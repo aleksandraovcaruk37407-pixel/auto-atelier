@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Авто-ателье">
@@ -24,7 +25,7 @@
         table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
         th { background: #1a3c5e; color: #fff; padding: 6px 3px; text-align: center; white-space: nowrap; }
         td { border: 1px solid #dde1e6; padding: 4px 2px; text-align: center; vertical-align: middle; }
-        input, select { width: 100%; padding: 4px 6px; border: 1px solid #ced4da; border-radius: 4px; font-size: 12px; background: #fff; }
+        input, select, textarea { width: 100%; padding: 4px 6px; border: 1px solid #ced4da; border-radius: 4px; font-size: 12px; background: #fff; }
         .btn-add { background: #28a745; color: #fff; border: none; padding: 8px 20px; border-radius: 30px; font-weight: 600; cursor: pointer; margin: 10px 0; }
         .btn-del { background: #dc3545; color: #fff; border: none; padding: 4px 10px; border-radius: 20px; cursor: pointer; font-size: 12px; }
         .btn-sm { padding: 4px 12px; border: none; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; }
@@ -252,7 +253,7 @@
             <table><thead><tr><th>Название</th><th>Ед. изм.</th><th>Цена за ед. (₽)</th><th></th></tr></thead><tbody id="extraRefBody"></tbody></table>
         </div>
         <div style="margin-top:10px;"><button class="btn-extra" onclick="addNewExtraRef()">➕ Добавить расходник</button></div>
-        <div class="note">✏️ Меняйте цены в таблицах – они сохранятся и применятся ко всем заказам.</div>
+        <div class="note">✏️ Меняйте цены в таблицах – они сохранятся и применятся ко всем заказам, где цена не изменена вручную.</div>
     </div>
 
     <!-- Вкладка Закупка -->
@@ -358,7 +359,7 @@
             <div id="serviceItemsContainer"></div>
             <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                 <button class="btn-extra" onclick="addServiceItemRow()">➕ Добавить расходник</button>
-                <span style="font-size:12px; color:#6c757d;">Введите «Ткань», «Краска», «Пленка для аквапринта» или название материала для маркеров</span>
+                <span style="font-size:12px; color:#6c757d;">Введите «Ткань», «Краска», «Пленка для аквапринта» или название вашего материала для маркеров</span>
             </div>
             <datalist id="serviceItemDatalist"></datalist>
             <div class="form-actions">
@@ -421,7 +422,6 @@
         regularExpenses = JSON.parse(localStorage.getItem('regularExpenses_data') || '[]');
         notes = JSON.parse(localStorage.getItem('notes_data') || '[]');
 
-        // Инициализация стандартных данных, если пусто
         if (!colors.length) {
             colors = [
                 {category:'velour', code:'A1011', name:'Потолочная ткань (велюр)', price:1400},
@@ -513,6 +513,7 @@
         return d.toISOString().slice(0,10);
     }
     function formatDate(d) {
+        if (!d) return '';
         return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     }
     function formatPhone(input) {
@@ -548,14 +549,13 @@
             }
             svc.items.forEach(item => {
                 if (item.enabled === false) return;
-                if (materialTypes.some(mt => mt.name === item.name)) return; // маркеры отдельно
+                if (materialTypes.some(mt => mt.name === item.name)) return;
                 if (item.name === 'Краска' || item.name === 'Пленка для аквапринта') return;
                 let qty = 0;
                 if (inst.manualItems[item.name] !== undefined) qty = parseFloat(inst.manualItems[item.name])||0;
                 else if (!item.manual) qty = item.perMeter ? item.quantity * (parseFloat(inst.fabric?.meters)||0) : item.quantity;
                 totalCost += qty * item.price;
             });
-            // Пользовательские маркеры
             materialTypes.forEach(mt => {
                 const markerData = inst[mt.name];
                 if (markerData && markerData.code) {
@@ -564,7 +564,6 @@
                 }
             });
         });
-        // Доп. расходники
         let extra = {};
         try { extra = JSON.parse(order.extraData || '{}'); } catch(e) {}
         for (let key in extra) {
@@ -639,7 +638,6 @@
                 }
             });
         });
-        // доп. расходники
         let extra = {};
         try { extra = JSON.parse(order.extraData || '{}'); } catch(e) {}
         for (let key in extra) {
@@ -838,7 +836,7 @@
     // ========== ЗАМЕТКИ ==========
     function openNoteModal(dateStr) {
         document.getElementById('noteModalTitle').textContent = 'Новая заметка';
-        document.getElementById('noteDate').value = dateStr || formatDate(selectedDate || new Date());
+        document.getElementById('noteDate').value = dateStr || (selectedDate ? formatDate(selectedDate) : '');
         document.getElementById('noteTime').value = '';
         document.getElementById('noteText').value = '';
         document.getElementById('noteModal').classList.add('active');
@@ -1014,6 +1012,40 @@
         materialTypes.forEach(mt => { const opt = document.createElement('option'); opt.value = mt.name; dl.appendChild(opt); });
     }
 
+    // ========== ТИПЫ МАТЕРИАЛОВ ==========
+    function addMaterialType() {
+        const name = prompt('Название типа материала (например, «Нитки»):', '');
+        if (!name) return;
+        const unit = prompt('Единица измерения (например, «шт»):', 'шт');
+        if (!unit) return;
+        materialTypes.push({ name, unit, articles: [] });
+        saveAll();
+        renderRefs();
+    }
+    function deleteMaterialType(idx) {
+        if (confirm(`Удалить тип "${materialTypes[idx].name}" и все его артикулы?`)) {
+            materialTypes.splice(idx, 1);
+            saveAll();
+            renderRefs();
+        }
+    }
+    function addArticleToType(idx) {
+        const code = prompt('Артикул:', '');
+        if (!code) return;
+        const name = prompt('Наименование:', '');
+        if (!name) return;
+        const price = parseFloat(prompt('Цена за единицу:', '0'));
+        if (isNaN(price)) return;
+        materialTypes[idx].articles.push({ code, name, price });
+        saveAll();
+        renderRefs();
+    }
+    function deleteArticleFromType(mtIdx, artIdx) {
+        materialTypes[mtIdx].articles.splice(artIdx, 1);
+        saveAll();
+        renderRefs();
+    }
+
     // ========== МОДАЛКА РАСХОДНИКОВ УСЛУГИ ==========
     function openServiceItemsModal(idx) {
         editingServiceIndex = idx;
@@ -1125,9 +1157,9 @@
         const order = orderId ? ordersData.find(o=>o.id===orderId) : null;
         orderEditId = order ? order.id : null;
         document.getElementById('orderModalTitle').textContent = order ? `Заказ №${order.orderNumber}` : 'Новый заказ';
-        document.getElementById('orderDate').value = order && order.date ? order.date : formatDate(new Date());
-        document.getElementById('orderDurationDays').value = order && order.durationDays ? order.durationDays : 1;
-        document.getElementById('orderDeadline').value = order && order.date ? getDeadline(order) : '';
+        document.getElementById('orderDate').value = order?.date || formatDate(new Date());
+        document.getElementById('orderDurationDays').value = order?.durationDays || 1;
+        document.getElementById('orderDeadline').value = order ? (getDeadline(order) || '') : '';
         document.getElementById('orderClient').value = order?.client || '';
         document.getElementById('orderPhone').value = order?.phone || '';
         document.getElementById('orderClientPrice').value = order?.clientPrice || 0;
@@ -1139,7 +1171,6 @@
             btn.classList.toggle('active', btn.classList.contains(currentManualColor));
         });
         currentExtraData = order?.extraData ? JSON.parse(order.extraData) : {};
-        // Услуги
         const servicesList = document.getElementById('servicesList');
         servicesList.innerHTML = '';
         currentServices = [];
@@ -1270,7 +1301,6 @@
             metersInput.addEventListener('input', update);
             update();
         }
-        // Пользовательские маркеры
         materialTypes.forEach(mt => {
             if (svc.items.some(item => item.name === mt.name && item.customMarker)) {
                 const div = document.createElement('div');
@@ -1296,7 +1326,6 @@
                 update();
             }
         });
-        // Обычные расходники
         svc.items.forEach(item => {
             if (item.name === 'Краска' || item.name === 'Пленка для аквапринта' || materialTypes.some(mt => mt.name === item.name)) return;
             const div = document.createElement('div');
@@ -1616,47 +1645,6 @@
         renderAll();
     }
     function closeModal() { document.getElementById('bookingModal').classList.remove('active'); }
-
-    // ========== НЕДОСТАЮЩИЕ ФУНКЦИИ (ДОБАВЛЕНЫ) ==========
-    function addMaterialType() {
-        const name = prompt('Название типа материала (например, "Краска", "Пленка"):');
-        if (!name) return;
-        const unit = prompt('Единица измерения (м, мл, шт):', 'шт');
-        if (!unit) return;
-        materialTypes.push({ name, unit, articles: [] });
-        saveAll();
-        renderRefs();
-    }
-
-    function addArticleToType(typeIndex) {
-        const code = prompt('Артикул:');
-        if (!code) return;
-        const name = prompt('Наименование:');
-        if (!name) return;
-        const price = parseFloat(prompt('Цена:', '0'));
-        if (isNaN(price)) return;
-        if (!materialTypes[typeIndex].articles) {
-            materialTypes[typeIndex].articles = [];
-        }
-        materialTypes[typeIndex].articles.push({ code, name, price });
-        saveAll();
-        renderRefs();
-    }
-
-    function deleteMaterialType(idx) {
-        const name = materialTypes[idx]?.name || 'этот тип';
-        if (!confirm(`Удалить тип материала "${name}"?`)) return;
-        materialTypes.splice(idx, 1);
-        saveAll();
-        renderRefs();
-    }
-
-    function deleteArticleFromType(typeIdx, artIdx) {
-        if (!confirm('Удалить артикул?')) return;
-        materialTypes[typeIdx].articles.splice(artIdx, 1);
-        saveAll();
-        renderRefs();
-    }
 
     // ========== РЕНДЕР ==========
     function renderAll() {
