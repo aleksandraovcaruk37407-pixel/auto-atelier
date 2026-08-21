@@ -105,6 +105,8 @@
         .color-btn.done { background: #6c757d; }
         .color-btn.auto { background: #fff; border-style: dashed; }
         .extra-item { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
+        .extra-item.marker-selected { background: #e8f5e9; border: 1px solid #81c784; border-radius: 6px; padding: 5px; }
+        .marker-status { color: #2e7d32; font-size: 12px; font-weight: 600; white-space: nowrap; }
         .manual-item-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
         .service-row { border: 1px solid #dee2e6; border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #fafbfc; }
         .service-row .service-header { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: nowrap; }
@@ -580,11 +582,17 @@ if (!paints.length) {
     }
 
     function serviceUsesMarker(svc, markerName) {
-        return !!svc && (svc.items || []).some(item => String(item.name || '').trim().toLowerCase() === markerName.toLowerCase());
+        return !!svc && (svc.items || []).some(item => item.enabled !== false && String(item.name || '').trim().toLowerCase() === markerName.toLowerCase());
     }
 
     function serviceUsesPaint(svc) {
         return serviceUsesMarker(svc, 'Краска');
+    }
+
+    function getServiceMeters(inst) {
+        const fabricMeters = parseFloat(inst?.fabric?.meters) || 0;
+        const filmMeters = parseFloat(inst?.film?.meters) || 0;
+        return fabricMeters || filmMeters;
     }
 
     // ========== РАСЧЕТ СЕБЕСТОИМОСТИ ==========
@@ -619,14 +627,18 @@ if (!paints.length) {
                 if (materialTypes.some(mt => mt.name === item.name)) return;
                 let qty = 0;
                 if ((inst.manualItems || {})[item.name] !== undefined) qty = parseFloat((inst.manualItems || {})[item.name])||0;
-                else if (!item.manual) qty = item.perMeter ? (parseFloat(item.quantity)||0) * (parseFloat(inst.fabric?.meters)||0) : (parseFloat(item.quantity)||0);
+                else if (!item.manual) qty = item.perMeter ? (parseFloat(item.quantity)||0) * getServiceMeters(inst) : (parseFloat(item.quantity)||0);
                 totalCost += qty * (parseFloat(item.price)||0);
             });
             materialTypes.forEach(mt => {
+                const markerItem = svc.items.find(item => item.enabled !== false && item.name === mt.name);
                 const markerData = inst[mt.name];
-                if (markerData && markerData.code) {
+                if (markerItem && markerData && markerData.code) {
                     const art = mt.articles.find(a => a.code === markerData.code);
-                    if (art) totalCost += (parseFloat(markerData.qty)||0) * (parseFloat(art.price)||0);
+                    if (art) {
+                        const qty = markerItem.manual ? (parseFloat(markerData.qty)||0) : (markerItem.perMeter ? (parseFloat(markerItem.quantity)||0) * getServiceMeters(inst) : (parseFloat(markerItem.quantity)||0));
+                        totalCost += qty * (parseFloat(art.price)||0);
+                    }
                 }
             });
         });
@@ -689,19 +701,22 @@ if (!paints.length) {
                     if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
                     if (item.name === 'Ткань' && svc.usesFabric) return;
                     if (materialTypes.some(mt => mt.name === item.name)) return;
-                    let qty = (inst.manualItems || {})[item.name] ? parseFloat((inst.manualItems || {})[item.name]) : (item.manual ? 0 : (item.perMeter ? (parseFloat(item.quantity)||0) * (parseFloat(inst.fabric?.meters)||0) : (parseFloat(item.quantity)||0)));
+                    let qty = (inst.manualItems || {})[item.name] !== undefined ? parseFloat((inst.manualItems || {})[item.name]) : (item.manual ? 0 : (item.perMeter ? (parseFloat(item.quantity)||0) * getServiceMeters(inst) : (parseFloat(item.quantity)||0)));
                     if (qty > 0) {
                         const stockItem = ensure(item.name, item.unit, parseFloat(item.price)||0);
                         stockItem.used += qty;
                     }
                 });
                 materialTypes.forEach(mt => {
+                    const markerItem = svc.items.find(item => item.enabled !== false && item.name === mt.name);
                     const markerData = inst[mt.name];
-                    if (markerData && markerData.code && parseFloat(markerData.qty) > 0) {
+                    if (markerItem && markerData && markerData.code) {
                         const art = mt.articles.find(a => a.code === markerData.code);
                         if (art) {
+                            const qty = markerItem.manual ? (parseFloat(markerData.qty)||0) : (markerItem.perMeter ? (parseFloat(markerItem.quantity)||0) * getServiceMeters(inst) : (parseFloat(markerItem.quantity)||0));
+                            if (qty <= 0) return;
                             const stockItem = ensure(art.name, mt.unit, parseFloat(art.price)||0);
-                            stockItem.used += parseFloat(markerData.qty);
+                            stockItem.used += qty;
                         }
                     }
                 });
@@ -1176,6 +1191,15 @@ if (!paints.length) {
         renderRefs();
     }
 
+    function getMarkerDefinition(name) {
+        const normalizedName = String(name || '').trim().toLowerCase();
+        if (normalizedName === 'ткань') return {name:'Ткань', unit:'м'};
+        if (normalizedName === 'краска') return {name:'Краска', unit:'мл'};
+        if (normalizedName === 'пленка для аквапринта') return {name:'Пленка для аквапринта', unit:'м'};
+        const materialType = materialTypes.find(mt => String(mt.name || '').trim().toLowerCase() === normalizedName);
+        return materialType ? {name:materialType.name, unit:materialType.unit} : null;
+    }
+
     // ========== МОДАЛКА РАСХОДНИКОВ УСЛУГИ ==========
     function openServiceItemsModal(idx) {
         editingServiceIndex = idx;
@@ -1183,8 +1207,11 @@ if (!paints.length) {
         document.getElementById('serviceItemsModalTitle').textContent = `Расходники для "${svc.service}"`;
         const container = document.getElementById('serviceItemsContainer');
         container.innerHTML = '';
-        svc.items.forEach(item => addServiceItemRow(item));
-        if (svc.items.length === 0) addServiceItemRow();
+        const items = (svc.items || []).filter(item => {
+            const isMarker = !!getMarkerDefinition(item.name);
+            return !isMarker || item.enabled !== false;
+        });
+        items.forEach(item => addServiceItemRow(item));
         document.getElementById('serviceItemsModal').classList.add('active');
     }
 
@@ -1201,7 +1228,8 @@ if (!paints.length) {
         const perMeter = item ? !!item.perMeter : false;
         const manual = item ? !!item.manual : false;
         const enabled = item ? (item.enabled !== false) : true;
-        const isMarker = name && (['Ткань','Краска','Пленка для аквапринта'].includes(name) || materialTypes.some(mt => mt.name === name));
+        const marker = getMarkerDefinition(name);
+        const isMarker = !!marker;
         row.innerHTML = `
             <input type="text" class="item-name" placeholder="Название" value="${name}" style="flex:1; min-width:80px;" list="serviceItemDatalist" oninput="handleItemNameInput(this)">
             <input type="number" class="item-qty" placeholder="Кол-во" value="${quantity}" style="width:70px;">
@@ -1221,9 +1249,11 @@ if (!paints.length) {
         if (isMarker) {
             row.dataset.isMarker = 'true';
             row.dataset.markerType = name;
+            row.classList.add('marker-selected');
             const inputs = row.querySelectorAll('.item-name, .item-qty, .item-unit, .item-price');
             inputs.forEach(el => el.disabled = true);
-            row.style.background = '#f0f0f0';
+            const enabledLabel = row.querySelector('.item-enabled').parentElement;
+            enabledLabel.insertAdjacentHTML('beforebegin', '<span class="marker-status">✓ Маркер услуги</span>');
         }
         container.appendChild(row);
     }
@@ -1232,16 +1262,23 @@ if (!paints.length) {
         const val = input.value.trim();
         const row = input.closest('.extra-item');
         if (!row) return;
-        const isMarker = ['Ткань','Краска','Пленка для аквапринта'].includes(val) || materialTypes.some(mt => mt.name === val);
+        const isMarker = !!getMarkerDefinition(val);
         if (isMarker) {
             row.dataset.isMarker = 'true';
             row.dataset.markerType = val;
+            row.classList.add('marker-selected');
             const inputs = row.querySelectorAll('.item-name, .item-qty, .item-unit, .item-price');
             inputs.forEach(el => el.disabled = true);
-            row.style.background = '#f0f0f0';
+            if (!row.querySelector('.marker-status')) {
+                const enabledLabel = row.querySelector('.item-enabled').parentElement;
+                enabledLabel.insertAdjacentHTML('beforebegin', '<span class="marker-status">✓ Маркер услуги</span>');
+            }
         } else {
             delete row.dataset.isMarker;
             delete row.dataset.markerType;
+            row.classList.remove('marker-selected');
+            const markerStatus = row.querySelector('.marker-status');
+            if (markerStatus) markerStatus.remove();
             const inputs = row.querySelectorAll('.item-name, .item-qty, .item-unit, .item-price');
             inputs.forEach(el => el.disabled = false);
             row.style.background = '';
@@ -1256,18 +1293,20 @@ if (!paints.length) {
         let usesFabric = false, usesPaint = false, usesFilm = false;
         rows.forEach(row => {
             const nameInput = row.querySelector('.item-name');
-            const name = nameInput.value.trim();
+            const enteredName = nameInput.value.trim();
+            const marker = getMarkerDefinition(enteredName);
+            const name = marker ? marker.name : enteredName;
             if (!name) return;
-            const isMarker = row.dataset.isMarker === 'true';
+            const isMarker = row.dataset.isMarker === 'true' || !!marker;
             if (isMarker) {
-                if (name === 'Ткань') usesFabric = true;
-                else if (name === 'Краска') usesPaint = true;
-                else if (name === 'Пленка для аквапринта') usesFilm = true;
                 const perMeter = row.querySelector('.item-perMeter').checked;
                 const manual = row.querySelector('.item-manual').checked;
                 const enabled = row.querySelector('.item-enabled').checked;
+                if (enabled && name === 'Ткань') usesFabric = true;
+                else if (enabled && name === 'Краска') usesPaint = true;
+                else if (enabled && name === 'Пленка для аквапринта') usesFilm = true;
                 const customMarker = !['Ткань','Краска','Пленка для аквапринта'].includes(name);
-                items.push({name, quantity:1, unit: row.querySelector('.item-unit').value, price:0, perMeter, manual, enabled, customMarker});
+                items.push({name, quantity:parseFloat(row.querySelector('.item-qty').value)||1, unit:marker ? marker.unit : row.querySelector('.item-unit').value, price:0, perMeter, manual, enabled, customMarker});
                 return;
             }
             const qty = parseFloat(row.querySelector('.item-qty').value)||0;
@@ -1276,9 +1315,7 @@ if (!paints.length) {
             const perMeter = row.querySelector('.item-perMeter').checked;
             const manual = row.querySelector('.item-manual').checked;
             const enabled = row.querySelector('.item-enabled').checked;
-            if (qty > 0 || manual) {
-                items.push({name, quantity:qty, unit, price, perMeter, manual, enabled, customMarker: false});
-            }
+            items.push({name, quantity:qty, unit, price, perMeter, manual, enabled, customMarker: false});
         });
         // Удаляем конфликтующие обычные items, если маркер уже существует
         const filteredItems = items.filter(item => {
@@ -1419,6 +1456,15 @@ if (!paints.length) {
         return dl;
     }
 
+    function findReferenceMatch(value, references) {
+        const query = String(value || '').trim().toLowerCase();
+        if (!query) return null;
+        return references.find(reference => String(reference.code || '').toLowerCase() === query || String(reference.name || '').toLowerCase() === query)
+            || references.find(reference => String(reference.code || '').toLowerCase().startsWith(query) || String(reference.name || '').toLowerCase().startsWith(query))
+            || references.find(reference => String(reference.name || '').toLowerCase().includes(query))
+            || null;
+    }
+
     function buildServiceDetails(container, index) {
         const inst = currentServices[index];
         const svc = rates.find(r => r.service === inst.serviceName);
@@ -1444,8 +1490,9 @@ if (!paints.length) {
                 inst.fabric.code = codeInput.value;
                 inst.fabric.price = parseFloat(priceInput.value) || 0;
                 inst.fabric.meters = parseFloat(metersInput.value) || 0;
-                const found = colors.find(c => c.code === codeInput.value.trim());
+                const found = findReferenceMatch(codeInput.value, colors);
                 if (found) {
+                    codeInput.value = found.code;
                     catInput.value = found.category;
                     priceInput.value = parseFloat(found.price) || 0;
                     inst.fabric.price = parseFloat(found.price) || 0;
@@ -1471,8 +1518,9 @@ if (!paints.length) {
             createDatalist('paintCodes', paints.map(p => p.code));
             const update = () => {
                 inst.paint.code = codeInput.value;
-                const found = paints.find(p => p.code === codeInput.value.trim());
+                const found = findReferenceMatch(codeInput.value, paints);
                 if (found) { 
+                    codeInput.value = found.code;
                     inst.paint.price = parseFloat(found.price)||0; 
                     priceInput.value = parseFloat(found.price)||0; 
                 } else {
@@ -1501,8 +1549,9 @@ if (!paints.length) {
             createDatalist('filmCodes', films.map(f => f.code));
             const update = () => {
                 inst.film.code = codeInput.value;
-                const found = films.find(f => f.code === codeInput.value.trim());
+                const found = findReferenceMatch(codeInput.value, films);
                 if (found) { 
+                    codeInput.value = found.code;
                     inst.film.price = parseFloat(found.price)||0; 
                     priceInput.value = parseFloat(found.price)||0; 
                 } else {
@@ -1517,12 +1566,18 @@ if (!paints.length) {
             update();
         }
         materialTypes.forEach(mt => {
-            if (svc.items.some(item => item.name === mt.name)) {
+            const markerItem = svc.items.find(item => item.enabled !== false && item.name === mt.name);
+            if (markerItem) {
                 const div = document.createElement('div');
+                const markerData = inst[mt.name] || {};
+                const automaticQty = markerItem.perMeter ? (parseFloat(markerItem.quantity)||0) * getServiceMeters(inst) : (parseFloat(markerItem.quantity)||0);
+                const quantityMarkup = markerItem.manual
+                    ? `<label>Потребность</label><input type="number" class="custom-qty" value="${parseFloat(markerData.qty)||''}">`
+                    : `<label>Автоматическое количество</label><input type="number" class="custom-qty automatic-qty" data-service-index="${index}" data-base-quantity="${parseFloat(markerItem.quantity)||0}" data-per-meter="${markerItem.perMeter}" value="${automaticQty}" readonly>`;
                 div.innerHTML = `<div class="section-title">${mt.name}</div>
                     <label>Артикул</label><input type="text" class="custom-code" data-mt="${mt.name}" value="${inst[mt.name]?.code||''}" list="${mt.name}Codes">
                     <label>Цена</label><input type="number" class="custom-price" value="${parseFloat(inst[mt.name]?.price)||0}" readonly>
-                    <label>Потребность</label><input type="number" class="custom-qty" value="${parseFloat(inst[mt.name]?.qty)||0}">
+                    ${quantityMarkup}
                     <label>Стоимость</label><input type="text" class="custom-cost" readonly>`;
                 container.appendChild(div);
                 const codeInput = div.querySelector('.custom-code');
@@ -1535,12 +1590,15 @@ if (!paints.length) {
                     if (art) { 
                         priceInput.value = parseFloat(art.price)||0; 
                     }
-                    inst[mt.name] = { 
+                    inst[mt.name] = {
                         code: codeInput.value, 
                         price: art ? (parseFloat(art.price)||0) : (parseFloat(priceInput.value)||0), 
-                        qty: parseFloat(qtyInput.value)||0 
+                        qty: markerItem.manual ? (parseFloat(qtyInput.value)||0) : automaticQty
                     };
-                    costInput.value = ((parseFloat(inst[mt.name].price)||0) * (parseFloat(inst[mt.name].qty)||0)).toFixed(2);
+                    const calculatedQty = markerItem.manual ? (parseFloat(inst[mt.name].qty)||0) : (markerItem.perMeter ? (parseFloat(markerItem.quantity)||0) * getServiceMeters(inst) : (parseFloat(markerItem.quantity)||0));
+                    inst[mt.name].qty = calculatedQty;
+                    if (!markerItem.manual) qtyInput.value = calculatedQty;
+                    costInput.value = ((parseFloat(inst[mt.name].price)||0) * calculatedQty).toFixed(2);
                     updateModalTotals();
                 };
                 codeInput.addEventListener('input', update);
@@ -1549,13 +1607,17 @@ if (!paints.length) {
             }
         });
         svc.items.forEach(item => {
+            if (item.enabled === false) return;
             if (item.customMarker) return;
             if (item.name === 'Краска' && serviceUsesPaint(svc)) return;
             if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
             if (item.name === 'Ткань' && svc.usesFabric) return;
             if (materialTypes.some(mt => mt.name === item.name)) return;
             const div = document.createElement('div');
-            div.innerHTML = `<label>${item.name} (${item.unit})</label><input type="number" class="ordinary-qty" value="${parseFloat((inst.manualItems || {})[item.name])||''}">`;
+            const automaticQty = item.perMeter ? (parseFloat(item.quantity)||0) * getServiceMeters(inst) : (parseFloat(item.quantity)||0);
+            div.innerHTML = item.manual
+                ? `<label>${item.name} (${item.unit})</label><input type="number" class="ordinary-qty" value="${parseFloat((inst.manualItems || {})[item.name])||''}">`
+                : `<label>${item.name} (${item.unit})</label><input type="number" class="ordinary-qty automatic-qty" data-service-index="${index}" data-base-quantity="${parseFloat(item.quantity)||0}" data-per-meter="${item.perMeter}" value="${automaticQty}" readonly>`;
             container.appendChild(div);
             const input = div.querySelector('.ordinary-qty');
             input.addEventListener('input', () => {
@@ -1568,6 +1630,12 @@ if (!paints.length) {
 
     function updateModalTotals() {
         let totalCost = 0;
+        document.querySelectorAll('.automatic-qty').forEach(input => {
+            const inst = currentServices[parseInt(input.dataset.serviceIndex)];
+            if (!inst) return;
+            const baseQuantity = parseFloat(input.dataset.baseQuantity) || 0;
+            input.value = input.dataset.perMeter === 'true' ? baseQuantity * getServiceMeters(inst) : baseQuantity;
+        });
         currentServices.forEach(inst => {
             const svc = rates.find(r => r.service === inst.serviceName);
             if (!svc) return;
@@ -1583,9 +1651,13 @@ if (!paints.length) {
                 totalCost += (parseFloat((inst.manualItems || {})[item.name])||0) * (parseFloat(item.price)||0);
             });
             materialTypes.forEach(mt => {
-                if (svc.items.some(item => item.name === mt.name)) {
+                const markerItem = svc.items.find(item => item.enabled !== false && item.name === mt.name);
+                if (markerItem) {
                     const markerData = inst[mt.name];
-                    if (markerData && markerData.code) totalCost += (parseFloat(markerData.qty)||0) * (parseFloat(markerData.price)||0);
+                    if (markerData && markerData.code) {
+                        const qty = markerItem.manual ? (parseFloat(markerData.qty)||0) : (markerItem.perMeter ? (parseFloat(markerItem.quantity)||0) * getServiceMeters(inst) : (parseFloat(markerItem.quantity)||0));
+                        totalCost += qty * (parseFloat(markerData.price)||0);
+                    }
                 }
             });
         });
@@ -2040,9 +2112,60 @@ function deleteOrder(orderId) {
         });
     }
 
+    function createSampleOrders() {
+        if (ordersData.length > 0) return;
+        const today = new Date();
+        const dateWithOffset = daysAgo => {
+            const date = new Date(today);
+            date.setDate(date.getDate() - daysAgo);
+            return formatDate(date);
+        };
+        const createService = (serviceName, values = {}) => {
+            const service = rates.find(rate => rate.service === serviceName);
+            if (!service) return null;
+            const instance = {
+                serviceName,
+                usesFabric: serviceUsesMarker(service, 'Ткань'),
+                usesPaint: serviceUsesPaint(service),
+                usesFilm: serviceUsesMarker(service, 'Пленка для аквапринта'),
+                fabric: {category:'velour', code:'A1011', meters: values.meters || 0, price:1400, colorName:'Потолочная ткань (велюр)'},
+                paint: {category:'acrylic', code:'P001', qty: values.paintQty || 0, price:2.5, colorName:'Краска черная'},
+                film: {category:'Глянцевая', code:'FG-01', meters: values.filmMeters || 0, price:1200, name:'Черный глянец'},
+                manualItems: {}
+            };
+            (service.items || []).forEach(item => {
+                if (!item.customMarker && !['Ткань', 'Краска', 'Пленка для аквапринта'].includes(item.name)) {
+                    instance.manualItems[item.name] = item.manual ? (values.manualQty || 2) : 0;
+                }
+            });
+            return instance;
+        };
+        const samples = [
+            {client:'Тест выполнен 1', service:'Восстановление после ДТП', date:dateWithOffset(3), durationDays:1, done:true, clientPrice:25000},
+            {client:'Тест выполнен 2', service:'Покраска пластика', date:dateWithOffset(5), durationDays:2, done:true, clientPrice:18000},
+            {client:'Тест срочный 1', service:'Перетяжка потолка', date:dateWithOffset(7), durationDays:10, clientPrice:22000},
+            {client:'Тест срочный 2', service:'Шумоизоляция', date:dateWithOffset(6), durationDays:8, clientPrice:19000},
+            {client:'Тест очень срочный 1', service:'Восстановление после ДТП', date:dateWithOffset(9), durationDays:10, clientPrice:28000},
+            {client:'Тест очень срочный 2', service:'Аквапринт', date:dateWithOffset(5), durationDays:5, clientPrice:21000},
+            {client:'Тест новый 1', service:'Перетяжка потолка', date:dateWithOffset(0), durationDays:10, clientPrice:24000},
+            {client:'Тест новый 2', service:'Покраска пластика', date:dateWithOffset(1), durationDays:10, clientPrice:16000},
+            {client:'Тест новый 3', service:'Аквапринт', date:dateWithOffset(2), durationDays:10, clientPrice:20000},
+            {client:'Тест новый 4', service:'Шумоизоляция', date:dateWithOffset(0), durationDays:10, clientPrice:17000}
+        ];
+        samples.forEach((sample, index) => {
+            const service = createService(sample.service, {meters: sample.service === 'Перетяжка потолка' ? 4 : 0, paintQty: sample.service === 'Восстановление после ДТП' || sample.service === 'Покраска пластика' ? 250 : 0, filmMeters: sample.service === 'Аквапринт' ? 2 : 0});
+            if (!service) return;
+            ordersData.push({id:Date.now() + index, orderNumber:index + 1, date:sample.date, client:sample.client, phone:'+7 900 000-00-0' + (index + 1), services:[service], clientPrice:sample.clientPrice, helperPay:1000, durationDays:sample.durationDays, extraData:'{}', done:sample.done, paid:false, manualColor:'auto'});
+        });
+        ordersData.forEach(order => recalcOrder(order));
+        recalculateStockFromAllOrders();
+        saveAll();
+    }
+
     // ========== ИНИЦИАЛИЗАЦИЯ ==========
     document.addEventListener('DOMContentLoaded', () => {
         loadData();
+        createSampleOrders();
         addRegularPaymentsToCash();
         currentDate = new Date();
         selectedDate = new Date();
