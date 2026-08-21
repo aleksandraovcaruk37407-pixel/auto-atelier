@@ -433,6 +433,8 @@
     regularExpenses = JSON.parse(localStorage.getItem('regularExpenses_data') || '[]');
     notes = JSON.parse(localStorage.getItem('notes_data') || '[]');
 
+    rates.forEach(r => { if (!r.items) r.items = []; });
+
     colors.forEach(c => c.price = parseFloat(c.price) || 0);
     paints.forEach(p => p.price = parseFloat(p.price) || 0);
     films.forEach(f => f.price = parseFloat(f.price) || 0);
@@ -961,7 +963,7 @@
                 <td><input type="text" class="rate-name-input" data-index="${idx}" value="${r.service}" onchange="updateServiceName(this)"></td>
                 <td>
                     <button class="btn-extra" onclick="openServiceItemsModal(${idx})">✏️ Редактировать</button>
-                    <span style="font-size:12px; color:#6c757d;">(${r.items.length} шт.)</span>
+                    <span style="font-size:12px; color:#6c757d;">(${(r.items || []).length} шт.)</span>
                 </td>
                 <td><button class="btn-del" onclick="deleteService(${idx})">✕</button></td>
             `;
@@ -2072,6 +2074,9 @@
           films = data.films || [];
           extraRef = data.extraRef || [];
           rates = data.rates || [];
+
+          rates.forEach(r => { if (!r.items) r.items = []; });
+
           ordersData = data.ordersData || [];
           cashOps = data.cashOps || [];
           bookings = data.bookings || [];
