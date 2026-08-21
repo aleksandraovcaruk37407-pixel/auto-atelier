@@ -199,14 +199,9 @@
 
     <!-- Вкладка Итоги -->
     <div id="tab-summary" class="tab-content">
-        <div class="inline-flex" style="margin-bottom:15px;">
-            <select id="summaryPeriod" onchange="renderSummary()">
-                <option value="current-month">Текущий месяц</option>
-                <option value="previous-month">Прошлый месяц</option>
-                <option value="current-year">Текущий год</option>
-                <option value="previous-year">Прошлый год</option>
-                <option value="all">Всё время</option>
-            </select>
+        <div class="inline-flex" style="margin-bottom:15px; gap:10px;">
+            <select id="summaryYear" onchange="renderSummary()"></select>
+            <select id="summaryMonth" onchange="renderSummary()"></select>
         </div>
         <div class="summary-block" id="summaryBlock"></div>
     </div>
@@ -571,8 +566,11 @@
             }
             svc.items.forEach(item => {
                 if (item.enabled === false) return;
-                if (item.customMarker) return; // кастомные маркеры обрабатываются отдельно
-                if (item.name === 'Краска' || item.name === 'Пленка для аквапринта') return;
+                if (item.customMarker) return;
+                if (item.name === 'Краска' && svc.usesPaint) return;
+                if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
+                if (item.name === 'Ткань' && svc.usesFabric) return;
+                if (materialTypes.some(mt => mt.name === item.name)) return;
                 let qty = 0;
                 if (inst.manualItems[item.name] !== undefined) qty = parseFloat(inst.manualItems[item.name])||0;
                 else if (!item.manual) qty = item.perMeter ? item.quantity * (parseFloat(inst.fabric?.meters)||0) : item.quantity;
@@ -641,7 +639,10 @@
                 }
                 svc.items.forEach(item => {
                     if (item.customMarker) return;
-                    if (item.name === 'Краска' || item.name === 'Пленка для аквапринта') return;
+                    if (item.name === 'Краска' && svc.usesPaint) return;
+                    if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
+                    if (item.name === 'Ткань' && svc.usesFabric) return;
+                    if (materialTypes.some(mt => mt.name === item.name)) return;
                     let qty = inst.manualItems[item.name] || (item.manual ? 0 : (item.perMeter ? item.quantity * (inst.fabric?.meters||0) : item.quantity));
                     if (qty > 0) {
                         const stockItem = ensure(item.name, item.unit, item.price);
@@ -741,28 +742,16 @@
 
     // ========== ИТОГИ ==========
     function renderSummary() {
-        const period = document.getElementById('summaryPeriod')?.value || 'current-month';
-        let filteredOrders = ordersData;
-        let filteredCash = cashOps;
-        const now = new Date();
-        if (period === 'current-month') {
-            const prefix = formatDate(new Date(now.getFullYear(), now.getMonth(), 1)).slice(0,7);
-            filteredOrders = ordersData.filter(o => o.date.startsWith(prefix));
-            filteredCash = cashOps.filter(op => op.date.startsWith(prefix));
-        } else if (period === 'previous-month') {
-            const prev = new Date(now.getFullYear(), now.getMonth()-1, 1);
-            const prefix = formatDate(prev).slice(0,7);
-            filteredOrders = ordersData.filter(o => o.date.startsWith(prefix));
-            filteredCash = cashOps.filter(op => op.date.startsWith(prefix));
-        } else if (period === 'current-year') {
-            const yearStr = String(now.getFullYear());
-            filteredOrders = ordersData.filter(o => o.date.startsWith(yearStr));
-            filteredCash = cashOps.filter(op => op.date.startsWith(yearStr));
-        } else if (period === 'previous-year') {
-            const yearStr = String(now.getFullYear() - 1);
-            filteredOrders = ordersData.filter(o => o.date.startsWith(yearStr));
-            filteredCash = cashOps.filter(op => op.date.startsWith(yearStr));
-        }
+        const yearSel = document.getElementById('summaryYear');
+        const monthSel = document.getElementById('summaryMonth');
+        if (!yearSel || !monthSel) return;
+        const year = parseInt(yearSel.value);
+        const month = parseInt(monthSel.value);
+        if (isNaN(year) || isNaN(month)) return;
+        const prefix = `${year}-${String(month).padStart(2,'0')}`;
+        let filteredOrders = ordersData.filter(o => o.date && o.date.startsWith(prefix));
+        let filteredCash = cashOps.filter(op => op.date && op.date.startsWith(prefix));
+
         let revenue=0, cost=0, helper=0;
         filteredOrders.forEach(o => {
             revenue += parseFloat(o.clientPrice)||0;
@@ -780,6 +769,24 @@
             <div class="summary-item"><label>Расходы</label><span>${expenses.toFixed(2)}₽</span></div>
             <div class="summary-item"><label>Чистая прибыль</label><span>${net.toFixed(2)}₽</span></div>
         `;
+    }
+
+    function populateSummarySelects() {
+        const yearSel = document.getElementById('summaryYear');
+        const monthSel = document.getElementById('summaryMonth');
+        const currentYear = new Date().getFullYear();
+        const years = new Set();
+        ordersData.forEach(o => { if (o.date) years.add(o.date.slice(0,4)); });
+        cashOps.forEach(op => { if (op.date) years.add(op.date.slice(0,4)); });
+        years.add(currentYear);
+        years.add(currentYear - 1);
+        const sortedYears = Array.from(years).sort().reverse();
+        yearSel.innerHTML = sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
+        const monthNames = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        monthSel.innerHTML = monthNames.map((m, i) => `<option value="${i+1}">${m}</option>`).join('');
+        const now = new Date();
+        yearSel.value = now.getFullYear();
+        monthSel.value = now.getMonth() + 1;
     }
 
     // ========== КАЛЕНДАРЬ ==========
@@ -1153,10 +1160,8 @@
         if (isMarker) {
             row.dataset.isMarker = 'true';
             row.dataset.markerType = name;
-            // Отключаем только поля, связанные с названием, количеством, единицей и ценой
             const inputs = row.querySelectorAll('.item-name, .item-qty, .item-unit, .item-price');
             inputs.forEach(el => el.disabled = true);
-            // Чекбоксы остаются активными
             row.style.background = '#f0f0f0';
         }
         container.appendChild(row);
@@ -1214,10 +1219,19 @@
                 items.push({name, quantity:qty, unit, price, perMeter, manual, enabled, customMarker: false});
             }
         });
+        // Удаляем конфликтующие обычные items, если маркер уже существует
+        const filteredItems = items.filter(item => {
+            if (item.customMarker) return true;
+            if (item.name === 'Ткань' && usesFabric) return false;
+            if (item.name === 'Краска' && usesPaint) return false;
+            if (item.name === 'Пленка для аквапринта' && usesFilm) return false;
+            if (materialTypes.some(mt => mt.name === item.name && items.some(i => i.customMarker && i.name === mt.name))) return false;
+            return true;
+        });
         rates[editingServiceIndex].usesFabric = usesFabric;
         rates[editingServiceIndex].usesPaint = usesPaint;
         rates[editingServiceIndex].usesFilm = usesFilm;
-        rates[editingServiceIndex].items = items;
+        rates[editingServiceIndex].items = filteredItems;
         saveAll();
         closeServiceItemsModal();
         renderRefs();
@@ -1427,7 +1441,7 @@
                 div.innerHTML = `<div class="section-title">${mt.name}</div>
                     <label>Артикул</label><input type="text" class="custom-code" data-mt="${mt.name}" value="${inst[mt.name]?.code||''}" list="${mt.name}Codes">
                     <label>Цена</label><input type="number" class="custom-price" value="${inst[mt.name]?.price||0}" readonly>
-                    <label>Кол-во</label><input type="number" class="custom-qty" value="${inst[mt.name]?.qty||0}">
+                    <label>Потребность</label><input type="number" class="custom-qty" value="${inst[mt.name]?.qty||0}">
                     <label>Стоимость</label><input type="text" class="custom-cost" readonly>`;
                 container.appendChild(div);
                 const codeInput = div.querySelector('.custom-code');
@@ -1449,7 +1463,10 @@
         });
         svc.items.forEach(item => {
             if (item.customMarker) return;
-            if (item.name === 'Краска' || item.name === 'Пленка для аквапринта' || materialTypes.some(mt => mt.name === item.name)) return;
+            if (item.name === 'Краска' && svc.usesPaint) return;
+            if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
+            if (item.name === 'Ткань' && svc.usesFabric) return;
+            if (materialTypes.some(mt => mt.name === item.name)) return;
             const div = document.createElement('div');
             div.innerHTML = `<label>${item.name} (${item.unit})</label><input type="number" class="ordinary-qty" value="${inst.manualItems[item.name]||''}">`;
             container.appendChild(div);
@@ -1472,7 +1489,10 @@
             if (svc.usesFilm && inst.film) totalCost += (inst.film.meters||0) * (inst.film.price||0);
             svc.items.forEach(item => {
                 if (item.customMarker) return;
-                if (item.name === 'Краска' || item.name === 'Пленка для аквапринта' || materialTypes.some(mt => mt.name === item.name)) return;
+                if (item.name === 'Краска' && svc.usesPaint) return;
+                if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
+                if (item.name === 'Ткань' && svc.usesFabric) return;
+                if (materialTypes.some(mt => mt.name === item.name)) return;
                 totalCost += (inst.manualItems[item.name]||0) * item.price;
             });
             materialTypes.forEach(mt => {
@@ -1633,7 +1653,10 @@
                 });
                 svc.items.forEach(item => {
                     if (item.customMarker) return;
-                    if (item.name === 'Краска' || item.name === 'Пленка для аквапринта' || materialTypes.some(mt=>mt.name===item.name)) return;
+                    if (item.name === 'Краска' && svc.usesPaint) return;
+                    if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
+                    if (item.name === 'Ткань' && svc.usesFabric) return;
+                    if (materialTypes.some(mt=>mt.name===item.name)) return;
                     let qty = inst.manualItems[item.name] || (item.manual ? 0 : (item.perMeter ? item.quantity*(inst.fabric?.meters||0) : item.quantity));
                     if (qty > 0) otherMaterials[item.name] = (otherMaterials[item.name]||0) + qty;
                 });
@@ -1693,7 +1716,7 @@
         const content = document.getElementById('purchaseDocumentContainer').innerHTML;
         if (!content) { alert('Сначала сформируйте документ'); return; }
         const printWindow = window.open('', '_blank');
-        printWindow.document.write('<html><head><title>Документ закупки</title></head><body>');
+        printWindow.document.write('<html><head><title>Документ закупки</title><style>body{font-family: Arial; font-size: 14px;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #ddd; padding:8px; text-align:left;}</style></head><body>');
         printWindow.document.write(content);
         printWindow.document.write('</body></html>');
         printWindow.document.close();
@@ -1797,6 +1820,7 @@
         renderOrders();
         renderStock();
         renderCash();
+        populateSummarySelects();
         renderSummary();
         renderCalendar();
         renderRefs();
