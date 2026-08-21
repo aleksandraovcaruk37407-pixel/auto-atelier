@@ -1057,8 +1057,7 @@
     function deleteExtraRef(idx) { extraRef.splice(idx,1); saveAll(); renderAll(); }
     function deletePaint(idx) { paints.splice(idx,1); saveAll(); renderAll(); }
     function deleteFilm(idx) { films.splice(idx,1); saveAll(); renderAll(); }
-       
-   function addNewArticle() {
+       function addNewArticle() {
         const category = prompt('Категория ткани:', 'Велюр');
         if (!category) return;
         const code = prompt('Артикул:', '');
