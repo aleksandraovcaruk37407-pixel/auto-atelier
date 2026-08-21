@@ -454,27 +454,21 @@
     });
 
     if (!colors.length) {
-        colors = [
-            {category:'Велюр', code:'A1011', name:'Потолочная ткань (велюр)', price:1400},
-            {category:'Велюр', code:'A1014', name:'Потолочная ткань (велюр)', price:1400},
-            {category:'Сетка', code:'L1041', name:'Потолочная ткань (сетка)', price:1400},
-            {category:'Сетка', code:'L1055', name:'Потолочная ткань (сетка) – Черный', price:1400}
-        ];
-    }
-    if (!paints.length) {
-        paints = [
-            {category:'Акрил', code:'P001', name:'Краска черная', price:2.5},
-            {category:'Акрил', code:'P002', name:'Краска белая', price:2.0},
-            {category:'Водная', code:'P003', name:'Краска серая', price:2.2}
-        ];
-    }
-    if (!films.length) {
-        films = [
-            {category:'Глянцевая', code:'FG-01', name:'Черный глянец', price:1200},
-            {category:'Глянцевая', code:'FG-02', name:'Белый глянец', price:1200},
-            {category:'Матовая', code:'FM-01', name:'Черный матовый', price:1100}
-        ];
-    }
+    colors = [
+        {category:'Велюр', code:'A1011', name:'Потолочная ткань (велюр)', price:1400},
+        {category:'Велюр', code:'A1014', name:'Потолочная ткань (велюр)', price:1400},
+        {category:'Сетка', code:'L1041', name:'Потолочная ткань (сетка)', price:1400},
+        {category:'Сетка', code:'L1055', name:'Потолочная ткань (сетка) – Черный', price:1400}
+    ];
+}
+if (!paints.length) {
+    paints = [
+        {category:'Акрил', code:'P001', name:'Краска черная', price:2.5},
+        {category:'Акрил', code:'P002', name:'Краска белая', price:2.0},
+        {category:'Водная', code:'P003', name:'Краска серая', price:2.2}
+    ];
+}
+
     if (!extraRef.length) {
         extraRef = [
             {name:'Клей', unit:'мл', price:5},
@@ -1357,6 +1351,7 @@
         materialTypes.forEach(mt => {
             if (!instance[mt.name]) instance[mt.name] = {};
         });
+
         currentServices.push(instance);
         const row = document.createElement('div');
         row.className = 'service-row';
@@ -1628,24 +1623,54 @@
         closeOrderModal();
     }
 
-    function distributePayment(order) {
-        const amount = parseFloat(order.clientPrice)||0;
-        if (amount <= 0) return;
-        cashOps.push({date: formatDate(new Date()), desc:`Оплата заказа №${order.orderNumber}`, income: amount, expense:0});
-        const tax = amount*0.04;
-        const helper = parseFloat(order.helperPay)||0;
-        const materials = parseFloat(order.materialCost)||0;
-        const rest = amount - tax - helper - materials;
-        const products = rest*0.2;
-        const savings = rest*0.1;
-        const personal = rest - products - savings;
-        if (tax>0) cashOps.push({date: formatDate(new Date()), desc:`Налог 4% (заказ №${order.orderNumber})`, income:0, expense:tax});
-        if (helper>0) cashOps.push({date: formatDate(new Date()), desc:`Помощнику (заказ №${order.orderNumber})`, income:0, expense:helper});
-        if (materials>0) cashOps.push({date: formatDate(new Date()), desc:`Материалы (заказ №${order.orderNumber})`, income:0, expense:materials});
-        if (products>0) cashOps.push({date: formatDate(new Date()), desc:`Продукты 20% (заказ №${order.orderNumber})`, income:0, expense:products});
-        if (savings>0) cashOps.push({date: formatDate(new Date()), desc:`Накопления 10% (заказ №${order.orderNumber})`, income:0, expense:savings});
-        if (personal>0) cashOps.push({date: formatDate(new Date()), desc:`Личные расходы (заказ №${order.orderNumber})`, income:0, expense:personal});
+function removePaymentDistribution(orderNumber) {
+    cashOps = cashOps.filter(op => !op.desc.includes(`№${orderNumber}`));
+}
+
+function distributePayment(order) {
+    const amount = parseFloat(order.clientPrice)||0;
+    if (amount <= 0) return;
+    
+    // Предотвращаем дублирование транзакций
+    const exists = cashOps.some(op => op.desc.includes(`№${order.orderNumber}`));
+    if (exists) return; 
+
+    cashOps.push({date: formatDate(new Date()), desc:`Оплата заказа №${order.orderNumber}`, income: amount, expense:0});
+    const tax = amount * 0.04;
+    const helper = parseFloat(order.helperPay)||0;
+    const materials = parseFloat(order.materialCost)||0;
+    const rest = amount - tax - helper - materials;
+    const products = rest * 0.2;
+    const savings = rest * 0.1;
+    const personal = rest - products - savings;
+
+    if (tax > 0) cashOps.push({date: formatDate(new Date()), desc:`Налог 4% (заказ №${order.orderNumber})`, income:0, expense:tax});
+    if (helper > 0) cashOps.push({date: formatDate(new Date()), desc:`Помощнику (заказ №${order.orderNumber})`, income:0, expense:helper});
+    if (materials > 0) cashOps.push({date: formatDate(new Date()), desc:`Материалы (заказ №${order.orderNumber})`, income:0, expense:materials});
+    if (products > 0) cashOps.push({date: formatDate(new Date()), desc:`Продукты 20% (заказ №${order.orderNumber})`, income:0, expense:products});
+    if (savings > 0) cashOps.push({date: formatDate(new Date()), desc:`Накопления 10% (заказ №${order.orderNumber})`, income:0, expense:savings});
+    if (personal > 0) cashOps.push({date: formatDate(new Date()), desc:`Личные расходы (заказ №${order.orderNumber})`, income:0, expense:personal});
+}
+
+function togglePaid(id, checked) {
+    const order = ordersData.find(o => o.id === id);
+    if (order) {
+        order.paid = checked;
+        if (checked) distributePayment(order);
+        else removePaymentDistribution(order.orderNumber); // Удаляем транзакции при снятии отметки
+        saveAll();
+        renderAll();
     }
+}
+
+function deleteOrder(orderId) {
+    const order = ordersData.find(o => o.id === orderId);
+    if (order) removePaymentDistribution(order.orderNumber); // Очищаем финансы при удалении
+    ordersData = ordersData.filter(o => o.id !== orderId);
+    recalculateStockFromAllOrders();
+    saveAll();
+    renderAll();
+}
 
     // ========== ДОП. РАСХОДНИКИ ==========
     function openExtraModalFromOrder() {
@@ -2035,7 +2060,23 @@
         document.getElementById('orderClientPrice').addEventListener('input', updateModalTotals);
         document.getElementById('orderHelperPay').addEventListener('input', updateModalTotals);
     });
-</script> <!-- ДОБАВЬТЕ ЭТОТ ЗАКРЫВАЮЩИЙ ТЕГ -->
+window.updateCloudData = function(data) {
+    colors = data.colors || [];
+    paints = data.paints || [];
+    films = data.films || [];
+    extraRef = data.extraRef || [];
+    rates = data.rates || [];
+    rates.forEach(r => { if (!r.items) r.items = []; });
+    ordersData = data.ordersData || [];
+    cashOps = data.cashOps || [];
+    bookings = data.bookings || [];
+    materialTypes = data.materialTypes || [];
+    regularExpenses = data.regularExpenses || [];
+    notes = data.notes || [];
+    renderAll();
+};
+</script>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
@@ -2065,25 +2106,10 @@
     .then(() => {
       console.log("Подключено к Firebase!");
       
-      // Автоматическая загрузка данных из базы данных при запуске
+      // Автоматическая загрузка данных из Realtime Database при старте
       get(child(ref(window.db), 'atelier_data')).then((snapshot) => {
         if (snapshot.exists()) {
-          const data = snapshot.val();
-          colors = data.colors || [];
-          paints = data.paints || [];
-          films = data.films || [];
-          extraRef = data.extraRef || [];
-          rates = data.rates || [];
-
-          rates.forEach(r => { if (!r.items) r.items = []; });
-
-          ordersData = data.ordersData || [];
-          cashOps = data.cashOps || [];
-          bookings = data.bookings || [];
-          materialTypes = data.materialTypes || [];
-          regularExpenses = data.regularExpenses || [];
-          notes = data.notes || [];
-          renderAll();
+          window.updateCloudData(snapshot.val());
           console.log("Данные синхронизированы из облака!");
         }
       }).catch(err => console.error("Ошибка загрузки:", err));
