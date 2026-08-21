@@ -1035,6 +1035,18 @@ if (!films.length) {
         });
     }
 
+    function renderRefs() {
+        renderServicesTable();
+        renderMarkersTable();
+        renderMaterialTypes();
+        renderColorTable();
+        renderPaintTable();
+        renderFilmTable();
+        renderExtraRefTable();
+        updateServiceItemDatalist();
+        fillServiceSelects();
+    }
+
     function renderServicesTable() {
         const container = document.getElementById('servicesContainer');
         container.innerHTML = '';
