@@ -1866,16 +1866,34 @@
             });
         });
 
-        document.getElementById('orderModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeOrderModal(); });
-        document.getElementById('extraModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeExtraModal(); });
-        document.getElementById('serviceItemsModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeServiceItemsModal(); });
-        document.getElementById('bookingModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-        document.getElementById('noteModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeNoteModal(); });
+        // Модальные окна – добавляем проверки на null
+        const orderModal = document.getElementById('orderModal');
+        if (orderModal) orderModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeOrderModal(); });
 
-        document.getElementById('orderDate').addEventListener('input', updateDeadline);
-        document.getElementById('orderDurationDays').addEventListener('input', updateDeadline);
-        document.getElementById('orderClientPrice').addEventListener('input', updateModalTotals);
-        document.getElementById('orderHelperPay').addEventListener('input', updateModalTotals);
+        const extraModal = document.getElementById('extraModal');
+        if (extraModal) extraModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeExtraModal(); });
+
+        const serviceItemsModal = document.getElementById('serviceItemsModal');
+        if (serviceItemsModal) serviceItemsModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeServiceItemsModal(); });
+
+        const bookingModal = document.getElementById('bookingModal');
+        if (bookingModal) bookingModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+        const noteModal = document.getElementById('noteModal');
+        if (noteModal) noteModal.addEventListener('click', e => { if (e.target === e.currentTarget) closeNoteModal(); });
+
+        // Поля даты и срока
+        const orderDate = document.getElementById('orderDate');
+        if (orderDate) orderDate.addEventListener('input', updateDeadline);
+
+        const orderDurationDays = document.getElementById('orderDurationDays');
+        if (orderDurationDays) orderDurationDays.addEventListener('input', updateDeadline);
+
+        const orderClientPrice = document.getElementById('orderClientPrice');
+        if (orderClientPrice) orderClientPrice.addEventListener('input', updateModalTotals);
+
+        const orderHelperPay = document.getElementById('orderHelperPay');
+        if (orderHelperPay) orderHelperPay.addEventListener('input', updateModalTotals);
     });
 </script>
 </body>
