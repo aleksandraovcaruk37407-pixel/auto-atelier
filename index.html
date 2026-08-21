@@ -530,24 +530,24 @@
         </div>
         <div style="margin-top:10px;"><button class="btn-extra" onclick="openAddExtraRefModal()">➕ Добавить расходник</button></div>
         <h3 style="margin-top:20px;">🔩 ВИБРОПОГЛОЩЕНИЕ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 370 х 270 мм. Введите количество м² при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 370 х 270 мм. Введите количество листов при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="vibroAbsorptionBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="vibroAbsorptionBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">🔊 ШУМОИЗОЛЯЦИЯ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 560 мм, 750 х 1000 мм или 750 х 500 мм. Введите количество м² при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 560 мм, 750 х 1000 мм или 750 х 500 мм. Введите количество листов при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="soundInsulationBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="soundInsulationBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">🔈 ЗВУКОИЗОЛЯЦИЯ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 750 х 540 мм. Введите количество м² при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 750 х 540 мм. Введите количество листов при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="soundProofingBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="soundProofingBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">🔇 ШУМОПОГЛОЩЕНИЕ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 1000 мм. Введите количество м² при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 1000 мм. Введите количество листов при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="soundAbsorptionBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="soundAbsorptionBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">Мои материалы (типы с артикулами)</h3>
         <div id="materialTypesContainer"></div>
@@ -796,13 +796,6 @@
     notes = JSON.parse(localStorage.getItem('notes_data') || '[]');
 
     rates.forEach(r => { if (!r.items) r.items = []; });
-    const accidentService = rates.find(r => r.service === 'Восстановление после ДТП');
-    if (accidentService) {
-        accidentService.usesPaint = true;
-        if (!accidentService.items.some(item => item.name === 'Краска')) {
-            accidentService.items.push({name:'Краска', quantity:1, unit:'мл', price:0, perMeter:false, manual:true, enabled:true});
-        }
-    }
 
     colors.forEach(c => c.price = parseFloat(c.price) || 0);
     paints.forEach(p => p.price = parseFloat(p.price) || 0);
@@ -863,11 +856,10 @@ if (!films.length) {
                 {name:'Клей', quantity:150, unit:'мл', price:5, perMeter:true, manual:false, enabled:true},
                 {name:'Растворитель', quantity:50, unit:'мл', price:3, perMeter:true, manual:false, enabled:true}
             ]},
-            {service:'Восстановление после ДТП', usesFabric:true, usesPaint:true, usesFilm:false, items:[
+            {service:'Восстановление после ДТП', usesFabric:true, usesPaint:false, usesFilm:false, items:[
                 {name:'Грунт для пластика', quantity:100, unit:'мл', price:2, perMeter:false, manual:true, enabled:true},
                 {name:'Шпаклёвка', quantity:200, unit:'г', price:0.5, perMeter:false, manual:true, enabled:true},
-                {name:'Обезжиреватель', quantity:150, unit:'мл', price:3, perMeter:false, manual:true, enabled:true},
-                {name:'Краска', quantity:1, unit:'мл', price:0, perMeter:false, manual:true, enabled:true}
+                {name:'Обезжиреватель', quantity:150, unit:'мл', price:3, perMeter:false, manual:true, enabled:true}
             ]},
             {service:'Покраска пластика', usesFabric:false, usesPaint:true, usesFilm:false, items:[
                 {name:'Грунт для пластика', quantity:80, unit:'мл', price:2, perMeter:false, manual:true, enabled:true},
@@ -881,10 +873,10 @@ if (!films.length) {
                 {name:'Вибропласт', quantity:3, unit:'лист', price:500, perMeter:false, manual:true, enabled:true},
                 {name:'Шумопоглощающий материал', quantity:4, unit:'м²', price:300, perMeter:false, manual:true, enabled:true},
                 {name:'Клей для шумоизоляции', quantity:200, unit:'мл', price:5, perMeter:false, manual:true, enabled:true},
-                {name:'ВИБРОПОГЛОЩЕНИЕ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true},
-                {name:'ЗВУКОИЗОЛЯЦИЯ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true},
-                {name:'ШУМОИЗОЛЯЦИЯ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true},
-                {name:'ШУМОПОГЛОЩЕНИЕ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true}
+                {name:'ВИБРОПОГЛОЩЕНИЕ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true},
+                {name:'ЗВУКОИЗОЛЯЦИЯ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true},
+                {name:'ШУМОИЗОЛЯЦИЯ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true},
+                {name:'ШУМОПОГЛОЩЕНИЕ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true}
             ]},
             {service:'Кузовной ремонт', usesFabric:false, usesPaint:false, usesFilm:false, items:[]}
         ];
@@ -2967,12 +2959,18 @@ function deleteOrder(orderId) {
     function renderOrders() {
         const list = document.getElementById('ordersList');
         list.innerHTML = '';
+        console.log('🔍 Рендер заказов, всего заказов:', ordersData.length);
+        
         ordersData.forEach(order => {
             const color = getOrderColorObj(order);
+            console.log(`📦 Заказ №${order.orderNumber}: цвет = "${color}", done = ${order.done}, manualColor = ${order.manualColor}`);
+            
             const show = filterCheck(order, currentFilter);
             if (!show) return;
+            
             const div = document.createElement('div');
             div.className = `order-item status-${color}`;
+            console.log(`✅ Создан div с классом: "${div.className}"`);
             div.innerHTML = `
                 <div class="order-header">
                     <span class="order-number">№${order.orderNumber}</span>
@@ -3120,7 +3118,7 @@ function deleteOrder(orderId) {
             {client:'Тест новый 4', service:'Шумоизоляция', date:dateWithOffset(0), durationDays:10, clientPrice:17000}
         ];
         samples.forEach((sample, index) => {
-            const service = createService(sample.service, {meters: sample.service === 'Перетяжка потолка' ? 4 : 0, paintQty: sample.service === 'Восстановление после ДТП' || sample.service === 'Покраска пластика' ? 250 : 0, filmMeters: sample.service === 'Аквапринт' ? 2 : 0});
+            const service = createService(sample.service, {meters: sample.service === 'Перетяжка потолка' ? 4 : 0, paintQty: sample.service === 'Покраска пластика' ? 250 : 0, filmMeters: sample.service === 'Аквапринт' ? 2 : 0});
             if (!service) return;
             ordersData.push({id:Date.now() + index, orderNumber:index + 1, date:sample.date, client:sample.client, phone:'+7 900 000-00-0' + (index + 1), services:[service], clientPrice:sample.clientPrice, helperPay:1000, durationDays:sample.durationDays, extraData:'{}', done:sample.done, paid:false, manualColor:'auto'});
         });
