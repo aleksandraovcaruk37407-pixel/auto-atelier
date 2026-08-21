@@ -1057,13 +1057,22 @@
     function deleteExtraRef(idx) { extraRef.splice(idx,1); saveAll(); renderAll(); }
     function deletePaint(idx) { paints.splice(idx,1); saveAll(); renderAll(); }
     function deleteFilm(idx) { films.splice(idx,1); saveAll(); renderAll(); }
-    function addNewArticle() {
-    const category = prompt('Категория ткани:', 'Велюр');
-    if (!category) return;
-    // ... остальной код функции остаётся без изменений ...
+       
+   function addNewArticle() {
+        const category = prompt('Категория ткани:', 'Велюр');
+        if (!category) return;
+        const code = prompt('Артикул:', '');
+        if (!code) return;
+        const name = prompt('Наименование:', '');
+        if (!name) return;
+        const price = parseFloat(prompt('Цена за метр:', '0'));
+        if (isNaN(price)) return;
+        colors.push({category, code, name, price});
+        saveAll(); renderRefs();
+    }
 
     function addNewPaint() {
-        const category = prompt('Категория краски:', 'acrylic');
+        const category = prompt('Категория краски:', 'Акрил');
         if (!category) return;
         const code = prompt('Артикул:', '');
         if (!code) return;
@@ -1074,6 +1083,7 @@
         paints.push({category, code, name, price});
         saveAll(); renderRefs();
     }
+
     function addNewFilm() {
         const category = prompt('Категория пленки:', 'Глянцевая');
         if (!category) return;
@@ -2024,7 +2034,7 @@
         document.getElementById('orderClientPrice').addEventListener('input', updateModalTotals);
         document.getElementById('orderHelperPay').addEventListener('input', updateModalTotals);
     });
-</script>
+</script> <!-- ДОБАВЬТЕ ЭТОТ ЗАКРЫВАЮЩИЙ ТЕГ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
