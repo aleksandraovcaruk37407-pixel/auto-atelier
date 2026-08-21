@@ -483,7 +483,6 @@
             <h2 id="calendarTitle" style="font-size:20px; color:#1a3c5e; margin:0;"></h2>
             <div style="display:flex; gap:8px; align-items:center;">
                 <button onclick="toggleCalendarView()" id="viewToggleBtn" style="padding:8px 14px; font-size:13px; font-weight:600; background:#6c757d; color:#fff; border:none; border-radius:20px; cursor:pointer;">📅 Неделя</button>
-                <button onclick="exportCalendar()" style="padding:8px 14px; font-size:13px; font-weight:600; background:#17a2b8; color:#fff; border:none; border-radius:20px; cursor:pointer;">📤 Экспорт</button>
             </div>
         </div>
         <div id="calendarSummary" style="background:#f8f9fa; padding:10px; border-radius:8px; margin:10px 0; display:flex; gap:15px; flex-wrap:wrap; font-size:14px; font-weight:600;"></div>
@@ -1305,6 +1304,12 @@ if (!films.length) {
 
     function deleteRegularIncome(idx) {
         regularIncomes.splice(idx, 1);
+        saveAll();
+        renderAll();
+    }
+
+    function deleteCashOp(idx) {
+        cashOps.splice(idx, 1);
         saveAll();
         renderAll();
     }
@@ -2527,14 +2532,23 @@ function deleteOrder(orderId) {
         
         grid.innerHTML = '';
         const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-        dayNames.forEach(n => { const d = document.createElement('div'); d.className='day-name'; d.textContent=n; grid.appendChild(d); });
+        dayNames.forEach(n => { 
+            const dayNameDiv = document.createElement('div'); 
+            dayNameDiv.className = 'day-name'; 
+            dayNameDiv.textContent = n; 
+            grid.appendChild(dayNameDiv); 
+        });
         const firstDay = new Date(year, month, 1);
         const daysInMonth = new Date(year, month+1, 0).getDate();
         const offset = firstDay.getDay()===0 ? 6 : firstDay.getDay()-1;
-        for (let i=0; i<offset; i++) { const d=document.createElement('div'); d.className='day-cell other-month'; grid.appendChild(d); }
+        for (let i=0; i<offset; i++) { 
+            const emptyDiv = document.createElement('div'); 
+            emptyDiv.className = 'day-cell other-month'; 
+            grid.appendChild(emptyDiv); 
+        }
         
-        for (let d=1; d<=daysInMonth; d++) {
-            const dateObj = new Date(year, month, d);
+        for (let dayNum=1; dayNum<=daysInMonth; dayNum++) {
+            const dateObj = new Date(year, month, dayNum);
             const dateStr = formatDate(dateObj);
             const isSelected = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
             let dayOrders = ordersData.filter(o => o.date === dateStr);
@@ -2580,8 +2594,8 @@ function deleteOrder(orderId) {
             const div = document.createElement('div');
             div.className = classes;
             
-            // Формируем HTML с подсказками
-            let html = `<span class="day-number">${d}</span>`;
+            // Создаём элемент с номером дня
+            div.innerHTML = `<span class="day-number">${dayNum}</span>`;
             
             // Показываем значки с количеством
             let badgeText = [];
@@ -2603,45 +2617,6 @@ function deleteOrder(orderId) {
             grid.appendChild(div);
         }
         renderSchedule();
-    }
-    
-    // ========== УВЕДОМЛЕНИЯ ==========
-    function checkTomorrowNotifications() {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowStr = formatDate(tomorrow);
-        
-        const tomorrowOrders = ordersData.filter(o => o.date === tomorrowStr);
-        const tomorrowNotes = notes.filter(n => n.date === tomorrowStr);
-        const tomorrowPayments = getRegularPaymentsForDate(tomorrowStr);
-        
-        let message = '';
-        if (tomorrowOrders.length > 0) {
-            message += `📋 ${tomorrowOrders.length} заказ(ов)\n`;
-            tomorrowOrders.forEach(o => {
-                const color = getOrderColorObj(o);
-                const colorName = color === 'critical' ? '🔴 ОЧЕНЬ СРОЧНЫЙ' : color === 'middle' ? '🟡 Срочный' : '🟢 Новый';
-                message += `   №${o.orderNumber} ${o.client} – ${o.services.map(s=>s.serviceName).join(', ')} (${colorName})\n`;
-            });
-        }
-        if (tomorrowNotes.length > 0) {
-            message += `📝 ${tomorrowNotes.length} заметк(а/и):\n`;
-            tomorrowNotes.forEach(n => {
-                message += `   ${n.text}\n`;
-            });
-        }
-        if (tomorrowPayments.length > 0) {
-            message += `💰 Регулярные платежи:\n`;
-            tomorrowPayments.forEach(p => {
-                message += `   ${p.desc} – ${(parseFloat(p.expense)||0).toFixed(2)}₽\n`;
-            });
-        }
-        
-        if (message) {
-            const title = `🔔 На завтра (${tomorrowStr})`;
-            alert(`${title}\n\n${message}`);
-            saveNotificationShown(tomorrowStr);
-        }
     }
     
     function saveNotificationShown(dateStr) {
