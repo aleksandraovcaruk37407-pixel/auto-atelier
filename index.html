@@ -77,7 +77,25 @@
         .calendar-grid .day-cell { background: #f8f9fa; border-radius: 6px; padding: 10px 4px; text-align: center; cursor: pointer; min-height: 50px; border: 1px solid transparent; position: relative; }
         .calendar-grid .day-cell.selected { border-color: #1a3c5e; background: #cfe2ff; }
         .calendar-grid .day-cell .day-number { font-weight: 600; font-size: 16px; }
-        .calendar-grid .day-cell .task-badge { position: absolute; top: 2px; right: 4px; background: #dc3545; color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; line-height: 18px; }
+        .calendar-grid .day-cell .task-badge {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            background: #dc3545;
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            line-height: 18px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            max-width: 60px;
+            white-space: nowrap;
+        }
         .calendar-grid .day-cell.color-new { background: #d4edda; border-color: #28a745; }
         .calendar-grid .day-cell.color-middle { background: #fff3cd; border-color: #ffc107; }
         .calendar-grid .day-cell.color-critical { background: #f8d7da; border-color: #dc3545; }
@@ -137,6 +155,212 @@
         .purchase-item { display: flex; align-items: center; gap: 10px; padding: 8px; }
         .purchase-item input[type="checkbox"] { width: auto; flex-shrink: 0; }
         .print-btn { background: #6c757d; color: #fff; border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; margin-left: 10px; }
+        
+        /* Стили для вкладки Итоги */
+        .summary-header {
+            background: linear-gradient(135deg, #1a3c5e 0%, #2a5c8e 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(26, 60, 94, 0.3);
+        }
+        .summary-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+            color: #fff;
+        }
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a3c5e;
+            margin: 15px 0 5px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 8px;
+            border-left: 4px solid #1a3c5e;
+        }
+        .summary-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .summary-block {
+            background: #fff;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .summary-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s;
+        }
+        .summary-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .summary-item label {
+            font-weight: 600;
+            color: #495057;
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .summary-item span {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a3c5e;
+        }
+        .summary-item span.positive { color: #28a745; }
+        .summary-item span.negative { color: #dc3545; }
+        .summary-footer {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e9ecef;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .btn-sm:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .btn-primary { background: #007bff; color: #fff; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-success { background: #28a745; color: #fff; }
+        .btn-success:hover { background: #218838; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-warning:hover { background: #e0a800; }
+        .btn-secondary { background: #6c757d; color: #fff; }
+        .btn-secondary:hover { background: #545b62; }
+        .btn-info { background: #17a2b8; color: #fff; }
+        .btn-info:hover { background: #138496; }
+        
+        /* Стили для уведомлений */
+        .notification-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .notification-modal.active {
+            display: flex;
+        }
+        .notification-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 500px;
+            width: 95%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .notification-header h3 {
+            margin: 0;
+            color: #1a3c5e;
+            font-size: 18px;
+        }
+        .notification-close {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+        }
+        .notification-item {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .notification-item.orders {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        .notification-item.notes {
+            background: #e6d9f5;
+            border-color: #6f42c1;
+        }
+        .notification-item.payments {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        .notification-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1a3c5e;
+        }
+        .notification-list {
+            margin-left: 15px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .notification-list li {
+            margin: 4px 0;
+        }
+        .service-filter-btn {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #e9ecef;
+            color: #495057;
+            transition: all 0.2s;
+        }
+        .service-filter-btn.active {
+            background: #1a3c5e;
+            color: #fff;
+        }
+        .calendar-week-view {
+            display: none;
+        }
+        .calendar-week-view.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -211,19 +435,61 @@
 
     <!-- Вкладка Итоги -->
     <div id="tab-summary" class="tab-content">
-        <div class="inline-flex" style="margin-bottom:15px; gap:10px;">
-            <select id="summaryYear" onchange="renderSummary()"></select>
-            <select id="summaryMonth" onchange="renderSummary()"></select>
+        <h2 style="color:#1a3c5e; margin-bottom:15px;">📊 Отчёт по финансовым показателям</h2>
+        
+        <div class="summary-header">
+            <div class="inline-flex" style="gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+                <button class="btn-sm btn-primary" onclick="setReportPeriod('month')" id="btnMonth">📅 По месяцу</button>
+                <button class="btn-sm btn-secondary" onclick="setReportPeriod('quarter')" id="btnQuarter">📆 По кварталу</button>
+                <button class="btn-sm btn-secondary" onclick="setReportPeriod('year')" id="btnYear">📊 По году</button>
+                <button class="btn-sm btn-warning" onclick="setReportPeriod('custom')" id="btnCustom">🗓 Произвольный период</button>
+            </div>
+            
+            <div id="periodControls" class="inline-flex" style="gap:10px; flex-wrap:wrap; align-items:center;">
+                <select id="summaryYear" onchange="renderSummary()" style="padding:8px; border-radius:6px; border:1px solid #ced4da;"></select>
+                <select id="summaryMonth" onchange="renderSummary()" style="padding:8px; border-radius:6px; border:1px solid #ced4da;"></select>
+                <input type="date" id="customDateFrom" style="display:none; padding:8px; border-radius:6px; border:1px solid #ced4da;" onchange="renderSummary()">
+                <span style="font-size:14px; color:#6c757d;">—</span>
+                <input type="date" id="customDateTo" style="display:none; padding:8px; border-radius:6px; border:1px solid #ced4da;" onchange="renderSummary()">
+            </div>
         </div>
+        
+        <div class="summary-title" id="summaryTitle"></div>
+        <div class="summary-subtitle" id="summarySubtitle"></div>
+        
         <div class="summary-block" id="summaryBlock"></div>
+        
+        <div class="summary-footer" style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn-sm btn-success" onclick="printSummaryReport()">🖨️ Печать отчёта</button>
+            <button class="btn-sm btn-info" onclick="exportSummaryReport()">📤 Экспорт в текстовый файл</button>
+            <button class="btn-sm btn-secondary" onclick="resetReportPeriod()">↺ Сбросить</button>
+        </div>
+        
+        <div class="note" style="margin-top:20px;">
+            📌 Отчёт показывает финансовые показатели за выбранный период. <br>
+            💡 Используйте кнопки для быстрого выбора периода или укажите произвольные даты. <br>
+            🖨️ Кнопка "Печать отчёта" формирует готовый документ для печати.
+        </div>
     </div>
 
     <!-- Вкладка Календарь -->
     <div id="tab-calendar" class="tab-content">
-        <div class="calendar-nav" style="display:flex; justify-content:space-between; align-items:center;">
-            <button onclick="changeMonth(-1)">◀</button>
-            <h2 id="calendarTitle" style="font-size:22px; color:#1a3c5e;"></h2>
-            <button onclick="changeMonth(1)">▶</button>
+        <div class="calendar-nav" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; gap:8px; align-items:center;">
+                <button onclick="changeMonth(-1)" style="padding:8px 12px; font-size:16px;">◀</button>
+                <button onclick="goToday()" style="padding:8px 16px; font-size:14px; font-weight:600; background:#007bff; color:#fff; border:none; border-radius:20px; cursor:pointer;">📍 Сегодня</button>
+                <button onclick="goTomorrow()" style="padding:8px 16px; font-size:14px; font-weight:600; background:#28a745; color:#fff; border:none; border-radius:20px; cursor:pointer;">Завтра ▶</button>
+            </div>
+            <h2 id="calendarTitle" style="font-size:20px; color:#1a3c5e; margin:0;"></h2>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <button onclick="toggleCalendarView()" id="viewToggleBtn" style="padding:8px 14px; font-size:13px; font-weight:600; background:#6c757d; color:#fff; border:none; border-radius:20px; cursor:pointer;">📅 Неделя</button>
+                <button onclick="exportCalendar()" style="padding:8px 14px; font-size:13px; font-weight:600; background:#17a2b8; color:#fff; border:none; border-radius:20px; cursor:pointer;">📤 Экспорт</button>
+            </div>
+        </div>
+        <div id="calendarSummary" style="background:#f8f9fa; padding:10px; border-radius:8px; margin:10px 0; display:flex; gap:15px; flex-wrap:wrap; font-size:14px; font-weight:600;"></div>
+        <div id="serviceFilterContainer" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
+            <span style="font-size:14px; color:#6c757d;">Услуги:</span>
+            <button class="service-filter-btn active" data-service="all" onclick="filterByService('all')">Все</button>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
         <div class="schedule-container">
@@ -479,6 +745,17 @@
         </div>
     </div>
 
+    <!-- Модальное окно уведомлений -->
+    <div class="notification-modal" id="notificationModal">
+        <div class="notification-content">
+            <div class="notification-header">
+                <h3 id="notificationTitle">🔔 На завтра</h3>
+                <button class="notification-close" onclick="closeNotificationModal()">×</button>
+            </div>
+            <div id="notificationBody"></div>
+        </div>
+    </div>
+
     <div class="footer-toolbar">
         <div>
             <button class="btn btn-export" onclick="exportData()">📤 Экспорт</button>
@@ -583,7 +860,10 @@ if (!films.length) {
     }
     if (!rates.length) {
         rates = [
-            {service:'Перетяжка потолка', usesFabric:true, usesPaint:false, usesFilm:false, items:[]},
+            {service:'Перетяжка потолка', usesFabric:true, usesPaint:false, usesFilm:false, items:[
+                {name:'Клей', quantity:150, unit:'мл', price:5, perMeter:true, manual:false, enabled:true},
+                {name:'Растворитель', quantity:50, unit:'мл', price:3, perMeter:true, manual:false, enabled:true}
+            ]},
             {service:'Восстановление после ДТП', usesFabric:true, usesPaint:true, usesFilm:false, items:[
                 {name:'Грунт для пластика', quantity:100, unit:'мл', price:2, perMeter:false, manual:true, enabled:true},
                 {name:'Шпаклёвка', quantity:200, unit:'г', price:0.5, perMeter:false, manual:true, enabled:true},
@@ -824,10 +1104,6 @@ if (!films.length) {
                 const meters = parseFloat(inst.fabric.meters)||0;
                 const price = parseFloat(inst.fabric.price)||0;
                 totalCost += meters * price;
-                const glue = extraRef.find(e => e.name === 'Клей');
-                const thinner = extraRef.find(e => e.name === 'Растворитель');
-                if (glue) totalCost += meters * 150 * (parseFloat(glue.price)||0);
-                if (thinner) totalCost += meters * 50 * (parseFloat(thinner.price)||0);
             }
             if (serviceUsesPaint(svc) && inst.paint) {
                 const found = paints.find(p => p.code === inst.paint.code);
@@ -993,6 +1269,42 @@ if (!films.length) {
         const income = parseFloat(prompt('Приход:', '0')) || 0;
         const expense = parseFloat(prompt('Расход:', '0')) || 0;
         cashOps.push({date, desc, income, expense});
+        saveAll();
+        renderAll();
+    }
+
+    function addRegularExpense() {
+        const desc = prompt('Название регулярного расхода (например, Аренда):');
+        if (!desc) return;
+        const day = parseInt(prompt('День месяца (1-31):', '1'));
+        if (isNaN(day) || day < 1 || day > 31) { alert('Неверный день'); return; }
+        const amount = parseFloat(prompt('Сумма (₽):', '0'));
+        if (isNaN(amount) || amount <= 0) { alert('Неверная сумма'); return; }
+        regularExpenses.push({desc, day, amount});
+        saveAll();
+        renderAll();
+    }
+
+    function deleteRegularExpense(idx) {
+        regularExpenses.splice(idx, 1);
+        saveAll();
+        renderAll();
+    }
+
+    function addRegularIncome() {
+        const desc = prompt('Название регулярного дохода (например, Оплата за заказ):');
+        if (!desc) return;
+        const day = parseInt(prompt('День месяца (1-31):', '1'));
+        if (isNaN(day) || day < 1 || day > 31) { alert('Неверный день'); return; }
+        const amount = parseFloat(prompt('Сумма (₽):', '0'));
+        if (isNaN(amount) || amount <= 0) { alert('Неверная сумма'); return; }
+        regularIncomes.push({desc, day, amount});
+        saveAll();
+        renderAll();
+    }
+
+    function deleteRegularIncome(idx) {
+        regularIncomes.splice(idx, 1);
         saveAll();
         renderAll();
     }
@@ -1726,10 +2038,10 @@ if (!films.length) {
                 const markerData = inst[mt.name] || {};
                 const icon = markerIcons[mt.name] || '📦';
                 div.innerHTML = `<div class="section-title">${icon} ${mt.name}</div>
-                    <label>Артикул или поиск по названию</label><input type="text" class="custom-code" data-mt="${mt.name}" value="${inst[mt.name]?.code||''}" list="${mt.name}Codes" placeholder="Введите код или название">
-                    <label>Цена за м²</label><input type="number" class="custom-price" value="${parseFloat(inst[mt.name]?.price)||0}" readonly>
-                    <label>М²</label><input type="number" class="custom-qty" value="${parseFloat(markerData.m2)||''}" step="0.1" placeholder="Введите м²">
-                    <label>Стоимость</label><input type="text" class="custom-cost" readonly>`;
+                    <label>Артикул или поиск по названию</label><input type="text" class="custom-code" data-mt="${mt.name}" value="${markerData.code||''}" list="${mt.name}Codes" placeholder="Введите код или название для поиска">
+                    <label>Цена за м²</label><input type="number" class="custom-price" value="${markerData.price||0}" readonly>
+                    <label>М² (введите количество)</label><input type="number" class="custom-qty" value="${markerData.m2||''}" step="0.1" placeholder="0.0">
+                    <label>Стоимость</label><input type="text" class="custom-cost" value="0.00" readonly>`;
                 container.appendChild(div);
                 const codeInput = div.querySelector('.custom-code');
                 const priceInput = div.querySelector('.custom-price');
@@ -1738,9 +2050,12 @@ if (!films.length) {
                 createDatalist(`${mt.name}Codes`, mt.articles.map(a => a.code + ' - ' + a.name));
                 const update = () => {
                     const query = codeInput.value.trim().toLowerCase();
-                    let art = mt.articles.find(a => a.code.toLowerCase() === query || a.name.toLowerCase().includes(query));
-                    if (!art && query) {
-                        art = mt.articles.find(a => a.code.toLowerCase().startsWith(query) || a.name.toLowerCase().startsWith(query));
+                    let art = null;
+                    if (query) {
+                        art = mt.articles.find(a => a.code.toLowerCase() === query || a.name.toLowerCase().includes(query));
+                        if (!art) {
+                            art = mt.articles.find(a => a.code.toLowerCase().startsWith(query) || a.name.toLowerCase().startsWith(query));
+                        }
                     }
                     if (art) { 
                         codeInput.value = art.code;
@@ -1792,16 +2107,19 @@ if (!films.length) {
         currentServices.forEach(inst => {
             const svc = rates.find(r => r.service === inst.serviceName);
             if (!svc) return;
-            if (serviceUsesMarker(svc, 'Ткань') && inst.fabric) totalCost += (parseFloat(inst.fabric.meters)||0) * (parseFloat(inst.fabric.price)||0) + (parseFloat(inst.fabric.meters)||0)*150*(parseFloat(extraRef.find(e=>e.name==='Клей')?.price)||0) + (parseFloat(inst.fabric.meters)||0)*50*(parseFloat(extraRef.find(e=>e.name==='Растворитель')?.price)||0);
+            if (serviceUsesMarker(svc, 'Ткань') && inst.fabric) totalCost += (parseFloat(inst.fabric.meters)||0) * (parseFloat(inst.fabric.price)||0);
             if (serviceUsesPaint(svc) && inst.paint) totalCost += (parseFloat(inst.paint.qty)||0) * (parseFloat(inst.paint.price)||0);
             if (serviceUsesMarker(svc, 'Пленка для аквапринта') && inst.film) totalCost += (parseFloat(inst.film.meters)||0) * (parseFloat(inst.film.price)||0);
             svc.items.forEach(item => {
+                if (item.enabled === false) return;
                 if (item.customMarker) return;
                 if (item.name === 'Краска' && serviceUsesPaint(svc)) return;
                 if (item.name === 'Пленка для аквапринта' && svc.usesFilm) return;
                 if (item.name === 'Ткань' && svc.usesFabric) return;
-                if (materialTypes.some(mt => mt.name === item.name)) return;
-                totalCost += (parseFloat((inst.manualItems || {})[item.name])||0) * (parseFloat(item.price)||0);
+                let qty = 0;
+                if ((inst.manualItems || {})[item.name] !== undefined) qty = parseFloat((inst.manualItems || {})[item.name])||0;
+                else if (!item.manual) qty = item.perMeter ? (parseFloat(item.quantity)||0) * getServiceMeters(inst) : (parseFloat(item.quantity)||0);
+                totalCost += qty * (parseFloat(item.price)||0);
             });
             materialTypes.forEach(mt => {
                 const markerItem = svc.items.find(item => item.enabled !== false && item.name === mt.name);
@@ -2187,10 +2505,26 @@ function deleteOrder(orderId) {
     }
 
     function renderCalendar() {
+        // Обновляем фильтр услуг
+        document.getElementById('serviceFilterContainer').innerHTML = getServiceFilterButtons();
+        
+        // Обновляем сводку
+        renderCalendarSummary();
+        
+        // Проверяем уведомления
+        checkTomorrowNotifications();
+        
+        const grid = document.getElementById('calendarGrid');
+        
+        if (calendarViewMode === 'week') {
+            renderWeekView();
+            return;
+        }
+        
         const year = currentDate.getFullYear(), month = currentDate.getMonth();
         const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
         document.getElementById('calendarTitle').textContent = `${months[month]} ${year}`;
-        const grid = document.getElementById('calendarGrid');
+        
         grid.innerHTML = '';
         const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
         dayNames.forEach(n => { const d = document.createElement('div'); d.className='day-name'; d.textContent=n; grid.appendChild(d); });
@@ -2198,41 +2532,124 @@ function deleteOrder(orderId) {
         const daysInMonth = new Date(year, month+1, 0).getDate();
         const offset = firstDay.getDay()===0 ? 6 : firstDay.getDay()-1;
         for (let i=0; i<offset; i++) { const d=document.createElement('div'); d.className='day-cell other-month'; grid.appendChild(d); }
+        
         for (let d=1; d<=daysInMonth; d++) {
             const dateObj = new Date(year, month, d);
             const dateStr = formatDate(dateObj);
             const isSelected = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
-            const dayOrders = ordersData.filter(o => o.date === dateStr);
+            let dayOrders = ordersData.filter(o => o.date === dateStr);
+            
+            // Применяем фильтр по услуге
+            if (currentServiceFilter !== 'all') {
+                dayOrders = dayOrders.filter(o => o.services.some(s => s.serviceName === currentServiceFilter));
+            }
+            
             const criticalOrder = dayOrders.some(o => getOrderColorObj(o)==='critical');
-            const payments = cashOps.filter(op => op.date === dateStr && parseFloat(op.expense) > 0);
-            const incomes = cashOps.filter(op => op.date === dateStr && parseFloat(op.income) > 0);
             const regularPayments = getRegularPaymentsForDate(dateStr);
             const regularIncomes = getRegularIncomesForDate(dateStr);
             const dayNotes = notes.filter(n => n.date === dateStr);
+            const cashPayments = cashOps.filter(op => op.date === dateStr && parseFloat(op.expense) > 0);
+            const cashIncomes = cashOps.filter(op => op.date === dateStr && parseFloat(op.income) > 0);
+            
+            // Определяем цвет дня по приоритету
             let classes = `day-cell${isSelected?' selected':''}`;
-            if (criticalOrder) classes += ' color-critical';
-            else if (payments.length || incomes.length || regularPayments.length || regularIncomes.length) classes += ' color-payment';
-            else if (dayNotes.length) classes += ' color-note';
-            else if (dayOrders.length) {
+            let dayBadge = { orders: 0, notes: 0, expenses: 0, incomes: 0 };
+            
+            // Считаем количество записей
+            dayBadge.orders = dayOrders.length;
+            dayBadge.notes = dayNotes.length;
+            dayBadge.expenses = cashPayments.length + regularPayments.length;
+            dayBadge.incomes = cashIncomes.length + regularIncomes.length;
+            
+            // Определяем цвет дня (приоритет: красный > синий > жёлтый > зелёный)
+            if (criticalOrder) {
+                // Очень срочный заказ - красный (переопределяет всё)
+                classes += ' color-critical';
+            } else if (regularPayments.length > 0 || regularIncomes.length > 0) {
+                // Регулярный платёж - синий
+                classes += ' color-payment';
+            } else if (dayOrders.length > 0) {
                 const colors = dayOrders.map(o => getOrderColorObj(o));
                 if (colors.includes('critical')) classes += ' color-critical';
                 else if (colors.includes('middle')) classes += ' color-middle';
                 else classes += ' color-new';
+            } else if (dayNotes.length > 0) {
+                classes += ' color-note';
             }
+            
             const div = document.createElement('div');
             div.className = classes;
-            div.innerHTML = `<span class="day-number">${d}</span>`;
-            const totalEntries = dayOrders.length + payments.length + incomes.length + regularPayments.length + regularIncomes.length + dayNotes.length;
-            if (totalEntries > 0) {
+            
+            // Формируем HTML с подсказками
+            let html = `<span class="day-number">${d}</span>`;
+            
+            // Показываем значки с количеством
+            let badgeText = [];
+            if (dayBadge.orders > 0) badgeText.push(`📋${dayBadge.orders}`);
+            if (dayBadge.notes > 0) badgeText.push(`📝${dayBadge.notes}`);
+            if (dayBadge.expenses > 0) badgeText.push(`💰${dayBadge.expenses}`);
+            if (dayBadge.incomes > 0) badgeText.push(`💵${dayBadge.incomes}`);
+            
+            if (badgeText.length > 0) {
                 const badge = document.createElement('span');
                 badge.className = 'task-badge';
-                badge.textContent = totalEntries;
+                badge.textContent = badgeText.join('+');
+                badge.style.cssText = 'font-size:9px; line-height:1.2; padding:2px 4px; max-width:50px; word-wrap:break-word;';
                 div.appendChild(badge);
             }
+            
+            div.title = `${dateStr}\nЗаказов: ${dayBadge.orders}\nЗаметок: ${dayBadge.notes}\nРасходов: ${dayBadge.expenses}\nДоходов: ${dayBadge.incomes}`;
             div.addEventListener('click', () => { selectedDate = dateObj; renderCalendar(); renderSchedule(); });
             grid.appendChild(div);
         }
         renderSchedule();
+    }
+    
+    // ========== УВЕДОМЛЕНИЯ ==========
+    function checkTomorrowNotifications() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = formatDate(tomorrow);
+        
+        const tomorrowOrders = ordersData.filter(o => o.date === tomorrowStr);
+        const tomorrowNotes = notes.filter(n => n.date === tomorrowStr);
+        const tomorrowPayments = getRegularPaymentsForDate(tomorrowStr);
+        
+        let message = '';
+        if (tomorrowOrders.length > 0) {
+            message += `📋 ${tomorrowOrders.length} заказ(ов)\n`;
+            tomorrowOrders.forEach(o => {
+                const color = getOrderColorObj(o);
+                const colorName = color === 'critical' ? '🔴 ОЧЕНЬ СРОЧНЫЙ' : color === 'middle' ? '🟡 Срочный' : '🟢 Новый';
+                message += `   №${o.orderNumber} ${o.client} – ${o.services.map(s=>s.serviceName).join(', ')} (${colorName})\n`;
+            });
+        }
+        if (tomorrowNotes.length > 0) {
+            message += `📝 ${tomorrowNotes.length} заметк(а/и):\n`;
+            tomorrowNotes.forEach(n => {
+                message += `   ${n.text}\n`;
+            });
+        }
+        if (tomorrowPayments.length > 0) {
+            message += `💰 Регулярные платежи:\n`;
+            tomorrowPayments.forEach(p => {
+                message += `   ${p.desc} – ${(parseFloat(p.expense)||0).toFixed(2)}₽\n`;
+            });
+        }
+        
+        if (message) {
+            const title = `🔔 На завтра (${tomorrowStr})`;
+            alert(`${title}\n\n${message}`);
+            saveNotificationShown(tomorrowStr);
+        }
+    }
+    
+    function saveNotificationShown(dateStr) {
+        const shown = JSON.parse(localStorage.getItem('notifications_shown') || '[]');
+        if (!shown.includes(dateStr)) {
+            shown.push(dateStr);
+            localStorage.setItem('notifications_shown', JSON.stringify(shown));
+        }
     }
 
     function renderSchedule() {
@@ -2292,6 +2709,233 @@ function deleteOrder(orderId) {
     function changeMonth(delta) {
         currentDate.setMonth(currentDate.getMonth()+delta);
         renderCalendar();
+    }
+    
+    function goToday() {
+        currentDate = new Date();
+        selectedDate = new Date();
+        renderCalendar();
+    }
+    
+    function goTomorrow() {
+        currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() + 1);
+        selectedDate = new Date(currentDate);
+        renderCalendar();
+    }
+    
+    // ========== ФИЛЬТР ПО УСЛУГАМ ==========
+    let currentServiceFilter = 'all';
+    let calendarViewMode = 'month'; // 'month' или 'week'
+    
+    function getServiceFilterButtons() {
+        const services = [...new Set(rates.map(r => r.service))];
+        let html = '<span style="font-size:14px; color:#6c757d;">Услуги:</span>';
+        html += '<button class="service-filter-btn active" data-service="all" onclick="filterByService(\'all\')">Все</button>';
+        services.forEach(svc => {
+            html += `<button class="service-filter-btn" data-service="${svc}" onclick="filterByService('${svc}')">${svc}</button>`;
+        });
+        return html;
+    }
+    
+    function filterByService(service) {
+        currentServiceFilter = service;
+        document.querySelectorAll('.service-filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.service === service);
+        });
+        renderCalendar();
+    }
+    
+    function toggleCalendarView() {
+        calendarViewMode = calendarViewMode === 'month' ? 'week' : 'month';
+        const btn = document.getElementById('viewToggleBtn');
+        btn.textContent = calendarViewMode === 'month' ? '📅 Неделя' : '📅 Месяц';
+        renderCalendar();
+    }
+    
+    function getCalendarSum() {
+        const year = currentDate.getFullYear(), month = currentDate.getMonth();
+        const daysInMonth = new Date(year, month+1, 0).getDate();
+        let totalOrders = 0, totalSum = 0;
+        
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const dayOrders = ordersData.filter(o => o.date === dateStr);
+            dayOrders.forEach(order => {
+                if (currentServiceFilter === 'all' || order.services.some(s => s.serviceName === currentServiceFilter)) {
+                    totalOrders++;
+                    totalSum += parseFloat(order.clientPrice) || 0;
+                }
+            });
+        }
+        
+        return { orders: totalOrders, sum: totalSum };
+    }
+    
+    function renderCalendarSummary() {
+        const summary = getCalendarSum();
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        document.getElementById('calendarSummary').innerHTML = `
+            <span style="color:#007bff;">📋 Заказов: ${summary.orders}</span>
+            <span style="color:#28a745;">💰 Прогноз: ${summary.sum.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}₽</span>
+            <span style="color:#6c757d;">📅 ${months[currentDate.getMonth()]} ${currentDate.getFullYear()}</span>
+        `;
+    }
+
+    // ========== ВИД НЕДЕЛИ ==========
+    function renderWeekView() {
+        const grid = document.getElementById('calendarGrid');
+        grid.innerHTML = '';
+        const today = new Date();
+        const dayOfWeek = today.getDay();
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+        
+        const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+        dayNames.forEach((name, i) => {
+            const date = new Date(monday);
+            date.setDate(monday.getDate() + i);
+            const div = document.createElement('div');
+            div.className = 'day-cell';
+            div.style.background = '#f8f9fa';
+            div.innerHTML = `<div style="font-weight:700; font-size:14px;">${name}</div><div style="font-size:12px; color:#6c757d;">${date.getDate()}</div>`;
+            div.addEventListener('click', () => {
+                selectedDate = date;
+                renderCalendar();
+                renderSchedule();
+            });
+            grid.appendChild(div);
+        });
+        
+        // Добавляем заказы на неделю
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(monday);
+            date.setDate(monday.getDate() + i);
+            const dateStr = formatDate(date);
+            const dayOrders = ordersData.filter(o => o.date === dateStr);
+            
+            if (dayOrders.length > 0) {
+                const dayDiv = grid.children[i];
+                dayOrders.forEach(order => {
+                    if (currentServiceFilter === 'all' || order.services.some(s => s.serviceName === currentServiceFilter)) {
+                        const badge = document.createElement('div');
+                        badge.style.cssText = 'font-size:10px; margin-top:4px; padding:2px; background:#e3f2fd; border-radius:4px;';
+                        badge.textContent = `№${order.orderNumber}`;
+                        dayDiv.appendChild(badge);
+                    }
+                });
+            }
+        }
+    }
+    
+    // ========== ЭКСПОРТ КАЛЕНДАРЯ ==========
+    function exportCalendar() {
+        const year = currentDate.getFullYear(), month = currentDate.getMonth();
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        const daysInMonth = new Date(year, month+1, 0).getDate();
+        
+        let text = `📅 КАЛЕНДАРЬ: ${months[month]} ${year}\n`;
+        text += `${'='.repeat(50)}\n\n`;
+        
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const dateObj = new Date(year, month, d);
+            const dayOrders = ordersData.filter(o => o.date === dateStr);
+            const dayNotes = notes.filter(n => n.date === dateStr);
+            
+            if (dayOrders.length > 0 || dayNotes.length > 0) {
+                text += `${d} ${months[month]}:\n`;
+                dayOrders.forEach(order => {
+                    if (currentServiceFilter !== 'all' && !order.services.some(s => s.serviceName === currentServiceFilter)) return;
+                    const color = getOrderColorObj(order);
+                    const colorName = color === 'critical' ? '🔴' : color === 'middle' ? '🟡' : color === 'done' ? '⬜' : '🟢';
+                    text += `  ${colorName} №${order.orderNumber} ${order.client} – ${order.services.map(s=>s.serviceName).join(', ')} – ${(parseFloat(order.clientPrice)||0).toFixed(2)}₽\n`;
+                });
+                dayNotes.forEach(note => {
+                    text += `  📝 ${note.time ? note.time + ' ' : ''}${note.text}\n`;
+                });
+                text += '\n';
+            }
+        }
+        
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `calendar_${months[month]}_${year}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    // ========== УЛУЧШЕННЫЕ УВЕДОМЛЕНИЯ ==========
+    function showNotificationModal(tomorrowStr, orders, notes, payments) {
+        const modal = document.getElementById('notificationModal');
+        const title = document.getElementById('notificationTitle');
+        const body = document.getElementById('notificationBody');
+        
+        title.textContent = `🔔 На завтра (${tomorrowStr})`;
+        let html = '';
+        
+        if (orders.length > 0) {
+            html += '<div class="notification-item orders">';
+            html += '<div class="notification-title">📋 Заказов: ' + orders.length + '</div>';
+            html += '<ul class="notification-list">';
+            orders.forEach(o => {
+                const color = getOrderColorObj(o);
+                const colorName = color === 'critical' ? '🔴 ОЧЕНЬ СРОЧНЫЙ' : color === 'middle' ? '🟡 Срочный' : '🟢 Новый';
+                html += `<li>№${o.orderNumber} ${o.client} – ${o.services.map(s=>s.serviceName).join(', ')} (${colorName})</li>`;
+            });
+            html += '</ul></div>';
+        }
+        
+        if (notes.length > 0) {
+            html += '<div class="notification-item notes">';
+            html += '<div class="notification-title">📝 Заметок: ' + notes.length + '</div>';
+            html += '<ul class="notification-list">';
+            notes.forEach(n => {
+                html += '<li>' + n.text + '</li>';
+            });
+            html += '</ul></div>';
+        }
+        
+        if (payments.length > 0) {
+            html += '<div class="notification-item payments">';
+            html += '<div class="notification-title">💰 Регулярные платежи:</div>';
+            html += '<ul class="notification-list">';
+            payments.forEach(p => {
+                html += '<li>' + p.desc + ' – ' + (parseFloat(p.expense)||0).toFixed(2) + '₽</li>';
+            });
+            html += '</ul></div>';
+        }
+        
+        if (!html) {
+            html = '<p style="text-align:center; color:#6c757d; padding:20px;">На завтра нет записей ✨</p>';
+        }
+        
+        body.innerHTML = html;
+        modal.classList.add('active');
+        saveNotificationShown(tomorrowStr);
+    }
+    
+    function closeNotificationModal() {
+        document.getElementById('notificationModal').classList.remove('active');
+    }
+    
+    function checkTomorrowNotifications() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = formatDate(tomorrow);
+        
+        const shown = JSON.parse(localStorage.getItem('notifications_shown') || '[]');
+        if (shown.includes(tomorrowStr)) return;
+        
+        const tomorrowOrders = ordersData.filter(o => o.date === tomorrowStr);
+        const tomorrowNotes = notes.filter(n => n.date === tomorrowStr);
+        const tomorrowPayments = getRegularPaymentsForDate(tomorrowStr);
+        
+        if (tomorrowOrders.length > 0 || tomorrowNotes.length > 0 || tomorrowPayments.length > 0) {
+            showNotificationModal(tomorrowStr, tomorrowOrders, tomorrowNotes, tomorrowPayments);
+        }
     }
 
     // ========== ЗАМЕТКИ ==========
@@ -2530,6 +3174,223 @@ function deleteOrder(orderId) {
         saveAll();
     }
 
+    function renderSummary() {
+        const yearSel = document.getElementById('summaryYear');
+        const monthSel = document.getElementById('summaryMonth');
+        const customDateFrom = document.getElementById('customDateFrom');
+        const customDateTo = document.getElementById('customDateTo');
+        if (!yearSel || !monthSel) return;
+        
+        let startDate, endDate;
+        const currentYear = parseInt(yearSel.value);
+        const currentMonth = parseInt(monthSel.value);
+        const periodType = document.querySelector('.btn-primary:not(.btn-info):not(.btn-success):not(.btn-warning)')?.classList?.contains('btn-primary') && 
+                          !document.getElementById('btnQuarter')?.classList?.contains('btn-primary') &&
+                          !document.getElementById('btnYear')?.classList?.contains('btn-primary') ? 'month' : 'month';
+        
+        // Определяем период на основе кнопок
+        if (customDateFrom?.value && customDateTo?.value) {
+            // Произвольный период
+            startDate = customDateFrom.value;
+            endDate = customDateTo.value;
+        } else {
+            // Месяц, квартал или год по умолчанию
+            const lastDay = new Date(currentYear, currentMonth, 0).getDate();
+            startDate = `${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
+            endDate = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
+        }
+        
+        let filteredOrders = ordersData.filter(o => o.date && o.date >= startDate && o.date <= endDate);
+        let filteredCash = cashOps.filter(op => op.date && op.date >= startDate && op.date <= endDate);
+        
+        // Формируем заголовок
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        const startD = new Date(startDate);
+        const endD = new Date(endDate);
+        
+        let titleText = '';
+        let subtitleText = '';
+        
+        if (customDateFrom?.value && customDateTo?.value) {
+            titleText = `Отчёт за период`;
+            subtitleText = `с ${formatDatePretty(startDate)} по ${formatDatePretty(endDate)}`;
+        } else if (startD.getMonth() === endD.getMonth() && startD.getFullYear() === endD.getFullYear()) {
+            titleText = `Отчёт за ${months[startD.getMonth()]} ${startD.getFullYear()}`;
+            subtitleText = '';
+        } else {
+            titleText = `Отчёт за период`;
+            subtitleText = `с ${formatDatePretty(startDate)} по ${formatDatePretty(endDate)}`;
+        }
+        
+        document.getElementById('summaryTitle').textContent = titleText;
+        document.getElementById('summarySubtitle').textContent = subtitleText;
+        
+        let revenue=0, cost=0, helper=0;
+        filteredOrders.forEach(o => {
+            revenue += parseFloat(o.clientPrice)||0;
+            cost += parseFloat(o.materialCost)||0;
+            helper += parseFloat(o.helperPay)||0;
+        });
+        const gross = revenue - cost - helper;
+        let expenses = filteredCash.reduce((acc, op) => acc + (parseFloat(op.expense)||0), 0);
+        const net = gross - expenses;
+        
+        const revenueClass = revenue > 0 ? 'positive' : '';
+        const costClass = 'negative';
+        const helperClass = 'negative';
+        const netClass = net >= 0 ? 'positive' : 'negative';
+        
+        document.getElementById('summaryBlock').innerHTML = `
+            <div class="summary-item"><label>💰 Выручка</label><span class="${revenueClass}">${revenue.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>📦 Себестоимость</label><span class="${costClass}">${cost.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>👥 Помощнику</label><span class="${helperClass}">${helper.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>📈 Валовый доход</label><span>${(gross).toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>💸 Расходы</label><span class="${costClass}">${expenses.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>✨ Чистая прибыль</label><span class="${netClass}">${net.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>📊 Заказов за период</label><span>${filteredOrders.length}</span></div>
+        `;
+    }
+    
+    function formatDatePretty(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+        return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    
+    function setReportPeriod(type) {
+        const yearSel = document.getElementById('summaryYear');
+        const monthSel = document.getElementById('summaryMonth');
+        const customDateFrom = document.getElementById('customDateFrom');
+        const customDateTo = document.getElementById('customDateTo');
+        const btnMonth = document.getElementById('btnMonth');
+        const btnQuarter = document.getElementById('btnQuarter');
+        const btnYear = document.getElementById('btnYear');
+        const btnCustom = document.getElementById('btnCustom');
+        
+        // Сброс всех кнопок
+        [btnMonth, btnQuarter, btnYear, btnCustom].forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
+        });
+        
+        if (type === 'month') {
+            btnMonth.classList.remove('btn-secondary');
+            btnMonth.classList.add('btn-primary');
+            customDateFrom.style.display = 'none';
+            customDateTo.style.display = 'none';
+            yearSel.style.display = 'inline-block';
+            monthSel.style.display = 'inline-block';
+            renderSummary();
+        } else if (type === 'quarter') {
+            btnQuarter.classList.remove('btn-secondary');
+            btnQuarter.classList.add('btn-primary');
+            customDateFrom.style.display = 'none';
+            customDateTo.style.display = 'none';
+            yearSel.style.display = 'inline-block';
+            monthSel.style.display = 'inline-block';
+            // Для квартала - показываем первый месяц квартала
+            const currentMonth = parseInt(monthSel.value) || (new Date().getMonth() + 1);
+            const quarter = Math.ceil(currentMonth / 3);
+            const quarterStart = (quarter - 1) * 3 + 1;
+            monthSel.value = quarterStart;
+            renderSummary();
+        } else if (type === 'year') {
+            btnYear.classList.remove('btn-secondary');
+            btnYear.classList.add('btn-primary');
+            customDateFrom.style.display = 'none';
+            customDateTo.style.display = 'none';
+            yearSel.style.display = 'inline-block';
+            monthSel.style.display = 'none';
+            renderSummary();
+        } else if (type === 'custom') {
+            btnCustom.classList.remove('btn-secondary');
+            btnCustom.classList.add('btn-primary');
+            yearSel.style.display = 'none';
+            monthSel.style.display = 'none';
+            customDateFrom.style.display = 'inline-block';
+            customDateTo.style.display = 'inline-block';
+            // Установка дат по умолчанию
+            const now = new Date();
+            const firstDay = new Date(now.getFullYear(), 0, 1);
+            customDateFrom.value = formatDate(firstDay);
+            customDateTo.value = formatDate(now);
+            renderSummary();
+        }
+    }
+    
+    function resetReportPeriod() {
+        setReportPeriod('month');
+    }
+    
+    function printSummaryReport() {
+        const title = document.getElementById('summaryTitle').textContent;
+        const subtitle = document.getElementById('summarySubtitle').textContent;
+        const block = document.getElementById('summaryBlock').innerHTML;
+        
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>${title}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 40px; }
+                    h1 { color: #1a3c5e; border-bottom: 3px solid #1a3c5e; padding-bottom: 10px; }
+                    h2 { color: #6c757d; margin-top: -10px; }
+                    .summary-block { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+                    .summary-item { background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
+                    .summary-item label { font-weight: 600; color: #495057; display: block; margin-bottom: 8px; }
+                    .summary-item span { font-size: 24px; font-weight: 700; color: #1a3c5e; }
+                    .summary-item span.positive { color: #28a745; }
+                    .summary-item span.negative { color: #dc3545; }
+                    .footer { margin-top: 30px; padding-top: 15px; border-top: 2px solid #e9ecef; color: #6c757d; font-size: 12px; }
+                    @media print { body { padding: 20px; } }
+                </style>
+            </head>
+            <body>
+                <h1>📊 Отчёт по финансовым показателям</h1>
+                <h2>${title}</h2>
+                ${subtitle ? `<p style="color: #6c757d; margin-top: -15px;">${subtitle}</p>` : ''}
+                <div class="summary-block">${block}</div>
+                <div class="footer">
+                    <p>Дата формирования: ${new Date().toLocaleDateString('ru-RU')} | Авто-ателье</p>
+                </div>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+    
+    function exportSummaryReport() {
+        const title = document.getElementById('summaryTitle').textContent;
+        const subtitle = document.getElementById('summarySubtitle').textContent;
+        const block = document.getElementById('summaryBlock');
+        
+        let text = `ОТЧЁТ ПО ФИНАНСОВЫМ ПОКАЗАТЕЛЯМ\n`;
+        text += `${'='.repeat(40)}\n\n`;
+        text += `${title}\n`;
+        if (subtitle) text += `${subtitle}\n\n`;
+        text += `${'-'.repeat(40)}\n\n`;
+        
+        const items = block.querySelectorAll('.summary-item');
+        items.forEach(item => {
+            const label = item.querySelector('label')?.textContent || '';
+            const value = item.querySelector('span')?.textContent || '';
+            text += `${label}: ${value}\n`;
+        });
+        
+        text += `\n${'-'.repeat(40)}\n`;
+        text += `Дата формирования: ${new Date().toLocaleDateString('ru-RU')}\n`;
+        text += `Авто-ателье\n`;
+        
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Отчёт_${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+    }
+
     function populateSummarySelects() {
         const yearSel = document.getElementById('summaryYear');
         const monthSel = document.getElementById('summaryMonth');
@@ -2633,6 +3494,66 @@ window.updateCloudData = function(data) {
     saveAll();
     renderAll();
 };
+
+// ========== ГОРЯЧИЕ КЛАВИШИ ==========
+document.addEventListener('keydown', (e) => {
+    // Проверяем, что не находимся в поле ввода
+    const isInInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+    const isModalOpen = document.querySelector('.modal-overlay.active');
+    
+    if (isInInput || isModalOpen) return;
+    
+    // Ctrl+D — создать заказ на сегодня
+    if (e.ctrlKey && e.key === 'd') {
+        e.preventDefault();
+        openOrderModal();
+    }
+    
+    // Ctrl+N — создать заказ на завтра
+    if (e.ctrlKey && e.key === 'n') {
+        e.preventDefault();
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        currentDate = new Date(tomorrow);
+        selectedDate = new Date(tomorrow);
+        openOrderModal();
+    }
+    
+    // Стрелки влево/вправо — переключение дней
+    if (e.key === 'ArrowLeft') {
+        if (calendarViewMode === 'week') {
+            currentDate.setDate(currentDate.getDate() - 7);
+        } else {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+        }
+        renderCalendar();
+    }
+    
+    if (e.key === 'ArrowRight') {
+        if (calendarViewMode === 'week') {
+            currentDate.setDate(currentDate.getDate() + 7);
+        } else {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+        }
+        renderCalendar();
+    }
+    
+    // Escape — закрыть модальные окна
+    if (e.key === 'Escape') {
+        closeNotificationModal();
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+});
+
+// Закрытие модального уведомления по клику вне него
+document.getElementById('notificationModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'notificationModal') {
+        closeNotificationModal();
+    }
+});
+
 </script>
 
 <script type="module">
