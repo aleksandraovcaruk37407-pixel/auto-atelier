@@ -265,13 +265,134 @@
         <div id="purchaseDocumentContainer" style="margin-top:20px;"></div>
     </div>
 
-    <!-- Модалки... (остальной HTML без изменений) -->
-
     <!-- Модалка заказа -->
     <div class="modal-overlay" id="orderModal">
-        <!-- ... -->
+        <div class="modal">
+            <h3 id="orderModalTitle">Новый заказ</h3>
+            <div class="form-row">
+                <div class="form-group"><label>Дата создания</label><input type="date" id="orderDate"></div>
+                <div class="form-group"><label>Срок (дней)</label><input type="number" id="orderDurationDays" min="1" max="30" value="1"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Дата истечения (авто)</label><input type="date" id="orderDeadline" readonly></div>
+                <div class="form-group"><label>Имя клиента</label><input type="text" id="orderClient" placeholder="Введите имя"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Телефон</label><input type="text" id="orderPhone" placeholder="+7 900 000-00-00" onblur="formatPhone(this)"></div>
+                <div class="form-group"></div>
+            </div>
+            <div class="form-group">
+                <label>Услуги (можно несколько)</label>
+                <div id="servicesList"></div>
+                <button class="btn-extra" onclick="addServiceRow()" style="margin-top:5px;">➕ Добавить услугу</button>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Цена клиенту (₽)</label><input type="number" id="orderClientPrice" step="0.01" value="0"></div>
+                <div class="form-group"><label>Оплата помощнику (₽)</label><input type="number" id="orderHelperPay" step="0.01" value="0"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Себестоимость (₽)</label><input type="text" id="orderMaterialCost" readonly></div>
+                <div class="form-group"><label>Прибыль (₽)</label><input type="text" id="orderGrossProfit" readonly></div>
+            </div>
+            <div class="form-group" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <label style="margin:0;">Выполнен</label><input type="checkbox" id="orderDone">
+                <label style="margin:0;">Оплачено</label><input type="checkbox" id="orderPaid" onchange="handlePaidChange()">
+                <button class="btn-extra" onclick="openExtraModalFromOrder()">📦 Доп. расходники</button>
+                <span style="font-size:12px; color:#6c757d; margin-left:10px;" id="extraInfo">(не указаны)</span>
+                <button class="btn-danger-sm" onclick="deleteOrderFromModal()">🗑️ Удалить заказ</button>
+            </div>
+            <div class="color-select">
+                <label>Срочность (цвет):</label>
+                <button class="color-btn auto active" onclick="setOrderColor('auto')" title="Авто">🌀</button>
+                <button class="color-btn new" onclick="setOrderColor('new')" title="Новый">🟢</button>
+                <button class="color-btn middle" onclick="setOrderColor('middle')" title="Срочный">🟡</button>
+                <button class="color-btn critical" onclick="setOrderColor('critical')" title="Очень срочный">🔴</button>
+                <button class="color-btn done" onclick="setOrderColor('done')" title="Выполнен">⬜</button>
+            </div>
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeOrderModal()">Отмена</button>
+                <button class="btn-save" onclick="saveOrderModal()">Сохранить</button>
+            </div>
+        </div>
     </div>
-    <!-- Остальные модалки ... -->
+
+    <!-- Модалка календарной записи -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal">
+            <h3>Новая запись в календаре</h3>
+            <div class="form-group"><label>Дата</label><input type="date" id="modalDate"></div>
+            <div class="form-group"><label>Имя клиента</label><input type="text" id="modalName"></div>
+            <div class="form-group"><label>Телефон</label><input type="text" id="modalPhone" onblur="formatPhone(this)"></div>
+            <div class="form-group"><label>Услуга</label><select id="modalService"></select></div>
+            <div class="form-group"><label>Срок (дней)</label><input type="number" id="modalDurationDays" min="1" max="30" value="1"></div>
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+                <button class="btn-save" onclick="saveBooking()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка доп. расходников -->
+    <div class="modal-overlay" id="extraModal">
+        <div class="modal">
+            <h3>Дополнительные расходники</h3>
+            <div id="extraMaterialsContainer"></div>
+            <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="newExtraName" placeholder="Название" style="flex:1; min-width:100px;">
+                <input type="number" id="newExtraPrice" placeholder="Цена за ед." step="0.01" style="width:100px;">
+                <select id="newExtraUnit" style="width:80px;">
+                    <option value="м">м</option><option value="г">г</option><option value="мл">мл</option><option value="шт">шт</option><option value="уп.">уп.</option>
+                </select>
+                <button class="btn-extra" onclick="addNewExtra()">➕ Добавить</button>
+            </div>
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeExtraModal()">Отмена</button>
+                <button class="btn-save" onclick="saveExtraModal()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка расходников услуги -->
+    <div class="modal-overlay" id="serviceItemsModal">
+        <div class="modal">
+            <h3 id="serviceItemsModalTitle">Расходники услуги</h3>
+            <div id="serviceItemsContainer"></div>
+            <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <button class="btn-extra" onclick="addServiceItemRow()">➕ Добавить расходник</button>
+                <span style="font-size:12px; color:#6c757d;">Введите «Ткань», «Краска», «Пленка для аквапринта» или название вашего материала для маркеров</span>
+            </div>
+            <datalist id="serviceItemDatalist"></datalist>
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeServiceItemsModal()">Отмена</button>
+                <button class="btn-save" onclick="saveServiceItemsModal()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка заметки -->
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal">
+            <h3 id="noteModalTitle">Новая заметка</h3>
+            <div class="form-group"><label>Дата</label><input type="date" id="noteDate"></div>
+            <div class="form-group"><label>Время (необязательно)</label><input type="time" id="noteTime"></div>
+            <div class="form-group"><label>Текст заметки</label><textarea id="noteText" rows="3"></textarea></div>
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeNoteModal()">Отмена</button>
+                <button class="btn-save" onclick="saveNote()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-toolbar">
+        <div>
+            <button class="btn btn-export" onclick="exportData()">📤 Экспорт</button>
+            <button class="btn btn-import" onclick="document.getElementById('fileInput').click()">📥 Импорт</button>
+            <input type="file" id="fileInput" accept=".json" onchange="importData(event)">
+        </div>
+        <div>
+            <button class="btn btn-danger" onclick="clearAllOrders()" style="background:#dc3545; color:#fff; padding:8px 18px; border:none; border-radius:30px; cursor:pointer;">🗑️ Очистить ВСЕ заказы</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -282,6 +403,7 @@
     let selectedDate = new Date();
     let orderEditId = null;
     let currentManualColor = 'auto';
+    let extraModalOrderId = null;
     let editingServiceIndex = null;
     let currentExtraData = {};
     let currentServices = [];
@@ -1481,7 +1603,49 @@
                 otherMaterials[key] = (otherMaterials[key]||0) + extra[key];
             }
         });
-        // ... остальной код генерации документа ...
+        for (let markerName in markers) {
+            if (markers[markerName].length) {
+                const section = document.createElement('h3');
+                section.textContent = markerName;
+                docContainer.appendChild(section);
+                const table = document.createElement('table');
+                table.innerHTML = '<tr><th>Артикул</th><th>Наименование</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th></tr>';
+                const grouped = {};
+                markers[markerName].forEach(m => {
+                    if (!grouped[m.article]) grouped[m.article] = {name:m.name, qty:0, unit:m.unit};
+                    grouped[m.article].qty += m.qty;
+                });
+                const stock = loadStock();
+                for (let art in grouped) {
+                    const g = grouped[art];
+                    const stockItem = stock.find(s => s.name === g.name) || {remain:0};
+                    const remain = stockItem.remain || 0;
+                    const toBuy = Math.max(0, g.qty - remain);
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${art}</td><td>${g.name}</td><td>${g.qty.toFixed(2)}</td><td>${g.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td>`;
+                    table.appendChild(tr);
+                }
+                docContainer.appendChild(table);
+            }
+        }
+        if (Object.keys(otherMaterials).length) {
+            const section = document.createElement('h3');
+            section.textContent = 'Прочие расходники';
+            docContainer.appendChild(section);
+            const table = document.createElement('table');
+            table.innerHTML = '<tr><th>Материал</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th></tr>';
+            const stock = loadStock();
+            for (let name in otherMaterials) {
+                const ref = extraRef.find(e=>e.name===name) || {unit:'шт'};
+                const stockItem = stock.find(s => s.name === name) || {remain:0};
+                const remain = stockItem.remain || 0;
+                const toBuy = Math.max(0, otherMaterials[name] - remain);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${name}</td><td>${otherMaterials[name].toFixed(2)}</td><td>${ref.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td>`;
+                table.appendChild(tr);
+            }
+            docContainer.appendChild(table);
+        }
     }
 
     // ========== ЭКСПОРТ/ИМПОРТ ==========
