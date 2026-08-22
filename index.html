@@ -159,8 +159,8 @@
     cursor: pointer;
     transition: all 0.2s ease;
     flex: 1;
-    max-width: 80px;
-    min-width: 50px;
+    max-width: 70px;
+    min-width: 45px;
 }
 
 .mobile-nav-item:active {
@@ -374,6 +374,8 @@
         max-width: 100%;
         transform: translateY(100%);
         transition: transform 0.3s ease;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
     
     .modal-overlay.active .modal {
@@ -569,6 +571,134 @@
     /* Справочники */
     .note {
         padding: 14px;
+        font-size: 14px;
+    }
+    
+    /* ===== МОБИЛЬНЫЕ СТИЛИ ДЛЯ МАРКЕРОВ ===== */
+    .service-row {
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 12px;
+        background: #fafbfc;
+    }
+    
+    .service-row .service-header {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .service-row .service-header select {
+        flex: 1;
+        min-width: 0;
+        font-size: 16px;
+        padding: 12px;
+        border-radius: 10px;
+        min-height: 48px;
+    }
+    
+    .service-row .service-header .btn-del {
+        flex-shrink: 0;
+        padding: 10px 14px;
+        min-height: 44px;
+    }
+    
+    .service-details {
+        border-top: 2px solid #e0e0e0;
+        padding-top: 12px;
+        margin-top: 8px;
+    }
+    
+    .service-details .section-title {
+        font-weight: 700;
+        color: #1a3c5e;
+        margin: 12px 0 8px;
+        font-size: 16px;
+    }
+    
+    .service-details label {
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+    
+    .service-details input,
+    .service-details select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        min-height: 48px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    
+    /* Маркеры услуг */
+    .extra-item {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .extra-item.marker-selected {
+        background: #e8f5e9;
+        border: 2px solid #81c784;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .marker-status {
+        color: #2e7d32;
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+        margin-left: 8px;
+    }
+    
+    .manual-item-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .manual-item-row input,
+    .manual-item-row select {
+        flex: 1;
+        min-width: 80px;
+    }
+    
+    /* Datalist стили */
+    datalist {
+        font-size: 14px;
+    }
+    
+    /* Улучшенные поля ввода */
+    input[type="number"],
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="tel"] {
+        font-size: 16px;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        min-height: 48px;
+    }
+    
+    /* Увеличиваем шрифт placeholder */
+    input::placeholder,
+    textarea::placeholder {
         font-size: 14px;
     }
 }
@@ -1248,6 +1378,14 @@
             <div class="icon">📅</div>
             <div class="label">Календарь</div>
         </div>
+        <div class="mobile-nav-item" data-tab="tab-ref" onclick="switchMobileTab(this)">
+            <div class="icon">📚</div>
+            <div class="label">Справочник</div>
+        </div>
+        <div class="mobile-nav-item" data-tab="tab-purchase" onclick="switchMobileTab(this)">
+            <div class="icon">📄</div>
+            <div class="label">Закупка</div>
+        </div>
     </div>
 </div>
 
@@ -1280,6 +1418,9 @@
     notes = JSON.parse(localStorage.getItem('notes_data') || '[]');
 
     rates.forEach(r => { if (!r.items) r.items = []; });
+    
+    // Настройка маркеров по умолчанию для услуг
+    configureDefaultServiceMarkers();
     
     // Удаляем маркер "Краска" из услуги "Восстановление после ДТП"
     const accidentService = rates.find(r => r.service === 'Восстановление после ДТП');
@@ -1970,13 +2111,14 @@ if (!films.length) {
     function deleteExtraRef(idx) { extraRef.splice(idx,1); saveAll(); renderAll(); }
     function deletePaint(idx) { paints.splice(idx,1); saveAll(); renderAll(); }
     function deleteFilm(idx) { films.splice(idx,1); saveAll(); renderAll(); }
-       function openAddColorModal() {
-         document.getElementById('newColorCategory').value = '';
-         document.getElementById('newColorCode').value = '';
-         document.getElementById('newColorName').value = '';
-         document.getElementById('newColorPrice').value = '';
-         document.getElementById('addColorModal').classList.add('active');
-       }
+        function openAddColorModal() {
+          document.getElementById('newColorCategory').value = '';
+          document.getElementById('newColorCode').value = '';
+          document.getElementById('newColorName').value = '';
+          document.getElementById('newColorPrice').value = '';
+          document.getElementById('addColorModal').classList.add('active');
+          openModalWithHistory('addColorModal');
+        }
        function closeAddColorModal() { document.getElementById('addColorModal').classList.remove('active'); }
        function saveNewColor() {
          const category = document.getElementById('newColorCategory').value.trim();
@@ -1994,6 +2136,7 @@ if (!films.length) {
         document.getElementById('newPaintName').value = '';
         document.getElementById('newPaintPrice').value = '';
         document.getElementById('addPaintModal').classList.add('active');
+        openModalWithHistory('addPaintModal');
     }
     function closeAddPaintModal() { document.getElementById('addPaintModal').classList.remove('active'); }
     function saveNewPaint() {
@@ -2012,6 +2155,7 @@ if (!films.length) {
         document.getElementById('newFilmName').value = '';
         document.getElementById('newFilmPrice').value = '';
         document.getElementById('addFilmModal').classList.add('active');
+        openModalWithHistory('addFilmModal');
     }
     function closeAddFilmModal() { document.getElementById('addFilmModal').classList.remove('active'); }
     function saveNewFilm() {
@@ -2027,7 +2171,7 @@ if (!films.length) {
         document.getElementById('newExtraRefName').value = '';
         document.getElementById('newExtraRefUnit').value = '';
         document.getElementById('newExtraRefPrice').value = '';
-        document.getElementById('addExtraRefModal').classList.add('active');
+        openModalWithHistory('addExtraRefModal');
     }
     function closeAddExtraRefModal() { document.getElementById('addExtraRefModal').classList.remove('active'); }
     function saveNewExtraRef() {
@@ -2161,7 +2305,7 @@ if (!films.length) {
             return !isMarker || item.enabled !== false;
         });
         items.forEach(item => addServiceItemRow(item));
-        document.getElementById('serviceItemsModal').classList.add('active');
+        openModalWithHistory('serviceItemsModal');
     }
 
     function addServiceItemRow(item) {
@@ -2331,6 +2475,7 @@ if (!films.length) {
             addServiceRow();
         }
         document.getElementById('orderModal').classList.add('active');
+        openModalWithHistory('orderModal');
         updateModalTotals();
     }
 
@@ -2381,10 +2526,20 @@ if (!films.length) {
         select.onchange = () => {
             instance.serviceName = select.value;
             const svc = rates.find(r => r.service === select.value);
-            if (svc) { instance.usesFabric = svc.usesFabric; instance.usesPaint = serviceUsesPaint(svc); instance.usesFilm = svc.usesFilm; }
-            buildServiceDetails(details, index);
+            if (svc) { 
+                instance.usesFabric = svc.usesFabric; 
+                instance.usesPaint = serviceUsesPaint(svc); 
+                instance.usesFilm = svc.usesFilm;
+                // Принудительно пересоздаём детали для маркеров
+                buildServiceDetails(details, index);
+            }
             updateModalTotals();
         };
+        
+        // Если услуга уже выбрана (редактирование)
+        if (instance.serviceName) {
+            buildServiceDetails(details, index);
+        }
         if (instance.serviceName) buildServiceDetails(details, index);
         updateModalTotals();
     }
@@ -2734,7 +2889,7 @@ function deleteOrder(orderId) {
             div.innerHTML = `<span>${ref.name}</span><input type="number" class="extra-qty" value="${parseFloat(currentExtraData[ref.name])||''}" placeholder="Кол-во" data-name="${ref.name}"> <span>${parseFloat(ref.price)||0}₽/${ref.unit}</span>`;
             container.appendChild(div);
         });
-        document.getElementById('extraModal').classList.add('active');
+        openModalWithHistory('extraModal');
     }
     function saveExtraModal() {
         document.querySelectorAll('.extra-qty').forEach(input => {
@@ -3371,12 +3526,12 @@ function deleteOrder(orderId) {
         }
         
         body.innerHTML = html;
-        modal.classList.add('active');
+        openModalWithHistory('notificationModal');
         saveNotificationShown(tomorrowStr);
     }
     
     function closeNotificationModal() {
-        document.getElementById('notificationModal').classList.remove('active');
+        closeModalWithHistory('notificationModal');
     }
     
     function checkTomorrowNotifications() {
@@ -3402,7 +3557,7 @@ function deleteOrder(orderId) {
         document.getElementById('noteDate').value = dateStr || (selectedDate ? formatDate(selectedDate) : '');
         document.getElementById('noteTime').value = '';
         document.getElementById('noteText').value = '';
-        document.getElementById('noteModal').classList.add('active');
+        openModalWithHistory('noteModal');
     }
     function closeNoteModal() { document.getElementById('noteModal').classList.remove('active'); }
     function saveNote() {
@@ -3875,6 +4030,8 @@ function deleteOrder(orderId) {
 
     document.addEventListener('DOMContentLoaded', () => {
         loadData();
+        // Принудительно настраиваем маркеры для всех услуг
+        configureDefaultServiceMarkers();
         createSampleOrders();
         addRegularPaymentsToCash();
         currentDate = new Date();
@@ -3891,31 +4048,192 @@ function deleteOrder(orderId) {
                 document.querySelectorAll('.mobile-nav-item').forEach(item => {
                     item.classList.toggle('active', item.dataset.tab === tabId);
                 });
+                // Добавляем в историю для кнопки "назад"
+                const lastItem = navigationStack[navigationStack.length - 1];
+                if (!lastItem || lastItem.type !== 'tab' || lastItem.id !== tabId) {
+                    navigationStack = navigationStack.filter(item => item.type !== 'modal');
+                    navigationStack.push({type: 'tab', id: tabId});
+                    lastActiveTab = tabId;
+                    history.pushState({tab: tabId}, '');
+                }
                 if (tabId === 'tab-calendar') renderCalendar();
                 if (tabId === 'tab-ref') renderRefs();
                 if (tabId === 'tab-purchase') renderPurchaseOrdersList();
             });
         });
         
-        // Глобальная функция для мобильных табов
-        window.switchMobileTab = function(navItem) {
-            const tabId = navItem.dataset.tab;
-            switchTab(tabId);
+    // ========== МОБИЛЬНАЯ НАВИГАЦИЯ "НАЗАД" ==========
+    // История вкладок и модалок для кнопки "назад"
+    let navigationStack = []; // [{type: 'tab'|'modal', id: string}]
+    let lastActiveTab = 'tab-orders';
+    
+    // Инициализация стека текущей активной вкладкой
+    const activeTabBtn = document.querySelector('.tab-btn.active');
+    if (activeTabBtn) {
+        navigationStack.push({type: 'tab', id: activeTabBtn.dataset.tab});
+    }
+    
+    // При открытии модалки добавляем в стек
+    function openModalWithHistory(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            navigationStack.push({type: 'modal', id: modalId});
+            history.pushState({modal: modalId}, '');
+        }
+    }
+    
+    // При закрытии модалки убираем из стека
+    function closeModalWithHistory(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            // Убираем последнюю запись модалки из стека
+            navigationStack = navigationStack.filter(item => item.id !== modalId);
+        }
+    }
+    
+    // Перехватываем стандартные вызовы закрытия модалок
+    const originalCloseOrderModal = window.closeOrderModal;
+    window.closeOrderModal = function() {
+        closeModalWithHistory('orderModal');
+        if (originalCloseOrderModal) originalCloseOrderModal();
+    };
+    
+    const originalCloseExtraModal = window.closeExtraModal;
+    window.closeExtraModal = function() {
+        closeModalWithHistory('extraModal');
+        if (originalCloseExtraModal) originalCloseExtraModal();
+    };
+    
+    const originalCloseServiceItemsModal = window.closeServiceItemsModal;
+    window.closeServiceItemsModal = function() {
+        closeModalWithHistory('serviceItemsModal');
+        if (originalCloseServiceItemsModal) originalCloseServiceItemsModal();
+    };
+    
+    const originalCloseModal = window.closeModal;
+    window.closeModal = function() {
+        closeModalWithHistory('bookingModal');
+        if (originalCloseModal) originalCloseModal();
+    };
+    
+    const originalCloseNoteModal = window.closeNoteModal;
+    window.closeNoteModal = function() {
+        closeModalWithHistory('noteModal');
+        if (originalCloseNoteModal) originalCloseNoteModal();
+    };
+    
+    const originalCloseAddColorModal = window.closeAddColorModal;
+    window.closeAddColorModal = function() {
+        closeModalWithHistory('addColorModal');
+        if (originalCloseAddColorModal) originalCloseAddColorModal();
+    };
+    
+    const originalCloseAddPaintModal = window.closeAddPaintModal;
+    window.closeAddPaintModal = function() {
+        closeModalWithHistory('addPaintModal');
+        if (originalCloseAddPaintModal) originalCloseAddPaintModal();
+    };
+    
+    const originalCloseAddFilmModal = window.closeAddFilmModal;
+    window.closeAddFilmModal = function() {
+        closeModalWithHistory('addFilmModal');
+        if (originalCloseAddFilmModal) originalCloseAddFilmModal();
+    };
+    
+    const originalCloseAddExtraRefModal = window.closeAddExtraRefModal;
+    window.closeAddExtraRefModal = function() {
+        closeModalWithHistory('addExtraRefModal');
+        if (originalCloseAddExtraRefModal) originalCloseAddExtraRefModal();
+    };
+    
+    // Обработка кнопки "назад" на телефоне
+    window.addEventListener('popstate', (event) => {
+        // Проверяем, есть ли открытые модалки (включая notification-modal)
+        const openModals = document.querySelectorAll('.modal-overlay.active, .notification-modal.active');
+        
+        if (openModals.length > 0) {
+            // Если есть модалки - закрываем последнюю
+            const lastModal = openModals[openModals.length - 1];
+            const modalId = lastModal.id;
             
-            // Обновляем desktop tabs
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.tab === tabId);
-            });
+            // Находим соответствующую функцию закрытия
+            const closeFn = {
+                'orderModal': closeOrderModal,
+                'extraModal': closeExtraModal,
+                'serviceItemsModal': closeServiceItemsModal,
+                'bookingModal': closeModal,
+                'noteModal': closeNoteModal,
+                'addColorModal': closeAddColorModal,
+                'addPaintModal': closeAddPaintModal,
+                'addFilmModal': closeAddFilmModal,
+                'addExtraRefModal': closeAddExtraRefModal,
+                'notificationModal': closeNotificationModal
+            }[modalId];
             
-            // Обновляем мобильную навигацию
-            document.querySelectorAll('.mobile-nav-item').forEach(item => {
-                item.classList.toggle('active', item.dataset.tab === tabId);
-            });
-            
-            if (tabId === 'tab-calendar') renderCalendar();
-            if (tabId === 'tab-ref') renderRefs();
-            if (tabId === 'tab-purchase') renderPurchaseOrdersList();
-        };
+            if (closeFn) {
+                closeFn();
+            } else {
+                // Если не нашли функцию - закрываем вручную
+                lastModal.classList.remove('active');
+            }
+        } else if (navigationStack.length > 1) {
+            // Если модалок нет - возвращаемся на предыдущую вкладку
+            navigationStack.pop();
+            const prevTab = navigationStack[navigationStack.length - 1];
+            if (prevTab && prevTab.type === 'tab') {
+                switchTab(prevTab.id);
+                
+                // Обновляем desktop tabs
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === prevTab.id);
+                });
+                
+                // Обновляем мобильную навигацию
+                document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.tab === prevTab.id);
+                });
+                
+                if (prevTab.id === 'tab-calendar') renderCalendar();
+                if (prevTab.id === 'tab-ref') renderRefs();
+                if (prevTab.id === 'tab-purchase') renderPurchaseOrdersList();
+            }
+        }
+        // Если стек пустой - разрешаем браузеру закрыть страницу (стандартное поведение)
+    });
+    
+    // Модифицируем switchMobileTab для отслеживания истории
+    window.switchMobileTab = function(navItem) {
+        const tabId = navItem.dataset.tab;
+        switchTab(tabId);
+        
+        // Обновляем desktop tabs
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabId);
+        });
+        
+        // Обновляем мобильную навигацию
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.tab === tabId);
+        });
+        
+        // Добавляем в историю только если эта вкладка не последняя
+        const lastItem = navigationStack[navigationStack.length - 1];
+        if (!lastItem || lastItem.type !== 'tab' || lastItem.id !== tabId) {
+            // Убираем все модалки из истории при переключении вкладок
+            navigationStack = navigationStack.filter(item => item.type !== 'modal');
+            // Добавляем новую вкладку
+            navigationStack.push({type: 'tab', id: tabId});
+            lastActiveTab = tabId;
+            // Добавляем в историю браузера
+            history.pushState({tab: tabId}, '');
+        }
+        
+        if (tabId === 'tab-calendar') renderCalendar();
+        if (tabId === 'tab-ref') renderRefs();
+        if (tabId === 'tab-purchase') renderPurchaseOrdersList();
+    };
         
         // Вспомогательная функция переключения табов
         function switchTab(tabId) {
@@ -3944,6 +4262,7 @@ function deleteOrder(orderId) {
         document.getElementById('addPaintModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddPaintModal(); });
         document.getElementById('addFilmModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddFilmModal(); });
         document.getElementById('addExtraRefModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddExtraRefModal(); });
+        document.getElementById('notificationModal')?.addEventListener('click', e => { if (e.target.id === 'notificationModal') closeNotificationModal(); });
 
         document.getElementById('orderDate').addEventListener('input', updateDeadline);
         document.getElementById('orderDurationDays').addEventListener('input', updateDeadline);
@@ -4042,12 +4361,27 @@ document.addEventListener('keydown', (e) => {
         renderCalendar();
     }
     
-    // Escape — закрыть модальные окна
+    // Escape — закрыть модальные окна (с учётом истории)
     if (e.key === 'Escape') {
-        closeNotificationModal();
-        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-            modal.classList.remove('active');
-        });
+        const openModals = document.querySelectorAll('.modal-overlay.active, .notification-modal.active');
+        if (openModals.length > 0) {
+            e.preventDefault();
+            const lastModal = openModals[openModals.length - 1];
+            const modalId = lastModal.id;
+            const closeFn = {
+                'orderModal': closeOrderModal,
+                'extraModal': closeExtraModal,
+                'serviceItemsModal': closeServiceItemsModal,
+                'bookingModal': closeModal,
+                'noteModal': closeNoteModal,
+                'addColorModal': closeAddColorModal,
+                'addPaintModal': closeAddPaintModal,
+                'addFilmModal': closeAddFilmModal,
+                'addExtraRefModal': closeAddExtraRefModal,
+                'notificationModal': closeNotificationModal
+            }[modalId];
+            if (closeFn) closeFn();
+        }
     }
 });
 
