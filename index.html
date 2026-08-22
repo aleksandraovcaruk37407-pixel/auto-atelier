@@ -1569,6 +1569,9 @@
     extraRef.forEach(r => r.price = parseFloat(r.price) || 0);
     materialTypes.forEach(mt => mt.articles.forEach(a => a.price = parseFloat(a.price) || 0));
     ordersData.forEach(o => {
+        // Гарантируем наличие boolean полей для Firebase
+        o.done = o.done === true;
+        o.paid = o.paid === true;
         o.clientPrice = parseFloat(o.clientPrice) || 0;
         o.helperPay = parseFloat(o.helperPay) || 0;
         if (o.services) o.services.forEach(inst => {
