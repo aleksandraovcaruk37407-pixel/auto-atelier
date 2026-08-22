@@ -442,7 +442,47 @@
         color: #fff;
     }
     
-    /* Цвета срочности */
+    /* ===== МОБИЛЬНЫЕ СТИЛИ ДЛЯ МОДАЛКИ ДОП. РАСХОДНИКОВ ===== */
+    .modal .extra-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .modal .extra-item span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #495057;
+        flex: 1;
+    }
+    
+    .modal .extra-item input[type="number"] {
+        width: 80px;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: center;
+    }
+    
+    .modal .extra-item span:last-child {
+        font-size: 13px;
+        color: #6c757d;
+        white-space: nowrap;
+    }
+    
+    .modal #extraMaterialsContainer {
+        max-height: 60vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* ===== ЦВЕТА СРОЧНОСТИ ===== */
     .color-select {
         flex-wrap: wrap;
         gap: 12px;
@@ -536,6 +576,43 @@
         flex: 1;
     }
     
+    /* ===== СТИЛИ ДЛЯ ВКЛАДКИ ЗАКУПКА ===== */
+    .purchase-total {
+        margin-top: 15px;
+        padding: 12px 16px;
+        background: #e8f5e9;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 18px;
+        color: #2e7d32;
+        text-align: right;
+    }
+    
+    .purchase-doc-section {
+        margin-top: 20px;
+    }
+    
+    .purchase-doc-section h3 {
+        font-size: 18px;
+        color: #1a3c5e;
+        margin: 20px 0 10px;
+        padding: 10px 12px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #1a3c5e;
+    }
+    
+    .purchase-doc-section table {
+        margin-bottom: 15px;
+    }
+    
+    .purchase-doc-section th,
+    .purchase-doc-section td {
+        padding: 8px 6px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    
     /* Уведомления */
     .notification-content {
         border-radius: 20px 20px 0 0;
@@ -606,6 +683,18 @@
         min-height: 44px;
     }
     
+    .service-row .service-header .btn-extra {
+        flex-shrink: 0;
+        padding: 10px 14px;
+        min-height: 44px;
+        min-width: 48px;
+        font-size: 20px;
+        border-radius: 10px;
+        background: #ffc107;
+        color: #212529;
+        font-weight: 600;
+    }
+    
     .service-details {
         border-top: 2px solid #e0e0e0;
         padding-top: 12px;
@@ -637,6 +726,44 @@
         min-height: 48px;
         margin-bottom: 10px;
         box-sizing: border-box;
+    }
+    
+    /* Мобильные стили для кастомных маркеров (ВИБРОПОГЛОЩЕНИЕ, ШУМОИЗОЛЯЦИЯ и т.д.) */
+    .service-details .custom-code,
+    .service-details .custom-qty {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        min-height: 48px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    
+    .service-details .custom-price,
+    .service-details .custom-cost {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        min-height: 48px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        background: #f8f9fa;
+        color: #495057;
+    }
+    
+    .service-details .section-title {
+        font-weight: 700;
+        color: #1a3c5e;
+        margin: 16px 0 10px;
+        font-size: 17px;
+        padding: 10px 12px;
+        background: #e9ecef;
+        border-radius: 8px;
+        border-left: 4px solid #1a3c5e;
     }
     
     /* Маркеры услуг */
@@ -1257,6 +1384,13 @@
             <div class="form-actions">
                 <button class="btn-cancel" onclick="closeServiceItemsModal()">Отмена</button>
                 <button class="btn-save" onclick="saveServiceItemsModal()">Сохранить</button>
+            </div>
+            <div style="margin-top:15px; padding-top:15px; border-top:2px solid #e9ecef;">
+                <div style="font-weight:600; color:#1a3c5e; margin-bottom:10px; font-size:14px;">📦 Для текущего заказа:</div>
+                <div class="form-actions">
+                    <button class="btn-cancel" onclick="closeOrderServiceItemsModal()">Отмена</button>
+                    <button class="btn-success" onclick="saveOrderServiceItemsModal()" style="background:#28a745; color:#fff;">Сохранить для заказа</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2116,10 +2250,9 @@ if (!films.length) {
           document.getElementById('newColorCode').value = '';
           document.getElementById('newColorName').value = '';
           document.getElementById('newColorPrice').value = '';
-          document.getElementById('addColorModal').classList.add('active');
           openModalWithHistory('addColorModal');
         }
-       function closeAddColorModal() { document.getElementById('addColorModal').classList.remove('active'); }
+       function closeAddColorModal() { closeModalWithHistory('addColorModal'); }
        function saveNewColor() {
          const category = document.getElementById('newColorCategory').value.trim();
          const code = document.getElementById('newColorCode').value.trim();
@@ -2130,15 +2263,14 @@ if (!films.length) {
          saveAll(); renderRefs(); closeAddColorModal();
      }
 
-    function openAddPaintModal() {
-        document.getElementById('newPaintCategory').value = '';
-        document.getElementById('newPaintCode').value = '';
-        document.getElementById('newPaintName').value = '';
-        document.getElementById('newPaintPrice').value = '';
-        document.getElementById('addPaintModal').classList.add('active');
-        openModalWithHistory('addPaintModal');
-    }
-    function closeAddPaintModal() { document.getElementById('addPaintModal').classList.remove('active'); }
+     function openAddPaintModal() {
+         document.getElementById('newPaintCategory').value = '';
+         document.getElementById('newPaintCode').value = '';
+         document.getElementById('newPaintName').value = '';
+         document.getElementById('newPaintPrice').value = '';
+         openModalWithHistory('addPaintModal');
+     }
+     function closeAddPaintModal() { closeModalWithHistory('addPaintModal'); }
     function saveNewPaint() {
         const category = document.getElementById('newPaintCategory').value.trim();
         const code = document.getElementById('newPaintCode').value.trim();
@@ -2154,10 +2286,9 @@ if (!films.length) {
         document.getElementById('newFilmCode').value = '';
         document.getElementById('newFilmName').value = '';
         document.getElementById('newFilmPrice').value = '';
-        document.getElementById('addFilmModal').classList.add('active');
         openModalWithHistory('addFilmModal');
     }
-    function closeAddFilmModal() { document.getElementById('addFilmModal').classList.remove('active'); }
+    function closeAddFilmModal() { closeModalWithHistory('addFilmModal'); }
     function saveNewFilm() {
         const category = document.getElementById('newFilmCategory').value.trim();
         const code = document.getElementById('newFilmCode').value.trim();
@@ -2173,13 +2304,25 @@ if (!films.length) {
         document.getElementById('newExtraRefPrice').value = '';
         openModalWithHistory('addExtraRefModal');
     }
-    function closeAddExtraRefModal() { document.getElementById('addExtraRefModal').classList.remove('active'); }
+    function closeAddExtraRefModal() { closeModalWithHistory('addExtraRefModal'); }
     function saveNewExtraRef() {
-        const name = document.getElementById('newExtraRefName').value.trim();
-        const unit = document.getElementById('newExtraRefUnit').value.trim();
-        const price = parseFloat(document.getElementById('newExtraRefPrice').value);
-        if (!name || !unit || isNaN(price)) { alert('Заполните все поля корректно'); return; }
-        extraRef.push({name, unit, price}); saveAll(); renderRefs(); closeAddExtraRefModal();
+        const nameInput = document.getElementById('newExtraRefName');
+        const unitInput = document.getElementById('newExtraRefUnit');
+        const priceInput = document.getElementById('newExtraRefPrice');
+        const name = nameInput ? nameInput.value.trim() : '';
+        const unit = unitInput ? unitInput.value.trim() : '';
+        const price = priceInput ? parseFloat(priceInput.value) : NaN;
+        if (!name) { alert('Введите название расходника'); return; }
+        if (!unit) { alert('Введите единицу измерения'); return; }
+        if (isNaN(price) || price <= 0) { alert('Введите корректную цену (больше 0)'); return; }
+        extraRef.push({name, unit, price});
+        saveAll();
+        renderRefs();
+        closeAddExtraRefModal();
+        // Очистим поля формы
+        if (nameInput) nameInput.value = '';
+        if (unitInput) unitInput.value = '';
+        if (priceInput) priceInput.value = '';
     }
     function addNewService() {
         const name = prompt('Название услуги:', ''); if(!name) return;
@@ -2427,6 +2570,73 @@ if (!films.length) {
     }
 
     function closeServiceItemsModal() { document.getElementById('serviceItemsModal').classList.remove('active'); editingServiceIndex = null; }
+    
+    // ========== РЕДАКТИРОВАНИЕ РАСХОДНИКОВ В КОНТЕКСТЕ ЗАКАЗА ==========
+    let editingOrderServiceIndex = null;
+    
+    function openServiceItemsModalForOrder(orderServiceIndex) {
+        editingOrderServiceIndex = orderServiceIndex;
+        const inst = currentServices[orderServiceIndex];
+        if (!inst || !inst.serviceName) {
+            alert('Сначала выберите услугу');
+            return;
+        }
+        const svc = rates.find(r => r.service === inst.serviceName);
+        if (!svc) return;
+        document.getElementById('serviceItemsModalTitle').textContent = `Расходники: ${inst.serviceName}`;
+        const container = document.getElementById('serviceItemsContainer');
+        container.innerHTML = '';
+        const items = (svc.items || []).filter(item => item.enabled !== false);
+        items.forEach(item => addServiceItemRow(item));
+        openModalWithHistory('serviceItemsModal');
+    }
+    
+    function saveOrderServiceItemsModal() {
+        if (editingOrderServiceIndex === null) return;
+        const container = document.getElementById('serviceItemsContainer');
+        const rows = container.querySelectorAll('.extra-item');
+        const items = [];
+        rows.forEach(row => {
+            const nameInput = row.querySelector('.item-name');
+            const enteredName = nameInput ? nameInput.value.trim() : '';
+            if (!enteredName) return;
+            const marker = getMarkerDefinition(enteredName);
+            const name = marker ? marker.name : enteredName;
+            const isMarker = row.dataset.isMarker === 'true' || !!marker;
+            if (isMarker) {
+                const perMeter = row.querySelector('.item-perMeter').checked;
+                const manual = row.querySelector('.item-manual').checked;
+                const enabled = row.querySelector('.item-enabled').checked;
+                const customMarker = !['Ткань','Краска','Пленка для аквапринта'].includes(name);
+                items.push({name, quantity:parseFloat(row.querySelector('.item-qty').value)||1, unit:marker ? marker.unit : row.querySelector('.item-unit').value, price:0, perMeter, manual, enabled, customMarker});
+                return;
+            }
+            const qtyInput = row.querySelector('.item-qty');
+            const unitInput = row.querySelector('.item-unit');
+            const priceInput = row.querySelector('.item-price');
+            const quantity = parseFloat(qtyInput?.value);
+            const price = parseFloat(priceInput?.value);
+            const unit = unitInput?.value || 'мл';
+            const perMeter = row.querySelector('.item-perMeter')?.checked || false;
+            const manual = row.querySelector('.item-manual')?.checked || false;
+            const enabled = row.querySelector('.item-enabled')?.checked !== false;
+            items.push({name, quantity:Number.isFinite(quantity) ? quantity : 1, unit, price:Number.isFinite(price) ? price : 0, perMeter, manual, enabled, customMarker: false});
+        });
+        const svc = rates.find(r => r.service === currentServices[editingOrderServiceIndex].serviceName);
+        if (svc) {
+            svc.items = items;
+            localChangesPending = true;
+            saveAll();
+        }
+        editingOrderServiceIndex = null;
+        closeModalWithHistory('serviceItemsModal');
+        renderRefs();
+    }
+    
+    function closeOrderServiceItemsModal() {
+        editingOrderServiceIndex = null;
+        closeModalWithHistory('serviceItemsModal');
+    }
 
     // ========== МОДАЛКА ЗАКАЗА ==========
     function updateDeadline() {
@@ -2510,6 +2720,15 @@ if (!films.length) {
         select.innerHTML = '<option value="">-- Выберите услугу --</option>';
         rates.forEach(r => { const opt = document.createElement('option'); opt.value=r.service; opt.textContent=r.service; select.appendChild(opt); });
         select.value = instance.serviceName;
+        const editItemsBtn = document.createElement('button');
+        editItemsBtn.className = 'btn-extra';
+        editItemsBtn.textContent = '✏️';
+        editItemsBtn.title = 'Редактировать расходники услуги';
+        editItemsBtn.style.fontSize = '18px';
+        editItemsBtn.onclick = () => {
+            editingOrderServiceIndex = index;
+            openServiceItemsModalForOrder(index);
+        };
         const delBtn = document.createElement('button');
         delBtn.className = 'btn-del';
         delBtn.textContent = '✕';
@@ -2517,6 +2736,7 @@ if (!films.length) {
         const header = document.createElement('div');
         header.className = 'service-header';
         header.appendChild(select);
+        header.appendChild(editItemsBtn);
         header.appendChild(delBtn);
         row.appendChild(header);
         const details = document.createElement('div');
@@ -2881,14 +3101,22 @@ function deleteOrder(orderId) {
 
     // ========== ДОП. РАСХОДНИКИ ==========
     function openExtraModalFromOrder() {
+        // Убедимся, что currentExtraData инициализирована
+        if (!currentExtraData || typeof currentExtraData !== 'object') {
+            currentExtraData = {};
+        }
         const container = document.getElementById('extraMaterialsContainer');
         container.innerHTML = '';
-        extraRef.forEach(ref => {
-            const div = document.createElement('div');
-            div.className = 'extra-item';
-            div.innerHTML = `<span>${ref.name}</span><input type="number" class="extra-qty" value="${parseFloat(currentExtraData[ref.name])||''}" placeholder="Кол-во" data-name="${ref.name}"> <span>${parseFloat(ref.price)||0}₽/${ref.unit}</span>`;
-            container.appendChild(div);
-        });
+        if (extraRef.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#6c757d; padding:20px;">Нет доступных расходников. Добавьте их во вкладке "Справочники".</p>';
+        } else {
+            extraRef.forEach(ref => {
+                const div = document.createElement('div');
+                div.className = 'extra-item';
+                div.innerHTML = `<span>${ref.name}</span><input type="number" class="extra-qty" value="${parseFloat(currentExtraData[ref.name])||''}" placeholder="Кол-во" data-name="${ref.name}"> <span>${parseFloat(ref.price)||0}₽/${ref.unit}</span>`;
+                container.appendChild(div);
+            });
+        }
         openModalWithHistory('extraModal');
     }
     function saveExtraModal() {
@@ -2940,18 +3168,26 @@ function deleteOrder(orderId) {
                 const svc = rates.find(r => r.service === inst.serviceName);
                 if (!svc) return;
                 if (svc.usesFabric && inst.fabric && inst.fabric.code) {
-                    markers['Ткань'].push({article: inst.fabric.code, name: inst.fabric.colorName || inst.fabric.code, qty: parseFloat(inst.fabric.meters)||0, unit:'м'});
+                    const foundColor = colors.find(c => c.code === inst.fabric.code);
+                    const price = foundColor ? (parseFloat(foundColor.price) || 0) : (parseFloat(inst.fabric.price) || 0);
+                    markers['Ткань'].push({article: inst.fabric.code, name: inst.fabric.colorName || inst.fabric.code, qty: parseFloat(inst.fabric.meters)||0, unit:'м', price});
                 }
                 if (serviceUsesPaint(svc) && inst.paint && inst.paint.code) {
-                    markers['Краска'].push({article: inst.paint.code, name: inst.paint.colorName || inst.paint.code, qty: parseFloat(inst.paint.qty)||0, unit:'мл'});
+                    const foundPaint = paints.find(p => p.code === inst.paint.code);
+                    const price = foundPaint ? (parseFloat(foundPaint.price) || 0) : (parseFloat(inst.paint.price) || 0);
+                    markers['Краска'].push({article: inst.paint.code, name: inst.paint.colorName || inst.paint.code, qty: parseFloat(inst.paint.qty)||0, unit:'мл', price});
                 }
                 if (svc.usesFilm && inst.film && inst.film.code) {
-                    markers['Пленка'].push({article: inst.film.code, name: inst.film.name || inst.film.code, qty: parseFloat(inst.film.meters)||0, unit:'м'});
+                    const foundFilm = films.find(f => f.code === inst.film.code);
+                    const price = foundFilm ? (parseFloat(foundFilm.price) || 0) : (parseFloat(inst.film.price) || 0);
+                    markers['Пленка'].push({article: inst.film.code, name: inst.film.name || inst.film.code, qty: parseFloat(inst.film.meters)||0, unit:'м', price});
                 }
                 materialTypes.forEach(mt => {
                     const markerData = inst[mt.name];
                     if (markerData && markerData.code) {
-                        markers[mt.name].push({article: markerData.code, name: mt.articles.find(a=>a.code===markerData.code)?.name || markerData.code, qty: parseFloat(markerData.qty)||0, unit: mt.unit});
+                        const art = mt.articles.find(a => a.code === markerData.code);
+                        const price = art ? (parseFloat(art.price) || 0) : (parseFloat(markerData.price) || 0);
+                        markers[mt.name].push({article: markerData.code, name: art?.name || markerData.code, qty: parseFloat(markerData.qty)||0, unit: mt.unit, price});
                     }
                 });
                 svc.items.forEach(item => {
@@ -2961,26 +3197,38 @@ function deleteOrder(orderId) {
                     if (item.name === 'Ткань' && svc.usesFabric) return;
                     if (materialTypes.some(mt=>mt.name===item.name)) return;
                     let qty = (inst.manualItems || {})[item.name] ? parseFloat((inst.manualItems || {})[item.name]) : (item.manual ? 0 : (item.perMeter ? (parseFloat(item.quantity)||0)*(parseFloat(inst.fabric?.meters)||0) : (parseFloat(item.quantity)||0)));
-                    if (qty > 0) otherMaterials[item.name] = (parseFloat(otherMaterials[item.name])||0) + qty;
+                    if (qty > 0) {
+                        const ref = extraRef.find(e=>e.name===item.name);
+                        const price = ref ? (parseFloat(ref.price) || 0) : 0;
+                        otherMaterials[item.name] = {qty: (parseFloat(otherMaterials[item.name]?.qty||0) || 0) + qty, unit: ref?.unit || 'шт', price};
+                    }
                 });
             });
             let extra = {};
             try { extra = JSON.parse(order.extraData || '{}'); } catch(e) {}
             for (let key in extra) {
-                otherMaterials[key] = (parseFloat(otherMaterials[key])||0) + (parseFloat(extra[key])||0);
+                const ref = extraRef.find(e=>e.name===key);
+                const price = ref ? (parseFloat(ref.price) || 0) : 0;
+                if (!otherMaterials[key]) {
+                    otherMaterials[key] = {qty: 0, unit: ref?.unit || 'шт', price};
+                }
+                otherMaterials[key].qty = (parseFloat(otherMaterials[key].qty) || 0) + (parseFloat(extra[key]) || 0);
             }
         });
+        let totalCost = 0;
         for (let markerName in markers) {
             if (markers[markerName].length) {
                 const section = document.createElement('h3');
                 section.textContent = markerName;
                 docContainer.appendChild(section);
                 const table = document.createElement('table');
-                table.innerHTML = '<tr><th>Артикул</th><th>Наименование</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th></tr>';
+                table.innerHTML = '<tr><th>Артикул</th><th>Наименование</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th><th>Цена за ед.</th><th>Стоимость</th></tr>';
                 const grouped = {};
                 markers[markerName].forEach(m => {
-                    if (!grouped[m.article]) grouped[m.article] = {name:m.name, qty:0, unit:m.unit};
+                    if (!grouped[m.article]) grouped[m.article] = {name:m.name, qty:0, unit:m.unit, price: m.price || 0};
                     grouped[m.article].qty += m.qty;
+                    // цену берём последнюю (можно усреднить, но для простоты — последнюю)
+                    if (m.price) grouped[m.article].price = m.price;
                 });
                 const stock = loadStock();
                 for (let art in grouped) {
@@ -2988,8 +3236,10 @@ function deleteOrder(orderId) {
                     const stockItem = stock.find(s => s.name === g.name) || {remain:0};
                     const remain = parseFloat(stockItem.remain) || 0;
                     const toBuy = Math.max(0, g.qty - remain);
+                    const cost = toBuy * (g.price || 0);
+                    totalCost += cost;
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${art}</td><td>${g.name}</td><td>${g.qty.toFixed(2)}</td><td>${g.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td>`;
+                    tr.innerHTML = `<td>${art}</td><td>${g.name}</td><td>${g.qty.toFixed(2)}</td><td>${g.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td><td>${g.price.toFixed(2)}₽</td><td>${cost.toFixed(2)}₽</td>`;
                     table.appendChild(tr);
                 }
                 docContainer.appendChild(table);
@@ -3000,18 +3250,28 @@ function deleteOrder(orderId) {
             section.textContent = 'Прочие расходники';
             docContainer.appendChild(section);
             const table = document.createElement('table');
-            table.innerHTML = '<tr><th>Материал</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th></tr>';
+            table.innerHTML = '<tr><th>Материал</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th><th>Цена за ед.</th><th>Стоимость</th></tr>';
             const stock = loadStock();
             for (let name in otherMaterials) {
-                const ref = extraRef.find(e=>e.name===name) || {unit:'шт'};
+                const m = otherMaterials[name];
+                const ref = extraRef.find(e=>e.name===name) || {unit:'шт', price:0};
                 const stockItem = stock.find(s => s.name === name) || {remain:0};
                 const remain = parseFloat(stockItem.remain) || 0;
-                const toBuy = Math.max(0, parseFloat(otherMaterials[name]) - remain);
+                const toBuy = Math.max(0, m.qty - remain);
+                const cost = toBuy * (m.price || ref.price || 0);
+                totalCost += cost;
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${name}</td><td>${parseFloat(otherMaterials[name]).toFixed(2)}</td><td>${ref.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td>`;
+                tr.innerHTML = `<td>${name}</td><td>${m.qty.toFixed(2)}</td><td>${m.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td><td>${(m.price || ref.price || 0).toFixed(2)}₽</td><td>${cost.toFixed(2)}₽</td>`;
                 table.appendChild(tr);
             }
             docContainer.appendChild(table);
+        }
+        // Итого
+        if (totalCost > 0) {
+            const totalDiv = document.createElement('div');
+            totalDiv.style.cssText = 'margin-top:15px;padding:12px 16px;background:#e8f5e9;border-radius:8px;font-weight:700;font-size:18px;color:#2e7d32;text-align:right;';
+            totalDiv.textContent = `Итого к закупке: ${totalCost.toFixed(2)} ₽`;
+            docContainer.appendChild(totalDiv);
         }
     }
 
