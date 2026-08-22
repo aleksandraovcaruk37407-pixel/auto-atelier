@@ -134,741 +134,24 @@
         .service-details .section-title { font-weight: 600; color: #1a3c5e; margin: 8px 0 5px; }
         .footer-toolbar { margin-top: 30px; border-top: 1px solid #dee2e6; padding-top: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: space-between; }
         #unpaidSummary { margin: 5px 0 10px; font-weight: 600; color: #dc3545; background: #f8f9fa; padding: 6px 12px; border-radius: 6px; display: inline-block; }
-/* ===== МОБИЛЬНАЯ НИЖНЯЯ НАВИГАЦИЯ ===== */
-.mobile-nav {
-    display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #ffffff;
-    border-top: 1px solid #e0e0e0;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-    z-index: 1000;
-    justify-content: space-around;
-    padding: 8px 0;
-    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0));
-}
-
-.mobile-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 6px 8px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 1;
-    max-width: 70px;
-    min-width: 45px;
-}
-
-.mobile-nav-item:active {
-    transform: scale(0.92);
-}
-
-.mobile-nav-item.active {
-    background: #e3f2fd;
-}
-
-.mobile-nav-item .icon {
-    font-size: 24px;
-    margin-bottom: 4px;
-}
-
-.mobile-nav-item .label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #6c757d;
-    line-height: 1;
-}
-
-.mobile-nav-item.active .label {
-    color: #1a3c5e;
-}
-
-/* ===== МЕДИА ЗАПРОСЫ ===== */
-
-/* Tablet and Desktop */
-@media (min-width: 769px) {
-    .mobile-nav {
-        display: none !important;
-    }
-    
-    body {
-        padding: 20px;
-    }
-    
-    .container {
-        max-width: 1400px;
-        margin: 0 auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        padding: 20px;
-    }
-    
-    h1 {
-        margin-bottom: 10px;
-        font-size: 28px;
-        color: #1a3c5e;
-        display: inline-block;
-    }
-    
-    .toolbar {
-        margin-bottom: 15px;
-    }
-    
-    .tabs {
-        margin-bottom: 20px;
-    }
-    
-    .tab-btn {
-        padding: 10px 24px;
-        font-size: 15px;
-    }
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-    body {
-        padding: 0;
-        padding-bottom: 70px; /* место для нижней навигации */
-        background: #f5f7fa;
-    }
-    
-    .container {
-        max-width: 100%;
-        border-radius: 0;
-        box-shadow: none;
-        padding: 0;
-        min-height: 100vh;
-    }
-    
-    /* Скрываем desktop tabs */
-    .tabs {
-        display: none !important;
-    }
-    
-    /* Показываем мобильную навигацию */
-    .mobile-nav {
-        display: flex;
-    }
-    
-    /* Заголовок */
-    h1 {
-        font-size: 20px;
-        margin-bottom: 8px;
-        padding: 16px 15px 8px;
-    }
-    
-    .toolbar {
-        padding: 0 15px;
-        margin-bottom: 10px;
-    }
-    
-    /* Контент с отступами */
-    .tab-content {
-        padding: 0 15px 15px;
-    }
-    
-    /* Фильтры - горизонтальная прокрутка */
-    .inline-flex {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        padding-bottom: 4px;
-        flex-wrap: nowrap;
-    }
-    
-    .inline-flex::-webkit-scrollbar {
-        display: none;
-    }
-    
-    /* Фильтры в фильтре */
-    .inline-flex > div:first-child {
-        display: flex;
-        gap: 6px;
-        flex-wrap: nowrap;
-    }
-    
-    /* Кнопки под размер пальца */
-    .btn-add {
-        width: 100%;
-        padding: 14px 16px;
-        font-size: 16px;
-        border-radius: 12px;
-        min-height: 50px;
-        white-space: nowrap;
-    }
-    
-    .btn {
-        padding: 12px 16px;
-        font-size: 15px;
-        min-height: 44px;
-        border-radius: 12px;
-    }
-    
-    .filter-btn {
-        padding: 10px 14px;
-        font-size: 13px;
-        min-height: 44px;
-        border-radius: 10px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-    
-    /* Карточки заказов */
-    .order-item {
-        border-radius: 12px;
-        margin-bottom: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    
-    .order-header {
-        padding: 12px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-    }
-    
-    .order-header .order-number {
-        font-size: 14px;
-        min-width: auto;
-    }
-    
-    .order-header .order-date,
-    .order-header .order-deadline,
-    .order-header .order-phone,
-    .order-header .order-service {
-        font-size: 12px;
-        min-width: auto;
-    }
-    
-    .order-header .order-client {
-        font-size: 16px;
-    }
-    
-    .order-header .order-sum {
-        font-size: 18px;
-        min-width: auto;
-    }
-    
-    /* Модальные окна - slide up */
-    .modal-overlay {
-        align-items: flex-end;
-        padding: 0;
-        z-index: 1001;
-    }
-    
-    .modal-overlay.active {
-        display: flex;
-    }
-    
-    .modal {
-        border-radius: 20px 20px 0 0;
-        padding: 24px 20px;
-        max-height: 90vh;
-        width: 100%;
-        max-width: 100%;
-        transform: translateY(100%);
-        transition: transform 0.3s ease;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .modal-overlay.active .modal {
-        transform: translateY(0);
-    }
-    
-    .modal h3 {
-        font-size: 20px;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 2px solid #e9ecef;
-    }
-    
-    .modal .form-group {
-        margin-bottom: 16px;
-    }
-    
-    .modal .form-group label {
-        font-size: 14px;
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 6px;
-        display: block;
-    }
-    
-    .modal .form-group input,
-    .modal .form-group select,
-    .modal .form-group textarea {
-        font-size: 16px;
-        padding: 14px;
-        border-radius: 12px;
-        height: auto;
-        min-height: 48px;
-        width: 100%;
-    }
-    
-    .modal .form-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-    
-    .modal .form-actions {
-        flex-direction: column-reverse;
-        gap: 10px;
-        margin-top: 20px;
-    }
-    
-    .modal .form-actions button {
-        width: 100%;
-        padding: 16px;
-        font-size: 16px;
-        border-radius: 12px;
-        min-height: 52px;
-    }
-    
-    .modal .btn-cancel {
-        background: #f8f9fa;
-        color: #495057;
-    }
-    
-    .modal .btn-save {
-        background: #28a745;
-        color: #fff;
-    }
-    
-    /* ===== МОБИЛЬНЫЕ СТИЛИ ДЛЯ МОДАЛКИ ДОП. РАСХОДНИКОВ ===== */
-    .modal .extra-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px;
-        margin-bottom: 10px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        border: 1px solid #e0e0e0;
-    }
-    
-    .modal .extra-item span {
-        font-size: 14px;
-        font-weight: 600;
-        color: #495057;
-        flex: 1;
-    }
-    
-    .modal .extra-item input[type="number"] {
-        width: 80px;
-        padding: 10px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 16px;
-        text-align: center;
-    }
-    
-    .modal .extra-item span:last-child {
-        font-size: 13px;
-        color: #6c757d;
-        white-space: nowrap;
-    }
-    
-    .modal #extraMaterialsContainer {
-        max-height: 60vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* ===== ЦВЕТА СРОЧНОСТИ ===== */
-    .color-select {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-    
-    .color-select .color-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
-    }
-    
-    /* Календарь */
-    .calendar-grid .day-cell {
-        padding: 12px 4px;
-        min-height: 50px;
-        border-radius: 12px;
-    }
-    
-    .calendar-grid .day-number {
-        font-size: 16px;
-    }
-    
-    .calendar-nav {
-        padding: 0 10px;
-    }
-    
-    .calendar-nav button {
-        padding: 12px 16px;
-        font-size: 16px;
-        min-height: 44px;
-        border-radius: 12px;
-    }
-    
-    /* Таблицы */
-    table {
-        font-size: 13px;
-    }
-    
-    th, td {
-        padding: 10px 6px;
-    }
-    
-    .scroll-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        margin-bottom: 15px;
-    }
-    
-    .stock-table,
-    .scroll-wrap table {
-        min-width: 600px;
-    }
-    
-    /* Итоги */
-    .summary-header {
-        padding: 16px;
-        border-radius: 12px;
-    }
-    
-    .summary-header button {
-        padding: 10px 14px;
-        font-size: 13px;
-        min-height: 44px;
-        border-radius: 10px;
-    }
-    
-    .summary-block {
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        padding: 12px;
-    }
-    
-    .summary-item {
-        padding: 16px 12px;
-        border-radius: 12px;
-    }
-    
-    .summary-item label {
-        font-size: 12px;
-    }
-    
-    .summary-item span {
-        font-size: 22px;
-    }
-    
-    .summary-footer button {
-        padding: 12px 16px;
-        font-size: 14px;
-        min-height: 44px;
-        border-radius: 10px;
-        flex: 1;
-    }
-    
-    /* ===== СТИЛИ ДЛЯ ВКЛАДКИ ЗАКУПКА ===== */
-    .purchase-total {
-        margin-top: 15px;
-        padding: 12px 16px;
-        background: #e8f5e9;
-        border-radius: 8px;
-        font-weight: 700;
-        font-size: 18px;
-        color: #2e7d32;
-        text-align: right;
-    }
-    
-    .purchase-doc-section {
-        margin-top: 20px;
-    }
-    
-    .purchase-doc-section h3 {
-        font-size: 18px;
-        color: #1a3c5e;
-        margin: 20px 0 10px;
-        padding: 10px 12px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        border-left: 4px solid #1a3c5e;
-    }
-    
-    .purchase-doc-section table {
-        margin-bottom: 15px;
-    }
-    
-    .purchase-doc-section th,
-    .purchase-doc-section td {
-        padding: 8px 6px;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-    
-    /* Уведомления */
-    .notification-content {
-        border-radius: 20px 20px 0 0;
-        max-width: 100%;
-        width: 100%;
-        padding: 24px 20px;
-        max-height: 80vh;
-    }
-    
-    .notification-header h3 {
-        font-size: 18px;
-    }
-    
-    .notification-close {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-    
-    /* Удаление */
-    .btn-del {
-        padding: 8px 12px;
-        min-height: 36px;
-        border-radius: 8px;
-    }
-    
-    .btn-extra {
-        padding: 10px 14px;
-        min-height: 44px;
-        border-radius: 10px;
-    }
-    
-    /* Справочники */
-    .note {
-        padding: 14px;
-        font-size: 14px;
-    }
-    
-    /* ===== МОБИЛЬНЫЕ СТИЛИ ДЛЯ МАРКЕРОВ ===== */
-    .service-row {
-        border: 2px solid #e0e0e0;
-        border-radius: 12px;
-        padding: 16px;
-        margin-bottom: 12px;
-        background: #fafbfc;
-    }
-    
-    .service-row .service-header {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-    }
-    
-    .service-row .service-header select {
-        flex: 1;
-        min-width: 0;
-        font-size: 16px;
-        padding: 12px;
-        border-radius: 10px;
-        min-height: 48px;
-    }
-    
-    .service-row .service-header .btn-del {
-        flex-shrink: 0;
-        padding: 10px 14px;
-        min-height: 44px;
-    }
-    
-    .service-row .service-header .btn-extra {
-        flex-shrink: 0;
-        padding: 10px 14px;
-        min-height: 44px;
-        min-width: 48px;
-        font-size: 20px;
-        border-radius: 10px;
-        background: #ffc107;
-        color: #212529;
-        font-weight: 600;
-    }
-    
-    .service-details {
-        border-top: 2px solid #e0e0e0;
-        padding-top: 12px;
-        margin-top: 8px;
-    }
-    
-    .service-details .section-title {
-        font-weight: 700;
-        color: #1a3c5e;
-        margin: 12px 0 8px;
-        font-size: 16px;
-    }
-    
-    .service-details label {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 6px;
-    }
-    
-    .service-details input,
-    .service-details select {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 16px;
-        min-height: 48px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-    }
-    
-    /* Мобильные стили для кастомных маркеров (ВИБРОПОГЛОЩЕНИЕ, ШУМОИЗОЛЯЦИЯ и т.д.) */
-    .service-details .custom-code,
-    .service-details .custom-qty {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 16px;
-        min-height: 48px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-    }
-    
-    .service-details .custom-price,
-    .service-details .custom-cost {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 16px;
-        min-height: 48px;
-        margin-bottom: 10px;
-        box-sizing: border-box;
-        background: #f8f9fa;
-        color: #495057;
-    }
-    
-    .service-details .section-title {
-        font-weight: 700;
-        color: #1a3c5e;
-        margin: 16px 0 10px;
-        font-size: 17px;
-        padding: 10px 12px;
-        background: #e9ecef;
-        border-radius: 8px;
-        border-left: 4px solid #1a3c5e;
-    }
-    
-    /* Маркеры услуг */
-    .extra-item {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 8px;
-        flex-wrap: wrap;
-    }
-    
-    .extra-item.marker-selected {
-        background: #e8f5e9;
-        border: 2px solid #81c784;
-        border-radius: 10px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    
-    .marker-status {
-        color: #2e7d32;
-        font-size: 13px;
-        font-weight: 700;
-        white-space: nowrap;
-        margin-left: 8px;
-    }
-    
-    .manual-item-row {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        margin-bottom: 8px;
-        flex-wrap: wrap;
-    }
-    
-    .manual-item-row input,
-    .manual-item-row select {
-        flex: 1;
-        min-width: 80px;
-    }
-    
-    /* Datalist стили */
-    datalist {
-        font-size: 14px;
-    }
-    
-    /* Улучшенные поля ввода */
-    input[type="number"],
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    input[type="tel"] {
-        font-size: 16px;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        min-height: 48px;
-    }
-    
-    /* Увеличиваем шрифт placeholder */
-    input::placeholder,
-    textarea::placeholder {
-        font-size: 14px;
-    }
-}
-
-/* Very small screens */
-@media (max-width: 360px) {
-    h1 {
-        font-size: 18px;
-    }
-    
-    .calendar-grid .day-cell {
-        padding: 10px 2px;
-        min-height: 46px;
-    }
-    
-    .order-header .order-client {
-        font-size: 15px;
-    }
-    
-    .order-header .order-sum {
-        font-size: 16px;
-    }
-}
-
-/* Landscape mode */
-@media (max-height: 500px) and (orientation: landscape) {
-    .mobile-nav {
-        padding: 4px 0;
-    }
-    
-    .mobile-nav-item .icon {
-        font-size: 20px;
-        margin-bottom: 0;
-    }
-    
-    .mobile-nav-item .label {
-        font-size: 10px;
-    }
-    
-    .modal {
-        max-height: 85vh;
-    }
-}
+        @media (max-width: 768px) {
+            .order-header { flex-wrap: wrap; }
+            .modal .form-row { grid-template-columns: 1fr; }
+            .tab-btn { padding: 6px 14px; font-size: 13px; }
+            .calendar-grid .day-cell { min-height: 40px; }
+            .modal { padding: 15px; }
+            .manual-item-row { flex-direction: column; align-items: stretch; }
+            input, select, textarea { font-size: 16px !important; }
+        }
+        @media (max-width: 480px) {
+            .toolbar .btn, .btn-add, .btn-extra, .btn-del, .btn-sm { padding: 10px 16px; font-size: 16px; min-height: 44px; }
+            .tab-btn { flex: 1 0 auto; text-align: center; font-size: 16px; padding: 10px 15px; }
+            .order-header { flex-direction: column; align-items: flex-start; }
+            .modal { padding: 15px; max-width: 100%; border-radius: 10px; }
+            .calendar-grid .day-cell { min-height: 44px; padding: 6px 2px; }
+            .schedule-slot { padding: 12px; font-size: 16px; }
+            input, select, textarea { font-size: 16px !important; min-height: 44px; }
+        }
         .purchase-item { display: flex; align-items: center; gap: 10px; padding: 8px; }
         .purchase-item input[type="checkbox"] { width: auto; flex-shrink: 0; }
         .print-btn { background: #6c757d; color: #fff; border: none; padding: 8px 16px; border-radius: 30px; cursor: pointer; margin-left: 10px; }
@@ -1200,6 +483,7 @@
             <h2 id="calendarTitle" style="font-size:20px; color:#1a3c5e; margin:0;"></h2>
             <div style="display:flex; gap:8px; align-items:center;">
                 <button onclick="toggleCalendarView()" id="viewToggleBtn" style="padding:8px 14px; font-size:13px; font-weight:600; background:#6c757d; color:#fff; border:none; border-radius:20px; cursor:pointer;">📅 Неделя</button>
+                <button onclick="exportCalendar()" style="padding:8px 14px; font-size:13px; font-weight:600; background:#17a2b8; color:#fff; border:none; border-radius:20px; cursor:pointer;">📤 Экспорт</button>
             </div>
         </div>
         <div id="calendarSummary" style="background:#f8f9fa; padding:10px; border-radius:8px; margin:10px 0; display:flex; gap:15px; flex-wrap:wrap; font-size:14px; font-weight:600;"></div>
@@ -1247,24 +531,24 @@
         </div>
         <div style="margin-top:10px;"><button class="btn-extra" onclick="openAddExtraRefModal()">➕ Добавить расходник</button></div>
         <h3 style="margin-top:20px;">🔩 ВИБРОПОГЛОЩЕНИЕ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 370 х 270 мм. Введите количество листов при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 370 х 270 мм. Введите количество м² при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="vibroAbsorptionBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="vibroAbsorptionBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">🔊 ШУМОИЗОЛЯЦИЯ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 560 мм, 750 х 1000 мм или 750 х 500 мм. Введите количество листов при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 560 мм, 750 х 1000 мм или 750 х 500 мм. Введите количество м² при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="soundInsulationBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="soundInsulationBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">🔈 ЗВУКОИЗОЛЯЦИЯ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 750 х 540 мм. Введите количество листов при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 460 мм или 750 х 540 мм. Введите количество м² при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="soundProofingBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="soundProofingBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">🔇 ШУМОПОГЛОЩЕНИЕ (редактируемые цены)</h3>
-        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 1000 мм. Введите количество листов при создании заказа.</p>
+        <p style="font-size:12px;color:#6c757d;margin-bottom:10px;">Листы 750 х 1000 мм. Введите количество м² при создании заказа.</p>
         <div class="scroll-wrap">
-            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за лист (₽)</th></tr></thead><tbody id="soundAbsorptionBody"></tbody></table>
+            <table><thead><tr><th>Артикул</th><th>Наименование</th><th>Цена за м² (₽)</th></tr></thead><tbody id="soundAbsorptionBody"></tbody></table>
         </div>
         <h3 style="margin-top:20px;">Мои материалы (типы с артикулами)</h3>
         <div id="materialTypesContainer"></div>
@@ -1385,13 +669,6 @@
                 <button class="btn-cancel" onclick="closeServiceItemsModal()">Отмена</button>
                 <button class="btn-save" onclick="saveServiceItemsModal()">Сохранить</button>
             </div>
-            <div style="margin-top:15px; padding-top:15px; border-top:2px solid #e9ecef;">
-                <div style="font-weight:600; color:#1a3c5e; margin-bottom:10px; font-size:14px;">📦 Для текущего заказа:</div>
-                <div class="form-actions">
-                    <button class="btn-cancel" onclick="closeOrderServiceItemsModal()">Отмена</button>
-                    <button class="btn-success" onclick="saveOrderServiceItemsModal()" style="background:#28a745; color:#fff;">Сохранить для заказа</button>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -1489,38 +766,6 @@
             <button class="btn btn-danger" onclick="clearAllOrders()" style="background:#dc3545; color:#fff; padding:8px 18px; border:none; border-radius:30px; cursor:pointer;">🗑️ Очистить ВСЕ заказы</button>
         </div>
     </div>
-    
-    <!-- ===== МОБИЛЬНАЯ НИЖНЯЯ НАВИГАЦИЯ ===== -->
-    <div class="mobile-nav">
-        <div class="mobile-nav-item active" data-tab="tab-orders" onclick="switchMobileTab(this)">
-            <div class="icon">📋</div>
-            <div class="label">Заказы</div>
-        </div>
-        <div class="mobile-nav-item" data-tab="tab-stock" onclick="switchMobileTab(this)">
-            <div class="icon">📦</div>
-            <div class="label">Склад</div>
-        </div>
-        <div class="mobile-nav-item" data-tab="tab-cash" onclick="switchMobileTab(this)">
-            <div class="icon">💰</div>
-            <div class="label">Деньги</div>
-        </div>
-        <div class="mobile-nav-item" data-tab="tab-summary" onclick="switchMobileTab(this)">
-            <div class="icon">📊</div>
-            <div class="label">Итоги</div>
-        </div>
-        <div class="mobile-nav-item" data-tab="tab-calendar" onclick="switchMobileTab(this)">
-            <div class="icon">📅</div>
-            <div class="label">Календарь</div>
-        </div>
-        <div class="mobile-nav-item" data-tab="tab-ref" onclick="switchMobileTab(this)">
-            <div class="icon">📚</div>
-            <div class="label">Справочник</div>
-        </div>
-        <div class="mobile-nav-item" data-tab="tab-purchase" onclick="switchMobileTab(this)">
-            <div class="icon">📄</div>
-            <div class="label">Закупка</div>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -1536,6 +781,7 @@
     let currentExtraData = {};
     let currentServices = [];
     let localChangesPending = false;
+    let currentReportPeriodType = 'month';
 
     function loadData() {
     colors = JSON.parse(localStorage.getItem('colors_data') || '[]');
@@ -1552,15 +798,12 @@
     notes = JSON.parse(localStorage.getItem('notes_data') || '[]');
 
     rates.forEach(r => { if (!r.items) r.items = []; });
-    
-    // Настройка маркеров по умолчанию для услуг
-    configureDefaultServiceMarkers();
-    
-    // Удаляем маркер "Краска" из услуги "Восстановление после ДТП"
     const accidentService = rates.find(r => r.service === 'Восстановление после ДТП');
     if (accidentService) {
-        accidentService.usesPaint = false;
-        accidentService.items = accidentService.items.filter(item => item.name !== 'Краска');
+        accidentService.usesPaint = true;
+        if (!accidentService.items.some(item => item.name === 'Краска')) {
+            accidentService.items.push({name:'Краска', quantity:1, unit:'мл', price:0, perMeter:false, manual:true, enabled:true});
+        }
     }
 
     colors.forEach(c => c.price = parseFloat(c.price) || 0);
@@ -1569,9 +812,6 @@
     extraRef.forEach(r => r.price = parseFloat(r.price) || 0);
     materialTypes.forEach(mt => mt.articles.forEach(a => a.price = parseFloat(a.price) || 0));
     ordersData.forEach(o => {
-        // Гарантируем наличие boolean полей для Firebase
-        o.done = o.done === true;
-        o.paid = o.paid === true;
         o.clientPrice = parseFloat(o.clientPrice) || 0;
         o.helperPay = parseFloat(o.helperPay) || 0;
         if (o.services) o.services.forEach(inst => {
@@ -1625,10 +865,11 @@ if (!films.length) {
                 {name:'Клей', quantity:150, unit:'мл', price:5, perMeter:true, manual:false, enabled:true},
                 {name:'Растворитель', quantity:50, unit:'мл', price:3, perMeter:true, manual:false, enabled:true}
             ]},
-            {service:'Восстановление после ДТП', usesFabric:true, usesPaint:false, usesFilm:false, items:[
+            {service:'Восстановление после ДТП', usesFabric:true, usesPaint:true, usesFilm:false, items:[
                 {name:'Грунт для пластика', quantity:100, unit:'мл', price:2, perMeter:false, manual:true, enabled:true},
                 {name:'Шпаклёвка', quantity:200, unit:'г', price:0.5, perMeter:false, manual:true, enabled:true},
-                {name:'Обезжиреватель', quantity:150, unit:'мл', price:3, perMeter:false, manual:true, enabled:true}
+                {name:'Обезжиреватель', quantity:150, unit:'мл', price:3, perMeter:false, manual:true, enabled:true},
+                {name:'Краска', quantity:1, unit:'мл', price:0, perMeter:false, manual:true, enabled:true}
             ]},
             {service:'Покраска пластика', usesFabric:false, usesPaint:true, usesFilm:false, items:[
                 {name:'Грунт для пластика', quantity:80, unit:'мл', price:2, perMeter:false, manual:true, enabled:true},
@@ -1642,10 +883,10 @@ if (!films.length) {
                 {name:'Вибропласт', quantity:3, unit:'лист', price:500, perMeter:false, manual:true, enabled:true},
                 {name:'Шумопоглощающий материал', quantity:4, unit:'м²', price:300, perMeter:false, manual:true, enabled:true},
                 {name:'Клей для шумоизоляции', quantity:200, unit:'мл', price:5, perMeter:false, manual:true, enabled:true},
-                {name:'ВИБРОПОГЛОЩЕНИЕ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true},
-                {name:'ЗВУКОИЗОЛЯЦИЯ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true},
-                {name:'ШУМОИЗОЛЯЦИЯ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true},
-                {name:'ШУМОПОГЛОЩЕНИЕ', quantity:1, unit:'лист', price:0, perMeter:false, manual:true, enabled:true, customMarker:true}
+                {name:'ВИБРОПОГЛОЩЕНИЕ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true},
+                {name:'ЗВУКОИЗОЛЯЦИЯ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true},
+                {name:'ШУМОИЗОЛЯЦИЯ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true},
+                {name:'ШУМОПОГЛОЩЕНИЕ', quantity:1, unit:'м²', price:0, perMeter:true, manual:false, enabled:true, customMarker:true}
             ]},
             {service:'Кузовной ремонт', usesFabric:false, usesPaint:false, usesFilm:false, items:[]}
         ];
@@ -2069,12 +1310,6 @@ if (!films.length) {
         renderAll();
     }
 
-    function deleteCashOp(idx) {
-        cashOps.splice(idx, 1);
-        saveAll();
-        renderAll();
-    }
-
     function renderMarkersTable() {
         const markerNames = ['ВИБРОПОГЛОЩЕНИЕ', 'ШУМОИЗОЛЯЦИЯ', 'ЗВУКОИЗОЛЯЦИЯ', 'ШУМОПОГЛОЩЕНИЕ'];
         const tbodyIds = {
@@ -2111,18 +1346,6 @@ if (!films.length) {
                 }
             });
         });
-    }
-
-    function renderRefs() {
-        renderServicesTable();
-        renderMarkersTable();
-        renderMaterialTypes();
-        renderColorTable();
-        renderPaintTable();
-        renderFilmTable();
-        renderExtraRefTable();
-        updateServiceItemDatalist();
-        fillServiceSelects();
     }
 
     function renderServicesTable() {
@@ -2248,14 +1471,14 @@ if (!films.length) {
     function deleteExtraRef(idx) { extraRef.splice(idx,1); saveAll(); renderAll(); }
     function deletePaint(idx) { paints.splice(idx,1); saveAll(); renderAll(); }
     function deleteFilm(idx) { films.splice(idx,1); saveAll(); renderAll(); }
-        function openAddColorModal() {
-          document.getElementById('newColorCategory').value = '';
-          document.getElementById('newColorCode').value = '';
-          document.getElementById('newColorName').value = '';
-          document.getElementById('newColorPrice').value = '';
-          openModalWithHistory('addColorModal');
-        }
-       function closeAddColorModal() { closeModalWithHistory('addColorModal'); }
+       function openAddColorModal() {
+         document.getElementById('newColorCategory').value = '';
+         document.getElementById('newColorCode').value = '';
+         document.getElementById('newColorName').value = '';
+         document.getElementById('newColorPrice').value = '';
+         document.getElementById('addColorModal').classList.add('active');
+       }
+       function closeAddColorModal() { document.getElementById('addColorModal').classList.remove('active'); }
        function saveNewColor() {
          const category = document.getElementById('newColorCategory').value.trim();
          const code = document.getElementById('newColorCode').value.trim();
@@ -2266,14 +1489,14 @@ if (!films.length) {
          saveAll(); renderRefs(); closeAddColorModal();
      }
 
-     function openAddPaintModal() {
-         document.getElementById('newPaintCategory').value = '';
-         document.getElementById('newPaintCode').value = '';
-         document.getElementById('newPaintName').value = '';
-         document.getElementById('newPaintPrice').value = '';
-         openModalWithHistory('addPaintModal');
-     }
-     function closeAddPaintModal() { closeModalWithHistory('addPaintModal'); }
+    function openAddPaintModal() {
+        document.getElementById('newPaintCategory').value = '';
+        document.getElementById('newPaintCode').value = '';
+        document.getElementById('newPaintName').value = '';
+        document.getElementById('newPaintPrice').value = '';
+        document.getElementById('addPaintModal').classList.add('active');
+    }
+    function closeAddPaintModal() { document.getElementById('addPaintModal').classList.remove('active'); }
     function saveNewPaint() {
         const category = document.getElementById('newPaintCategory').value.trim();
         const code = document.getElementById('newPaintCode').value.trim();
@@ -2289,9 +1512,9 @@ if (!films.length) {
         document.getElementById('newFilmCode').value = '';
         document.getElementById('newFilmName').value = '';
         document.getElementById('newFilmPrice').value = '';
-        openModalWithHistory('addFilmModal');
+        document.getElementById('addFilmModal').classList.add('active');
     }
-    function closeAddFilmModal() { closeModalWithHistory('addFilmModal'); }
+    function closeAddFilmModal() { document.getElementById('addFilmModal').classList.remove('active'); }
     function saveNewFilm() {
         const category = document.getElementById('newFilmCategory').value.trim();
         const code = document.getElementById('newFilmCode').value.trim();
@@ -2305,27 +1528,15 @@ if (!films.length) {
         document.getElementById('newExtraRefName').value = '';
         document.getElementById('newExtraRefUnit').value = '';
         document.getElementById('newExtraRefPrice').value = '';
-        openModalWithHistory('addExtraRefModal');
+        document.getElementById('addExtraRefModal').classList.add('active');
     }
-    function closeAddExtraRefModal() { closeModalWithHistory('addExtraRefModal'); }
+    function closeAddExtraRefModal() { document.getElementById('addExtraRefModal').classList.remove('active'); }
     function saveNewExtraRef() {
-        const nameInput = document.getElementById('newExtraRefName');
-        const unitInput = document.getElementById('newExtraRefUnit');
-        const priceInput = document.getElementById('newExtraRefPrice');
-        const name = nameInput ? nameInput.value.trim() : '';
-        const unit = unitInput ? unitInput.value.trim() : '';
-        const price = priceInput ? parseFloat(priceInput.value) : NaN;
-        if (!name) { alert('Введите название расходника'); return; }
-        if (!unit) { alert('Введите единицу измерения'); return; }
-        if (isNaN(price) || price <= 0) { alert('Введите корректную цену (больше 0)'); return; }
-        extraRef.push({name, unit, price});
-        saveAll();
-        renderRefs();
-        closeAddExtraRefModal();
-        // Очистим поля формы
-        if (nameInput) nameInput.value = '';
-        if (unitInput) unitInput.value = '';
-        if (priceInput) priceInput.value = '';
+        const name = document.getElementById('newExtraRefName').value.trim();
+        const unit = document.getElementById('newExtraRefUnit').value.trim();
+        const price = parseFloat(document.getElementById('newExtraRefPrice').value);
+        if (!name || !unit || isNaN(price)) { alert('Заполните все поля корректно'); return; }
+        extraRef.push({name, unit, price}); saveAll(); renderRefs(); closeAddExtraRefModal();
     }
     function addNewService() {
         const name = prompt('Название услуги:', ''); if(!name) return;
@@ -2451,7 +1662,7 @@ if (!films.length) {
             return !isMarker || item.enabled !== false;
         });
         items.forEach(item => addServiceItemRow(item));
-        openModalWithHistory('serviceItemsModal');
+        document.getElementById('serviceItemsModal').classList.add('active');
     }
 
     function addServiceItemRow(item) {
@@ -2573,73 +1784,6 @@ if (!films.length) {
     }
 
     function closeServiceItemsModal() { document.getElementById('serviceItemsModal').classList.remove('active'); editingServiceIndex = null; }
-    
-    // ========== РЕДАКТИРОВАНИЕ РАСХОДНИКОВ В КОНТЕКСТЕ ЗАКАЗА ==========
-    let editingOrderServiceIndex = null;
-    
-    function openServiceItemsModalForOrder(orderServiceIndex) {
-        editingOrderServiceIndex = orderServiceIndex;
-        const inst = currentServices[orderServiceIndex];
-        if (!inst || !inst.serviceName) {
-            alert('Сначала выберите услугу');
-            return;
-        }
-        const svc = rates.find(r => r.service === inst.serviceName);
-        if (!svc) return;
-        document.getElementById('serviceItemsModalTitle').textContent = `Расходники: ${inst.serviceName}`;
-        const container = document.getElementById('serviceItemsContainer');
-        container.innerHTML = '';
-        const items = (svc.items || []).filter(item => item.enabled !== false);
-        items.forEach(item => addServiceItemRow(item));
-        openModalWithHistory('serviceItemsModal');
-    }
-    
-    function saveOrderServiceItemsModal() {
-        if (editingOrderServiceIndex === null) return;
-        const container = document.getElementById('serviceItemsContainer');
-        const rows = container.querySelectorAll('.extra-item');
-        const items = [];
-        rows.forEach(row => {
-            const nameInput = row.querySelector('.item-name');
-            const enteredName = nameInput ? nameInput.value.trim() : '';
-            if (!enteredName) return;
-            const marker = getMarkerDefinition(enteredName);
-            const name = marker ? marker.name : enteredName;
-            const isMarker = row.dataset.isMarker === 'true' || !!marker;
-            if (isMarker) {
-                const perMeter = row.querySelector('.item-perMeter').checked;
-                const manual = row.querySelector('.item-manual').checked;
-                const enabled = row.querySelector('.item-enabled').checked;
-                const customMarker = !['Ткань','Краска','Пленка для аквапринта'].includes(name);
-                items.push({name, quantity:parseFloat(row.querySelector('.item-qty').value)||1, unit:marker ? marker.unit : row.querySelector('.item-unit').value, price:0, perMeter, manual, enabled, customMarker});
-                return;
-            }
-            const qtyInput = row.querySelector('.item-qty');
-            const unitInput = row.querySelector('.item-unit');
-            const priceInput = row.querySelector('.item-price');
-            const quantity = parseFloat(qtyInput?.value);
-            const price = parseFloat(priceInput?.value);
-            const unit = unitInput?.value || 'мл';
-            const perMeter = row.querySelector('.item-perMeter')?.checked || false;
-            const manual = row.querySelector('.item-manual')?.checked || false;
-            const enabled = row.querySelector('.item-enabled')?.checked !== false;
-            items.push({name, quantity:Number.isFinite(quantity) ? quantity : 1, unit, price:Number.isFinite(price) ? price : 0, perMeter, manual, enabled, customMarker: false});
-        });
-        const svc = rates.find(r => r.service === currentServices[editingOrderServiceIndex].serviceName);
-        if (svc) {
-            svc.items = items;
-            localChangesPending = true;
-            saveAll();
-        }
-        editingOrderServiceIndex = null;
-        closeModalWithHistory('serviceItemsModal');
-        renderRefs();
-    }
-    
-    function closeOrderServiceItemsModal() {
-        editingOrderServiceIndex = null;
-        closeModalWithHistory('serviceItemsModal');
-    }
 
     // ========== МОДАЛКА ЗАКАЗА ==========
     function updateDeadline() {
@@ -2688,7 +1832,6 @@ if (!films.length) {
             addServiceRow();
         }
         document.getElementById('orderModal').classList.add('active');
-        openModalWithHistory('orderModal');
         updateModalTotals();
     }
 
@@ -2723,15 +1866,6 @@ if (!films.length) {
         select.innerHTML = '<option value="">-- Выберите услугу --</option>';
         rates.forEach(r => { const opt = document.createElement('option'); opt.value=r.service; opt.textContent=r.service; select.appendChild(opt); });
         select.value = instance.serviceName;
-        const editItemsBtn = document.createElement('button');
-        editItemsBtn.className = 'btn-extra';
-        editItemsBtn.textContent = '✏️';
-        editItemsBtn.title = 'Редактировать расходники услуги';
-        editItemsBtn.style.fontSize = '18px';
-        editItemsBtn.onclick = () => {
-            editingOrderServiceIndex = index;
-            openServiceItemsModalForOrder(index);
-        };
         const delBtn = document.createElement('button');
         delBtn.className = 'btn-del';
         delBtn.textContent = '✕';
@@ -2739,7 +1873,6 @@ if (!films.length) {
         const header = document.createElement('div');
         header.className = 'service-header';
         header.appendChild(select);
-        header.appendChild(editItemsBtn);
         header.appendChild(delBtn);
         row.appendChild(header);
         const details = document.createElement('div');
@@ -2749,20 +1882,10 @@ if (!films.length) {
         select.onchange = () => {
             instance.serviceName = select.value;
             const svc = rates.find(r => r.service === select.value);
-            if (svc) { 
-                instance.usesFabric = svc.usesFabric; 
-                instance.usesPaint = serviceUsesPaint(svc); 
-                instance.usesFilm = svc.usesFilm;
-                // Принудительно пересоздаём детали для маркеров
-                buildServiceDetails(details, index);
-            }
+            if (svc) { instance.usesFabric = svc.usesFabric; instance.usesPaint = serviceUsesPaint(svc); instance.usesFilm = svc.usesFilm; }
+            buildServiceDetails(details, index);
             updateModalTotals();
         };
-        
-        // Если услуга уже выбрана (редактирование)
-        if (instance.serviceName) {
-            buildServiceDetails(details, index);
-        }
         if (instance.serviceName) buildServiceDetails(details, index);
         updateModalTotals();
     }
@@ -3104,23 +2227,15 @@ function deleteOrder(orderId) {
 
     // ========== ДОП. РАСХОДНИКИ ==========
     function openExtraModalFromOrder() {
-        // Убедимся, что currentExtraData инициализирована
-        if (!currentExtraData || typeof currentExtraData !== 'object') {
-            currentExtraData = {};
-        }
         const container = document.getElementById('extraMaterialsContainer');
         container.innerHTML = '';
-        if (extraRef.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:#6c757d; padding:20px;">Нет доступных расходников. Добавьте их во вкладке "Справочники".</p>';
-        } else {
-            extraRef.forEach(ref => {
-                const div = document.createElement('div');
-                div.className = 'extra-item';
-                div.innerHTML = `<span>${ref.name}</span><input type="number" class="extra-qty" value="${parseFloat(currentExtraData[ref.name])||''}" placeholder="Кол-во" data-name="${ref.name}"> <span>${parseFloat(ref.price)||0}₽/${ref.unit}</span>`;
-                container.appendChild(div);
-            });
-        }
-        openModalWithHistory('extraModal');
+        extraRef.forEach(ref => {
+            const div = document.createElement('div');
+            div.className = 'extra-item';
+            div.innerHTML = `<span>${ref.name}</span><input type="number" class="extra-qty" value="${parseFloat(currentExtraData[ref.name])||''}" placeholder="Кол-во" data-name="${ref.name}"> <span>${parseFloat(ref.price)||0}₽/${ref.unit}</span>`;
+            container.appendChild(div);
+        });
+        document.getElementById('extraModal').classList.add('active');
     }
     function saveExtraModal() {
         document.querySelectorAll('.extra-qty').forEach(input => {
@@ -3171,26 +2286,18 @@ function deleteOrder(orderId) {
                 const svc = rates.find(r => r.service === inst.serviceName);
                 if (!svc) return;
                 if (svc.usesFabric && inst.fabric && inst.fabric.code) {
-                    const foundColor = colors.find(c => c.code === inst.fabric.code);
-                    const price = foundColor ? (parseFloat(foundColor.price) || 0) : (parseFloat(inst.fabric.price) || 0);
-                    markers['Ткань'].push({article: inst.fabric.code, name: inst.fabric.colorName || inst.fabric.code, qty: parseFloat(inst.fabric.meters)||0, unit:'м', price});
+                    markers['Ткань'].push({article: inst.fabric.code, name: inst.fabric.colorName || inst.fabric.code, qty: parseFloat(inst.fabric.meters)||0, unit:'м'});
                 }
                 if (serviceUsesPaint(svc) && inst.paint && inst.paint.code) {
-                    const foundPaint = paints.find(p => p.code === inst.paint.code);
-                    const price = foundPaint ? (parseFloat(foundPaint.price) || 0) : (parseFloat(inst.paint.price) || 0);
-                    markers['Краска'].push({article: inst.paint.code, name: inst.paint.colorName || inst.paint.code, qty: parseFloat(inst.paint.qty)||0, unit:'мл', price});
+                    markers['Краска'].push({article: inst.paint.code, name: inst.paint.colorName || inst.paint.code, qty: parseFloat(inst.paint.qty)||0, unit:'мл'});
                 }
                 if (svc.usesFilm && inst.film && inst.film.code) {
-                    const foundFilm = films.find(f => f.code === inst.film.code);
-                    const price = foundFilm ? (parseFloat(foundFilm.price) || 0) : (parseFloat(inst.film.price) || 0);
-                    markers['Пленка'].push({article: inst.film.code, name: inst.film.name || inst.film.code, qty: parseFloat(inst.film.meters)||0, unit:'м', price});
+                    markers['Пленка'].push({article: inst.film.code, name: inst.film.name || inst.film.code, qty: parseFloat(inst.film.meters)||0, unit:'м'});
                 }
                 materialTypes.forEach(mt => {
                     const markerData = inst[mt.name];
                     if (markerData && markerData.code) {
-                        const art = mt.articles.find(a => a.code === markerData.code);
-                        const price = art ? (parseFloat(art.price) || 0) : (parseFloat(markerData.price) || 0);
-                        markers[mt.name].push({article: markerData.code, name: art?.name || markerData.code, qty: parseFloat(markerData.qty)||0, unit: mt.unit, price});
+                        markers[mt.name].push({article: markerData.code, name: mt.articles.find(a=>a.code===markerData.code)?.name || markerData.code, qty: parseFloat(markerData.qty)||0, unit: mt.unit});
                     }
                 });
                 svc.items.forEach(item => {
@@ -3200,38 +2307,26 @@ function deleteOrder(orderId) {
                     if (item.name === 'Ткань' && svc.usesFabric) return;
                     if (materialTypes.some(mt=>mt.name===item.name)) return;
                     let qty = (inst.manualItems || {})[item.name] ? parseFloat((inst.manualItems || {})[item.name]) : (item.manual ? 0 : (item.perMeter ? (parseFloat(item.quantity)||0)*(parseFloat(inst.fabric?.meters)||0) : (parseFloat(item.quantity)||0)));
-                    if (qty > 0) {
-                        const ref = extraRef.find(e=>e.name===item.name);
-                        const price = ref ? (parseFloat(ref.price) || 0) : 0;
-                        otherMaterials[item.name] = {qty: (parseFloat(otherMaterials[item.name]?.qty||0) || 0) + qty, unit: ref?.unit || 'шт', price};
-                    }
+                    if (qty > 0) otherMaterials[item.name] = (parseFloat(otherMaterials[item.name])||0) + qty;
                 });
             });
             let extra = {};
             try { extra = JSON.parse(order.extraData || '{}'); } catch(e) {}
             for (let key in extra) {
-                const ref = extraRef.find(e=>e.name===key);
-                const price = ref ? (parseFloat(ref.price) || 0) : 0;
-                if (!otherMaterials[key]) {
-                    otherMaterials[key] = {qty: 0, unit: ref?.unit || 'шт', price};
-                }
-                otherMaterials[key].qty = (parseFloat(otherMaterials[key].qty) || 0) + (parseFloat(extra[key]) || 0);
+                otherMaterials[key] = (parseFloat(otherMaterials[key])||0) + (parseFloat(extra[key])||0);
             }
         });
-        let totalCost = 0;
         for (let markerName in markers) {
             if (markers[markerName].length) {
                 const section = document.createElement('h3');
                 section.textContent = markerName;
                 docContainer.appendChild(section);
                 const table = document.createElement('table');
-                table.innerHTML = '<tr><th>Артикул</th><th>Наименование</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th><th>Цена за ед.</th><th>Стоимость</th></tr>';
+                table.innerHTML = '<tr><th>Артикул</th><th>Наименование</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th></tr>';
                 const grouped = {};
                 markers[markerName].forEach(m => {
-                    if (!grouped[m.article]) grouped[m.article] = {name:m.name, qty:0, unit:m.unit, price: m.price || 0};
+                    if (!grouped[m.article]) grouped[m.article] = {name:m.name, qty:0, unit:m.unit};
                     grouped[m.article].qty += m.qty;
-                    // цену берём последнюю (можно усреднить, но для простоты — последнюю)
-                    if (m.price) grouped[m.article].price = m.price;
                 });
                 const stock = loadStock();
                 for (let art in grouped) {
@@ -3239,10 +2334,8 @@ function deleteOrder(orderId) {
                     const stockItem = stock.find(s => s.name === g.name) || {remain:0};
                     const remain = parseFloat(stockItem.remain) || 0;
                     const toBuy = Math.max(0, g.qty - remain);
-                    const cost = toBuy * (g.price || 0);
-                    totalCost += cost;
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${art}</td><td>${g.name}</td><td>${g.qty.toFixed(2)}</td><td>${g.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td><td>${g.price.toFixed(2)}₽</td><td>${cost.toFixed(2)}₽</td>`;
+                    tr.innerHTML = `<td>${art}</td><td>${g.name}</td><td>${g.qty.toFixed(2)}</td><td>${g.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td>`;
                     table.appendChild(tr);
                 }
                 docContainer.appendChild(table);
@@ -3253,28 +2346,18 @@ function deleteOrder(orderId) {
             section.textContent = 'Прочие расходники';
             docContainer.appendChild(section);
             const table = document.createElement('table');
-            table.innerHTML = '<tr><th>Материал</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th><th>Цена за ед.</th><th>Стоимость</th></tr>';
+            table.innerHTML = '<tr><th>Материал</th><th>Требуется</th><th>Ед.</th><th>Остаток</th><th>К закупке</th></tr>';
             const stock = loadStock();
             for (let name in otherMaterials) {
-                const m = otherMaterials[name];
-                const ref = extraRef.find(e=>e.name===name) || {unit:'шт', price:0};
+                const ref = extraRef.find(e=>e.name===name) || {unit:'шт'};
                 const stockItem = stock.find(s => s.name === name) || {remain:0};
                 const remain = parseFloat(stockItem.remain) || 0;
-                const toBuy = Math.max(0, m.qty - remain);
-                const cost = toBuy * (m.price || ref.price || 0);
-                totalCost += cost;
+                const toBuy = Math.max(0, parseFloat(otherMaterials[name]) - remain);
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${name}</td><td>${m.qty.toFixed(2)}</td><td>${m.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td><td>${(m.price || ref.price || 0).toFixed(2)}₽</td><td>${cost.toFixed(2)}₽</td>`;
+                tr.innerHTML = `<td>${name}</td><td>${parseFloat(otherMaterials[name]).toFixed(2)}</td><td>${ref.unit}</td><td>${remain.toFixed(2)}</td><td>${toBuy.toFixed(2)}</td>`;
                 table.appendChild(tr);
             }
             docContainer.appendChild(table);
-        }
-        // Итого
-        if (totalCost > 0) {
-            const totalDiv = document.createElement('div');
-            totalDiv.style.cssText = 'margin-top:15px;padding:12px 16px;background:#e8f5e9;border-radius:8px;font-weight:700;font-size:18px;color:#2e7d32;text-align:right;';
-            totalDiv.textContent = `Итого к закупке: ${totalCost.toFixed(2)} ₽`;
-            docContainer.appendChild(totalDiv);
         }
     }
 
@@ -3337,21 +2420,6 @@ function deleteOrder(orderId) {
     }
 
     // ========== ПРОЧЕЕ ==========
-    function togglePaid(id, checked) {
-        const order = ordersData.find(o=>o.id===id);
-        if (order) {
-            order.paid = checked;
-            if (checked) distributePayment(order);
-            saveAll();
-            renderAll();
-        }
-    }
-    function deleteOrder(orderId) {
-        ordersData = ordersData.filter(o=>o.id!==orderId);
-        recalculateStockFromAllOrders();
-        saveAll();
-        renderAll();
-    }
     function clearAllOrders() {
         if (confirm('Удалить все заказы?')) {
             ordersData = [];
@@ -3366,7 +2434,20 @@ function deleteOrder(orderId) {
         currentManualColor = color;
         document.querySelectorAll('.color-select .color-btn').forEach(b => b.classList.toggle('active', b.classList.contains(color)));
     }
-    function handlePaidChange() { /* Обновление при изменении чекбокса в модалке */ }
+    function handlePaidChange() {
+        const checkbox = document.getElementById('orderPaid');
+        const order = orderEditId ? ordersData.find(o => o.id === orderEditId) : null;
+        if (!order) return;
+        order.paid = checkbox.checked;
+        if (checkbox.checked) {
+            distributePayment(order);
+        } else {
+            removePaymentDistribution(order.orderNumber);
+        }
+        saveAll();
+        updateModalTotals();
+        updateUnpaidSummary();
+    }
        function saveBooking() {
         const date = document.getElementById('modalDate').value;
         const name = document.getElementById('modalName').value.trim();
@@ -3433,23 +2514,14 @@ function deleteOrder(orderId) {
         
         grid.innerHTML = '';
         const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-        dayNames.forEach(n => { 
-            const dayNameDiv = document.createElement('div'); 
-            dayNameDiv.className = 'day-name'; 
-            dayNameDiv.textContent = n; 
-            grid.appendChild(dayNameDiv); 
-        });
+        dayNames.forEach(n => { const d = document.createElement('div'); d.className='day-name'; d.textContent=n; grid.appendChild(d); });
         const firstDay = new Date(year, month, 1);
         const daysInMonth = new Date(year, month+1, 0).getDate();
         const offset = firstDay.getDay()===0 ? 6 : firstDay.getDay()-1;
-        for (let i=0; i<offset; i++) { 
-            const emptyDiv = document.createElement('div'); 
-            emptyDiv.className = 'day-cell other-month'; 
-            grid.appendChild(emptyDiv); 
-        }
+        for (let i=0; i<offset; i++) { const d=document.createElement('div'); d.className='day-cell other-month'; grid.appendChild(d); }
         
-        for (let dayNum=1; dayNum<=daysInMonth; dayNum++) {
-            const dateObj = new Date(year, month, dayNum);
+        for (let d=1; d<=daysInMonth; d++) {
+            const dateObj = new Date(year, month, d);
             const dateStr = formatDate(dateObj);
             const isSelected = selectedDate && dateObj.toDateString() === selectedDate.toDateString();
             let dayOrders = ordersData.filter(o => o.date === dateStr);
@@ -3495,8 +2567,8 @@ function deleteOrder(orderId) {
             const div = document.createElement('div');
             div.className = classes;
             
-            // Создаём элемент с номером дня
-            div.innerHTML = `<span class="day-number">${dayNum}</span>`;
+            // Формируем HTML с подсказками
+            let html = `<span class="day-number">${d}</span>`;
             
             // Показываем значки с количеством
             let badgeText = [];
@@ -3518,6 +2590,45 @@ function deleteOrder(orderId) {
             grid.appendChild(div);
         }
         renderSchedule();
+    }
+    
+    // ========== УВЕДОМЛЕНИЯ ==========
+    function checkTomorrowNotifications() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = formatDate(tomorrow);
+        
+        const tomorrowOrders = ordersData.filter(o => o.date === tomorrowStr);
+        const tomorrowNotes = notes.filter(n => n.date === tomorrowStr);
+        const tomorrowPayments = getRegularPaymentsForDate(tomorrowStr);
+        
+        let message = '';
+        if (tomorrowOrders.length > 0) {
+            message += `📋 ${tomorrowOrders.length} заказ(ов)\n`;
+            tomorrowOrders.forEach(o => {
+                const color = getOrderColorObj(o);
+                const colorName = color === 'critical' ? '🔴 ОЧЕНЬ СРОЧНЫЙ' : color === 'middle' ? '🟡 Срочный' : '🟢 Новый';
+                message += `   №${o.orderNumber} ${o.client} – ${o.services.map(s=>s.serviceName).join(', ')} (${colorName})\n`;
+            });
+        }
+        if (tomorrowNotes.length > 0) {
+            message += `📝 ${tomorrowNotes.length} заметк(а/и):\n`;
+            tomorrowNotes.forEach(n => {
+                message += `   ${n.text}\n`;
+            });
+        }
+        if (tomorrowPayments.length > 0) {
+            message += `💰 Регулярные платежи:\n`;
+            tomorrowPayments.forEach(p => {
+                message += `   ${p.desc} – ${(parseFloat(p.expense)||0).toFixed(2)}₽\n`;
+            });
+        }
+        
+        if (message) {
+            const title = `🔔 На завтра (${tomorrowStr})`;
+            alert(`${title}\n\n${message}`);
+            saveNotificationShown(tomorrowStr);
+        }
     }
     
     function saveNotificationShown(dateStr) {
@@ -3668,39 +2779,86 @@ function deleteOrder(orderId) {
         monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
         
         const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-        dayNames.forEach((name, i) => {
-            const date = new Date(monday);
-            date.setDate(monday.getDate() + i);
-            const div = document.createElement('div');
-            div.className = 'day-cell';
-            div.style.background = '#f8f9fa';
-            div.innerHTML = `<div style="font-weight:700; font-size:14px;">${name}</div><div style="font-size:12px; color:#6c757d;">${date.getDate()}</div>`;
-            div.addEventListener('click', () => {
-                selectedDate = date;
-                renderCalendar();
-                renderSchedule();
-            });
-            grid.appendChild(div);
-        });
-        
-        // Добавляем заказы на неделю
         for (let i = 0; i < 7; i++) {
             const date = new Date(monday);
             date.setDate(monday.getDate() + i);
             const dateStr = formatDate(date);
             const dayOrders = ordersData.filter(o => o.date === dateStr);
             
-            if (dayOrders.length > 0) {
-                const dayDiv = grid.children[i];
-                dayOrders.forEach(order => {
-                    if (currentServiceFilter === 'all' || order.services.some(s => s.serviceName === currentServiceFilter)) {
-                        const badge = document.createElement('div');
-                        badge.style.cssText = 'font-size:10px; margin-top:4px; padding:2px; background:#e3f2fd; border-radius:4px;';
-                        badge.textContent = `№${order.orderNumber}`;
-                        dayDiv.appendChild(badge);
-                    }
-                });
+            // Фильтруем по услуге
+            const visibleOrders = dayOrders.filter(o => 
+                currentServiceFilter === 'all' || o.services.some(s => s.serviceName === currentServiceFilter)
+            );
+            
+            // Определяем цвет дня по срочности
+            let bgColor = '#f8f9fa';
+            let borderColor = 'transparent';
+            let colorClass = '';
+            
+            if (visibleOrders.length > 0) {
+                const colors = visibleOrders.map(o => getOrderColorObj(o));
+                if (colors.includes('critical')) {
+                    bgColor = '#f8d7da';
+                    borderColor = '#dc3545';
+                } else if (colors.includes('middle')) {
+                    bgColor = '#fff3cd';
+                    borderColor = '#ffc107';
+                } else if (colors.includes('new')) {
+                    bgColor = '#d4edda';
+                    borderColor = '#28a745';
+                }
             }
+            
+            // Подсвечиваем сегодня
+            const isToday = date.toDateString() === today.toDateString();
+            if (isToday) {
+                borderColor = '#1a3c5e';
+            }
+            
+            const div = document.createElement('div');
+            div.className = 'day-cell';
+            if (colorClass) div.className += ' ' + colorClass;
+            div.style.background = bgColor;
+            if (borderColor !== 'transparent') {
+                div.style.borderColor = borderColor;
+                div.style.borderWidth = '2px';
+                div.style.borderStyle = 'solid';
+            }
+            div.innerHTML = `<div style="font-weight:700; font-size:14px;">${dayNames[i]}</div><div style="font-size:12px; color:#6c757d;">${date.getDate()}</div>`;
+            div.addEventListener('click', () => {
+                selectedDate = date;
+                renderCalendar();
+                renderSchedule();
+            });
+            
+            // Показываем заказы
+            visibleOrders.forEach(order => {
+                const badge = document.createElement('div');
+                const color = getOrderColorObj(order);
+                badge.style.cssText = `font-size:10px; margin-top:2px; padding:2px 4px; background:${color === 'critical' ? '#f5c6cb' : color === 'middle' ? '#ffeeba' : '#c3e6cb'}; border-radius:4px; border-left: 2px solid ${color === 'critical' ? '#dc3545' : color === 'middle' ? '#ffc107' : '#28a745'};`;
+                badge.textContent = `№${order.orderNumber} ${order.client}`;
+                div.appendChild(badge);
+            });
+            
+            // Показываем заметки
+            const dayNotes = notes.filter(n => n.date === dateStr);
+            if (dayNotes.length > 0) {
+                const noteBadge = document.createElement('div');
+                noteBadge.style.cssText = 'font-size:9px; margin-top:2px; padding:2px 4px; background:#e6d9f5; border-radius:4px; color:#6f42c1;';
+                noteBadge.textContent = `📝 ${dayNotes.length}`;
+                div.appendChild(noteBadge);
+            }
+            
+            // Показываем платежи
+            const dayPayments = cashOps.filter(op => op.date === dateStr && parseFloat(op.expense) > 0);
+            if (dayPayments.length > 0) {
+                const payBadge = document.createElement('div');
+                payBadge.style.cssText = 'font-size:9px; margin-top:2px; padding:2px 4px; background:#cce5ff; border-radius:4px; color:#007bff;';
+                payBadge.textContent = `💰 ${dayPayments.length}`;
+                div.appendChild(payBadge);
+            }
+            
+            grid.appendChild(div);
         }
     }
     
@@ -3789,12 +2947,12 @@ function deleteOrder(orderId) {
         }
         
         body.innerHTML = html;
-        openModalWithHistory('notificationModal');
+        modal.classList.add('active');
         saveNotificationShown(tomorrowStr);
     }
     
     function closeNotificationModal() {
-        closeModalWithHistory('notificationModal');
+        document.getElementById('notificationModal').classList.remove('active');
     }
     
     function checkTomorrowNotifications() {
@@ -3820,7 +2978,7 @@ function deleteOrder(orderId) {
         document.getElementById('noteDate').value = dateStr || (selectedDate ? formatDate(selectedDate) : '');
         document.getElementById('noteTime').value = '';
         document.getElementById('noteText').value = '';
-        openModalWithHistory('noteModal');
+        document.getElementById('noteModal').classList.add('active');
     }
     function closeNoteModal() { document.getElementById('noteModal').classList.remove('active'); }
     function saveNote() {
@@ -3868,18 +3026,12 @@ function deleteOrder(orderId) {
     function renderOrders() {
         const list = document.getElementById('ordersList');
         list.innerHTML = '';
-        console.log('🔍 Рендер заказов, всего заказов:', ordersData.length);
-        
         ordersData.forEach(order => {
             const color = getOrderColorObj(order);
-            console.log(`📦 Заказ №${order.orderNumber}: цвет = "${color}", done = ${order.done}, manualColor = ${order.manualColor}`);
-            
             const show = filterCheck(order, currentFilter);
             if (!show) return;
-            
             const div = document.createElement('div');
             div.className = `order-item status-${color}`;
-            console.log(`✅ Создан div с классом: "${div.className}"`);
             div.innerHTML = `
                 <div class="order-header">
                     <span class="order-number">№${order.orderNumber}</span>
@@ -3956,17 +3108,78 @@ function deleteOrder(orderId) {
         });
     }
 
+    // ========== ИТОГИ (ОТЧЁТ) ==========
+    function calculateSummaryPeriodDates() {
+        const yearSel = document.getElementById('summaryYear');
+        const monthSel = document.getElementById('summaryMonth');
+        const customDateFrom = document.getElementById('customDateFrom');
+        const customDateTo = document.getElementById('customDateTo');
+        if (!yearSel || !monthSel) return { startDate: '', endDate: '' };
+        
+        let startDate, endDate;
+        const currentYear = parseInt(yearSel.value);
+        const currentMonth = parseInt(monthSel.value);
+        
+        if (currentReportPeriodType === 'custom' && customDateFrom?.value && customDateTo?.value) {
+            startDate = customDateFrom.value;
+            endDate = customDateTo.value;
+        } else if (currentReportPeriodType === 'year') {
+            startDate = `${currentYear}-01-01`;
+            endDate = `${currentYear}-12-31`;
+        } else if (currentReportPeriodType === 'quarter') {
+            const quarter = Math.ceil(currentMonth / 3);
+            const quarterStart = (quarter - 1) * 3 + 1;
+            const lastMonth = quarterStart + 2;
+            const lastDay = new Date(currentYear, lastMonth, 0).getDate();
+            startDate = `${currentYear}-${String(quarterStart).padStart(2,'0')}-01`;
+            endDate = `${currentYear}-${String(lastMonth).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
+        } else {
+            // month (по умолчанию)
+            const lastDay = new Date(currentYear, currentMonth, 0).getDate();
+            startDate = `${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
+            endDate = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
+        }
+        
+        return { startDate, endDate };
+    }
+
     function renderSummary() {
         const yearSel = document.getElementById('summaryYear');
         const monthSel = document.getElementById('summaryMonth');
+        const customDateFrom = document.getElementById('customDateFrom');
+        const customDateTo = document.getElementById('customDateTo');
         if (!yearSel || !monthSel) return;
-        const year = parseInt(yearSel.value);
-        const month = parseInt(monthSel.value);
-        if (isNaN(year) || isNaN(month)) return;
-        const prefix = `${year}-${String(month).padStart(2,'0')}`;
-        let filteredOrders = ordersData.filter(o => o.date && o.date.startsWith(prefix));
-        let filteredCash = cashOps.filter(op => op.date && op.date.startsWith(prefix));
-
+        
+        const { startDate, endDate } = calculateSummaryPeriodDates();
+        
+        let filteredOrders = ordersData.filter(o => o.date && o.date >= startDate && o.date <= endDate);
+        let filteredCash = cashOps.filter(op => op.date && op.date >= startDate && op.date <= endDate);
+        
+        // Формируем заголовок
+        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+        const startD = new Date(startDate);
+        const endD = new Date(endDate);
+        
+        let titleText = '';
+        let subtitleText = '';
+        
+        if (currentReportPeriodType === 'custom' && customDateFrom?.value && customDateTo?.value) {
+            titleText = `Отчёт за период`;
+            subtitleText = `с ${formatDatePretty(startDate)} по ${formatDatePretty(endDate)}`;
+        } else if (currentReportPeriodType === 'quarter') {
+            titleText = `Отчёт за ${currentReportPeriodType === 'quarter' ? 'квартал' : ''} ${startD.getFullYear()}`;
+            subtitleText = `${months[startD.getMonth()]} — ${months[endD.getMonth()]}`;
+        } else if (startD.getMonth() === endD.getMonth() && startD.getFullYear() === endD.getFullYear()) {
+            titleText = `Отчёт за ${months[startD.getMonth()]} ${startD.getFullYear()}`;
+            subtitleText = '';
+        } else {
+            titleText = `Отчёт за период`;
+            subtitleText = `с ${formatDatePretty(startDate)} по ${formatDatePretty(endDate)}`;
+        }
+        
+        document.getElementById('summaryTitle').textContent = titleText;
+        document.getElementById('summarySubtitle').textContent = subtitleText;
+        
         let revenue=0, cost=0, helper=0;
         filteredOrders.forEach(o => {
             revenue += parseFloat(o.clientPrice)||0;
@@ -3976,13 +3189,20 @@ function deleteOrder(orderId) {
         const gross = revenue - cost - helper;
         let expenses = filteredCash.reduce((acc, op) => acc + (parseFloat(op.expense)||0), 0);
         const net = gross - expenses;
+        
+        const revenueClass = revenue > 0 ? 'positive' : '';
+        const costClass = 'negative';
+        const helperClass = 'negative';
+        const netClass = net >= 0 ? 'positive' : 'negative';
+        
         document.getElementById('summaryBlock').innerHTML = `
-            <div class="summary-item"><label>Выручка</label><span>${revenue.toFixed(2)}₽</span></div>
-            <div class="summary-item"><label>Себестоимость</label><span>${cost.toFixed(2)}₽</span></div>
-            <div class="summary-item"><label>Помощнику</label><span>${helper.toFixed(2)}₽</span></div>
-            <div class="summary-item"><label>Валовый доход</label><span>${gross.toFixed(2)}₽</span></div>
-            <div class="summary-item"><label>Расходы</label><span>${expenses.toFixed(2)}₽</span></div>
-            <div class="summary-item"><label>Чистая прибыль</label><span>${net.toFixed(2)}₽</span></div>
+            <div class="summary-item"><label>💰 Выручка</label><span class="${revenueClass}">${revenue.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>📦 Себестоимость</label><span class="${costClass}">${cost.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>👥 Помощнику</label><span class="${helperClass}">${helper.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>📈 Валовый доход</label><span>${gross.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>💸 Расходы</label><span class="${costClass}">${expenses.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>✨ Чистая прибыль</label><span class="${netClass}">${net.toFixed(2)} ₽</span></div>
+            <div class="summary-item"><label>📊 Заказов за период</label><span>${filteredOrders.length}</span></div>
         `;
     }
 
@@ -4027,7 +3247,7 @@ function deleteOrder(orderId) {
             {client:'Тест новый 4', service:'Шумоизоляция', date:dateWithOffset(0), durationDays:10, clientPrice:17000}
         ];
         samples.forEach((sample, index) => {
-            const service = createService(sample.service, {meters: sample.service === 'Перетяжка потолка' ? 4 : 0, paintQty: sample.service === 'Покраска пластика' ? 250 : 0, filmMeters: sample.service === 'Аквапринт' ? 2 : 0});
+            const service = createService(sample.service, {meters: sample.service === 'Перетяжка потолка' ? 4 : 0, paintQty: sample.service === 'Восстановление после ДТП' || sample.service === 'Покраска пластика' ? 250 : 0, filmMeters: sample.service === 'Аквапринт' ? 2 : 0});
             if (!service) return;
             ordersData.push({id:Date.now() + index, orderNumber:index + 1, date:sample.date, client:sample.client, phone:'+7 900 000-00-0' + (index + 1), services:[service], clientPrice:sample.clientPrice, helperPay:1000, durationDays:sample.durationDays, extraData:'{}', done:sample.done, paid:false, manualColor:'auto'});
         });
@@ -4055,83 +3275,6 @@ function deleteOrder(orderId) {
         });
         saveAll();
     }
-
-    function renderSummary() {
-        const yearSel = document.getElementById('summaryYear');
-        const monthSel = document.getElementById('summaryMonth');
-        const customDateFrom = document.getElementById('customDateFrom');
-        const customDateTo = document.getElementById('customDateTo');
-        if (!yearSel || !monthSel) return;
-        
-        let startDate, endDate;
-        const currentYear = parseInt(yearSel.value);
-        const currentMonth = parseInt(monthSel.value);
-        const periodType = document.querySelector('.btn-primary:not(.btn-info):not(.btn-success):not(.btn-warning)')?.classList?.contains('btn-primary') && 
-                          !document.getElementById('btnQuarter')?.classList?.contains('btn-primary') &&
-                          !document.getElementById('btnYear')?.classList?.contains('btn-primary') ? 'month' : 'month';
-        
-        // Определяем период на основе кнопок
-        if (customDateFrom?.value && customDateTo?.value) {
-            // Произвольный период
-            startDate = customDateFrom.value;
-            endDate = customDateTo.value;
-        } else {
-            // Месяц, квартал или год по умолчанию
-            const lastDay = new Date(currentYear, currentMonth, 0).getDate();
-            startDate = `${currentYear}-${String(currentMonth).padStart(2,'0')}-01`;
-            endDate = `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(lastDay).padStart(2,'0')}`;
-        }
-        
-        let filteredOrders = ordersData.filter(o => o.date && o.date >= startDate && o.date <= endDate);
-        let filteredCash = cashOps.filter(op => op.date && op.date >= startDate && op.date <= endDate);
-        
-        // Формируем заголовок
-        const months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-        const startD = new Date(startDate);
-        const endD = new Date(endDate);
-        
-        let titleText = '';
-        let subtitleText = '';
-        
-        if (customDateFrom?.value && customDateTo?.value) {
-            titleText = `Отчёт за период`;
-            subtitleText = `с ${formatDatePretty(startDate)} по ${formatDatePretty(endDate)}`;
-        } else if (startD.getMonth() === endD.getMonth() && startD.getFullYear() === endD.getFullYear()) {
-            titleText = `Отчёт за ${months[startD.getMonth()]} ${startD.getFullYear()}`;
-            subtitleText = '';
-        } else {
-            titleText = `Отчёт за период`;
-            subtitleText = `с ${formatDatePretty(startDate)} по ${formatDatePretty(endDate)}`;
-        }
-        
-        document.getElementById('summaryTitle').textContent = titleText;
-        document.getElementById('summarySubtitle').textContent = subtitleText;
-        
-        let revenue=0, cost=0, helper=0;
-        filteredOrders.forEach(o => {
-            revenue += parseFloat(o.clientPrice)||0;
-            cost += parseFloat(o.materialCost)||0;
-            helper += parseFloat(o.helperPay)||0;
-        });
-        const gross = revenue - cost - helper;
-        let expenses = filteredCash.reduce((acc, op) => acc + (parseFloat(op.expense)||0), 0);
-        const net = gross - expenses;
-        
-        const revenueClass = revenue > 0 ? 'positive' : '';
-        const costClass = 'negative';
-        const helperClass = 'negative';
-        const netClass = net >= 0 ? 'positive' : 'negative';
-        
-        document.getElementById('summaryBlock').innerHTML = `
-            <div class="summary-item"><label>💰 Выручка</label><span class="${revenueClass}">${revenue.toFixed(2)} ₽</span></div>
-            <div class="summary-item"><label>📦 Себестоимость</label><span class="${costClass}">${cost.toFixed(2)} ₽</span></div>
-            <div class="summary-item"><label>👥 Помощнику</label><span class="${helperClass}">${helper.toFixed(2)} ₽</span></div>
-            <div class="summary-item"><label>📈 Валовый доход</label><span>${(gross).toFixed(2)} ₽</span></div>
-            <div class="summary-item"><label>💸 Расходы</label><span class="${costClass}">${expenses.toFixed(2)} ₽</span></div>
-            <div class="summary-item"><label>✨ Чистая прибыль</label><span class="${netClass}">${net.toFixed(2)} ₽</span></div>
-            <div class="summary-item"><label>📊 Заказов за период</label><span>${filteredOrders.length}</span></div>
-        `;
-    }
     
     function formatDatePretty(dateStr) {
         if (!dateStr) return '';
@@ -4141,6 +3284,7 @@ function deleteOrder(orderId) {
     }
     
     function setReportPeriod(type) {
+        currentReportPeriodType = type;
         const yearSel = document.getElementById('summaryYear');
         const monthSel = document.getElementById('summaryMonth');
         const customDateFrom = document.getElementById('customDateFrom');
@@ -4163,7 +3307,6 @@ function deleteOrder(orderId) {
             customDateTo.style.display = 'none';
             yearSel.style.display = 'inline-block';
             monthSel.style.display = 'inline-block';
-            renderSummary();
         } else if (type === 'quarter') {
             btnQuarter.classList.remove('btn-secondary');
             btnQuarter.classList.add('btn-primary');
@@ -4176,7 +3319,6 @@ function deleteOrder(orderId) {
             const quarter = Math.ceil(currentMonth / 3);
             const quarterStart = (quarter - 1) * 3 + 1;
             monthSel.value = quarterStart;
-            renderSummary();
         } else if (type === 'year') {
             btnYear.classList.remove('btn-secondary');
             btnYear.classList.add('btn-primary');
@@ -4184,7 +3326,6 @@ function deleteOrder(orderId) {
             customDateTo.style.display = 'none';
             yearSel.style.display = 'inline-block';
             monthSel.style.display = 'none';
-            renderSummary();
         } else if (type === 'custom') {
             btnCustom.classList.remove('btn-secondary');
             btnCustom.classList.add('btn-primary');
@@ -4197,8 +3338,9 @@ function deleteOrder(orderId) {
             const firstDay = new Date(now.getFullYear(), 0, 1);
             customDateFrom.value = formatDate(firstDay);
             customDateTo.value = formatDate(now);
-            renderSummary();
         }
+        
+        renderSummary();
     }
     
     function resetReportPeriod() {
@@ -4293,8 +3435,6 @@ function deleteOrder(orderId) {
 
     document.addEventListener('DOMContentLoaded', () => {
         loadData();
-        // Принудительно настраиваем маркеры для всех услуг
-        configureDefaultServiceMarkers();
         createSampleOrders();
         addRegularPaymentsToCash();
         currentDate = new Date();
@@ -4304,208 +3444,15 @@ function deleteOrder(orderId) {
 
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const tabId = btn.dataset.tab;
-                switchTab(tabId);
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(btn.dataset.tab).classList.add('active');
                 btn.classList.add('active');
-                // Обновляем и мобильную навигацию
-                document.querySelectorAll('.mobile-nav-item').forEach(item => {
-                    item.classList.toggle('active', item.dataset.tab === tabId);
-                });
-                // Добавляем в историю для кнопки "назад"
-                const lastItem = navigationStack[navigationStack.length - 1];
-                if (!lastItem || lastItem.type !== 'tab' || lastItem.id !== tabId) {
-                    navigationStack = navigationStack.filter(item => item.type !== 'modal');
-                    navigationStack.push({type: 'tab', id: tabId});
-                    lastActiveTab = tabId;
-                    history.pushState({tab: tabId}, '');
-                }
-                if (tabId === 'tab-calendar') renderCalendar();
-                if (tabId === 'tab-ref') renderRefs();
-                if (tabId === 'tab-purchase') renderPurchaseOrdersList();
+                if (btn.dataset.tab === 'tab-calendar') renderCalendar();
+                if (btn.dataset.tab === 'tab-ref') renderRefs();
+                if (btn.dataset.tab === 'tab-purchase') renderPurchaseOrdersList();
             });
         });
-        
-    // ========== МОБИЛЬНАЯ НАВИГАЦИЯ "НАЗАД" ==========
-    // История вкладок и модалок для кнопки "назад"
-    let navigationStack = []; // [{type: 'tab'|'modal', id: string}]
-    let lastActiveTab = 'tab-orders';
-    
-    // Инициализация стека текущей активной вкладкой
-    const activeTabBtn = document.querySelector('.tab-btn.active');
-    if (activeTabBtn) {
-        navigationStack.push({type: 'tab', id: activeTabBtn.dataset.tab});
-    }
-    
-    // При открытии модалки добавляем в стек
-    function openModalWithHistory(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.add('active');
-            navigationStack.push({type: 'modal', id: modalId});
-            history.pushState({modal: modalId}, '');
-        }
-    }
-    
-    // При закрытии модалки убираем из стека
-    function closeModalWithHistory(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.remove('active');
-            // Убираем последнюю запись модалки из стека
-            navigationStack = navigationStack.filter(item => item.id !== modalId);
-        }
-    }
-    
-    // Перехватываем стандартные вызовы закрытия модалок
-    const originalCloseOrderModal = window.closeOrderModal;
-    window.closeOrderModal = function() {
-        closeModalWithHistory('orderModal');
-        if (originalCloseOrderModal) originalCloseOrderModal();
-    };
-    
-    const originalCloseExtraModal = window.closeExtraModal;
-    window.closeExtraModal = function() {
-        closeModalWithHistory('extraModal');
-        if (originalCloseExtraModal) originalCloseExtraModal();
-    };
-    
-    const originalCloseServiceItemsModal = window.closeServiceItemsModal;
-    window.closeServiceItemsModal = function() {
-        closeModalWithHistory('serviceItemsModal');
-        if (originalCloseServiceItemsModal) originalCloseServiceItemsModal();
-    };
-    
-    const originalCloseModal = window.closeModal;
-    window.closeModal = function() {
-        closeModalWithHistory('bookingModal');
-        if (originalCloseModal) originalCloseModal();
-    };
-    
-    const originalCloseNoteModal = window.closeNoteModal;
-    window.closeNoteModal = function() {
-        closeModalWithHistory('noteModal');
-        if (originalCloseNoteModal) originalCloseNoteModal();
-    };
-    
-    const originalCloseAddColorModal = window.closeAddColorModal;
-    window.closeAddColorModal = function() {
-        closeModalWithHistory('addColorModal');
-        if (originalCloseAddColorModal) originalCloseAddColorModal();
-    };
-    
-    const originalCloseAddPaintModal = window.closeAddPaintModal;
-    window.closeAddPaintModal = function() {
-        closeModalWithHistory('addPaintModal');
-        if (originalCloseAddPaintModal) originalCloseAddPaintModal();
-    };
-    
-    const originalCloseAddFilmModal = window.closeAddFilmModal;
-    window.closeAddFilmModal = function() {
-        closeModalWithHistory('addFilmModal');
-        if (originalCloseAddFilmModal) originalCloseAddFilmModal();
-    };
-    
-    const originalCloseAddExtraRefModal = window.closeAddExtraRefModal;
-    window.closeAddExtraRefModal = function() {
-        closeModalWithHistory('addExtraRefModal');
-        if (originalCloseAddExtraRefModal) originalCloseAddExtraRefModal();
-    };
-    
-    // Обработка кнопки "назад" на телефоне
-    window.addEventListener('popstate', (event) => {
-        // Проверяем, есть ли открытые модалки (включая notification-modal)
-        const openModals = document.querySelectorAll('.modal-overlay.active, .notification-modal.active');
-        
-        if (openModals.length > 0) {
-            // Если есть модалки - закрываем последнюю
-            const lastModal = openModals[openModals.length - 1];
-            const modalId = lastModal.id;
-            
-            // Находим соответствующую функцию закрытия
-            const closeFn = {
-                'orderModal': closeOrderModal,
-                'extraModal': closeExtraModal,
-                'serviceItemsModal': closeServiceItemsModal,
-                'bookingModal': closeModal,
-                'noteModal': closeNoteModal,
-                'addColorModal': closeAddColorModal,
-                'addPaintModal': closeAddPaintModal,
-                'addFilmModal': closeAddFilmModal,
-                'addExtraRefModal': closeAddExtraRefModal,
-                'notificationModal': closeNotificationModal
-            }[modalId];
-            
-            if (closeFn) {
-                closeFn();
-            } else {
-                // Если не нашли функцию - закрываем вручную
-                lastModal.classList.remove('active');
-            }
-        } else if (navigationStack.length > 1) {
-            // Если модалок нет - возвращаемся на предыдущую вкладку
-            navigationStack.pop();
-            const prevTab = navigationStack[navigationStack.length - 1];
-            if (prevTab && prevTab.type === 'tab') {
-                switchTab(prevTab.id);
-                
-                // Обновляем desktop tabs
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === prevTab.id);
-                });
-                
-                // Обновляем мобильную навигацию
-                document.querySelectorAll('.mobile-nav-item').forEach(item => {
-                    item.classList.toggle('active', item.dataset.tab === prevTab.id);
-                });
-                
-                if (prevTab.id === 'tab-calendar') renderCalendar();
-                if (prevTab.id === 'tab-ref') renderRefs();
-                if (prevTab.id === 'tab-purchase') renderPurchaseOrdersList();
-            }
-        }
-        // Если стек пустой - разрешаем браузеру закрыть страницу (стандартное поведение)
-    });
-    
-    // Модифицируем switchMobileTab для отслеживания истории
-    window.switchMobileTab = function(navItem) {
-        const tabId = navItem.dataset.tab;
-        switchTab(tabId);
-        
-        // Обновляем desktop tabs
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.tab === tabId);
-        });
-        
-        // Обновляем мобильную навигацию
-        document.querySelectorAll('.mobile-nav-item').forEach(item => {
-            item.classList.toggle('active', item.dataset.tab === tabId);
-        });
-        
-        // Добавляем в историю только если эта вкладка не последняя
-        const lastItem = navigationStack[navigationStack.length - 1];
-        if (!lastItem || lastItem.type !== 'tab' || lastItem.id !== tabId) {
-            // Убираем все модалки из истории при переключении вкладок
-            navigationStack = navigationStack.filter(item => item.type !== 'modal');
-            // Добавляем новую вкладку
-            navigationStack.push({type: 'tab', id: tabId});
-            lastActiveTab = tabId;
-            // Добавляем в историю браузера
-            history.pushState({tab: tabId}, '');
-        }
-        
-        if (tabId === 'tab-calendar') renderCalendar();
-        if (tabId === 'tab-ref') renderRefs();
-        if (tabId === 'tab-purchase') renderPurchaseOrdersList();
-    };
-        
-        // Вспомогательная функция переключения табов
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            const targetTab = document.getElementById(tabId);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            }
-        }
 
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -4525,7 +3472,6 @@ function deleteOrder(orderId) {
         document.getElementById('addPaintModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddPaintModal(); });
         document.getElementById('addFilmModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddFilmModal(); });
         document.getElementById('addExtraRefModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAddExtraRefModal(); });
-        document.getElementById('notificationModal')?.addEventListener('click', e => { if (e.target.id === 'notificationModal') closeNotificationModal(); });
 
         document.getElementById('orderDate').addEventListener('input', updateDeadline);
         document.getElementById('orderDurationDays').addEventListener('input', updateDeadline);
@@ -4555,14 +3501,6 @@ window.updateCloudData = function(data) {
         if (!rates.some(service => service.service === localService.service)) rates.push(localService);
     });
     rates.forEach(r => { if (!r.items) r.items = []; });
-    
-    // Удаляем маркер "Краска" из услуги "Восстановление после ДТП"
-    const accidentServiceCloud = rates.find(r => r.service === 'Восстановление после ДТП');
-    if (accidentServiceCloud) {
-        accidentServiceCloud.usesPaint = false;
-        accidentServiceCloud.items = accidentServiceCloud.items.filter(item => item.name !== 'Краска');
-    }
-    
     ordersData = data.ordersData || [];
     ordersData.forEach(order => (order.services || []).forEach(inst => { inst.manualItems = inst.manualItems || {}; }));
     cashOps = data.cashOps || [];
@@ -4624,27 +3562,12 @@ document.addEventListener('keydown', (e) => {
         renderCalendar();
     }
     
-    // Escape — закрыть модальные окна (с учётом истории)
+    // Escape — закрыть модальные окна
     if (e.key === 'Escape') {
-        const openModals = document.querySelectorAll('.modal-overlay.active, .notification-modal.active');
-        if (openModals.length > 0) {
-            e.preventDefault();
-            const lastModal = openModals[openModals.length - 1];
-            const modalId = lastModal.id;
-            const closeFn = {
-                'orderModal': closeOrderModal,
-                'extraModal': closeExtraModal,
-                'serviceItemsModal': closeServiceItemsModal,
-                'bookingModal': closeModal,
-                'noteModal': closeNoteModal,
-                'addColorModal': closeAddColorModal,
-                'addPaintModal': closeAddPaintModal,
-                'addFilmModal': closeAddFilmModal,
-                'addExtraRefModal': closeAddExtraRefModal,
-                'notificationModal': closeNotificationModal
-            }[modalId];
-            if (closeFn) closeFn();
-        }
+        closeNotificationModal();
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
     }
 });
 
